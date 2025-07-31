@@ -15,10 +15,9 @@ import Link from "next/link";
 export default function Navigation() {
     const navItems = [
         { path: "/parties", icon: Users, label: "Parties" },
-        { path: "/magic-shops", icon: ShoppingBag, label: "Magic Shops" },
-        { path: "/encounters", icon: Swords, label: "Encounters" },
+        // { path: "/magic-shops", icon: ShoppingBag, label: "Magic Shops" },
+        // { path: "/encounters", icon: Swords, label: "Encounters" },
         { path: "/worlds", icon: Globe, label: "Worlds" },
-        { path: "/regions", icon: Map, label: "Regions" },
         { path: "/battle-maps", icon: MapPinned, label: "Battle Maps" },
     ];
 

@@ -1,5 +1,6 @@
 /** @format */
 
+import Footer from "@/components/nav/Footer";
 import Header from "./components/Header";
 
 export default function Layout({
@@ -11,6 +12,7 @@ export default function Layout({
         <div className="flex flex-col min-h-screen">
             <Header />
             <div>{children}</div>
+            <Footer />
         </div>
     );
 }
