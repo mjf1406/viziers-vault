@@ -4,6 +4,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { Button } from "../ui/button";
 import { FaGoogle } from "react-icons/fa";
@@ -11,14 +12,15 @@ import { Loader2 } from "lucide-react";
 
 export function SignInWithGoogle() {
     const { signIn } = useAuthActions();
+    const router = useRouter();
     const [isLoading, setIsLoading] = useState(false);
 
     const handleSignIn = async () => {
         setIsLoading(true);
         try {
             await signIn("google");
+            router.push("/parties");
         } catch (error) {
-            // Optionally handle the error here
             setIsLoading(false);
         }
     };
