@@ -2,14 +2,18 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useAuthActions } from "@convex-dev/auth/react";
 import { toast } from "sonner";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 import { Loader2 } from "lucide-react";
+import { SignInWithGithub } from "@/components/auth/SignInWithGithub";
+import { SignInWithGoogle } from "@/components/auth/SignInWithGoogle";
+import { Separator } from "@/components/ui/separator";
 
 export default function SignInPage() {
+    const router = useRouter();
     const { signIn } = useAuthActions();
     const [flow, setFlow] = useState<"signIn" | "signUp">("signIn");
     const [loading, setLoading] = useState({
@@ -22,8 +26,11 @@ export default function SignInPage() {
         setLoading((s) => ({ ...s, credential: true }));
         const formData = new FormData(e.currentTarget);
         formData.set("flow", flow);
+
         try {
             await signIn("password", formData);
+            // Redirect on success:
+            router.push("/parties");
         } catch (err: any) {
             const msg = err.message.includes("Invalid password")
                 ? "Invalid password. Please try again."
@@ -40,19 +47,22 @@ export default function SignInPage() {
         setLoading((s) => ({ ...s, anonymous: true }));
         try {
             await signIn("anonymous");
+            // Redirect on success:
+            router.push("/parties");
         } finally {
             setLoading((s) => ({ ...s, anonymous: false }));
         }
     };
 
     return (
-        <div
-            className="flex flex-col items-center justify-center min-h-screen
-      bg-gray-50 dark:bg-gray-900"
-        >
-            <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6">
-                Sign In
+        <div className="flex flex-col items-center justify-center min-h-screen">
+            <h1 className="text-3xl font-bold mb-6">
+                Sign in to Vizier&apos;s Vault
             </h1>
+            <div className="w-full flex gap-4 items-center justify-center mb-6">
+                <SignInWithGithub />
+                <SignInWithGoogle />
+            </div>
             <div className="w-full max-w-sm mx-auto">
                 <form
                     onSubmit={handleSubmit}
@@ -100,13 +110,15 @@ export default function SignInPage() {
                         </button>
                     </div>
                 </form>
+
                 <div className="flex items-center my-6">
-                    <Separator />
-                    <span className="px-2 text-sm text-muted-foreground">
+                    <hr className="flex-1 border-border" />
+                    <span className="mx-4 text-sm text-muted-foreground">
                         or
                     </span>
-                    <Separator />
+                    <hr className="flex-1 border-border" />
                 </div>
+
                 <Button
                     variant="outline"
                     onClick={handleAnonymous}
