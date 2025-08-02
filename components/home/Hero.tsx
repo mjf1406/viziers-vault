@@ -23,7 +23,7 @@ export default function Hero() {
                         asChild
                         variant={"default"}
                     >
-                        <Link href={"/parties"}>Get started</Link>
+                        <Link href={"/dashboard"}>Get started</Link>
                     </Button>
                     <Button
                         asChild
