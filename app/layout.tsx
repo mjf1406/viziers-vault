@@ -44,7 +44,6 @@ export default function RootLayout({
                         disableTransitionOnChange
                     >
                         <ConvexClientProvider>{children}</ConvexClientProvider>
-                        <Footer />
                     </ThemeProvider>
                 </body>
             </html>

@@ -1,9 +1,5 @@
 /** @format */
 
-"use client";
-
-import { Authenticated } from "convex/react";
-import Navigation from "./Nav";
 import { SignOutButton } from "@/components/auth/SignOutButton";
 import { ThemeSelector } from "@/components/theme/theme-selector";
 import HeaderLogo from "@/components/brand/HeaderLogo";

@@ -109,3 +109,23 @@ export const remove = mutation({
         return await ctx.db.delete(args.id);
     },
 });
+
+export const get = query({
+    args: {
+        id: v.id("worlds"),
+    },
+    handler: async (ctx, args) => {
+        const userId = await getAuthUserId(ctx);
+        if (!userId) {
+            throw new Error("Not authenticated");
+        }
+        const world = await ctx.db.get(args.id);
+        if (!world) {
+            throw new Error("World not found");
+        }
+        if (world.userId !== userId) {
+            throw new Error("Not authorized to access this world");
+        }
+        return world;
+    },
+});

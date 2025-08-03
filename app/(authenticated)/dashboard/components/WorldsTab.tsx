@@ -41,6 +41,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Plus, Trash2, Edit, Globe, MapPin } from "lucide-react";
 import { usePersistedQuery } from "@/app/hooks/usePersistedQuery";
+import { Router } from "next/router";
+import { useRouter } from "next/navigation";
 
 type WorldWithOptimistic = (
     | Doc<"worlds">
@@ -61,6 +63,7 @@ export default function WorldsTab() {
     const createWorld = useMutation(api.worlds.create);
     const updateWorld = useMutation(api.worlds.update);
     const deleteWorld = useMutation(api.worlds.remove);
+    const router = useRouter();
 
     const [open, setOpen] = useState(false);
     const [editOpen, setEditOpen] = useState(false);
@@ -73,6 +76,8 @@ export default function WorldsTab() {
     const [locations, setLocations] = useState<
         { name: string; type: string; description: string }[]
     >([]);
+    const [isCreating, setIsCreating] = useState(false);
+
     const [optimisticWorlds, setOptimisticWorlds] = useState<
         Array<{
             _id: string;
@@ -168,12 +173,14 @@ export default function WorldsTab() {
             isOptimistic: true,
         };
         setOptimisticWorlds((prev) => [temp, ...prev]);
+        setIsCreating(true);
         clearForm();
-        setOpen(false);
+        // setOpen(false);
         toast.success("World created successfully!");
 
         try {
-            await createWorld(payload);
+            const newWorldId = await createWorld(payload);
+            router.push(`/world/${newWorldId}`);
         } catch {
             setOptimisticWorlds((prev) =>
                 prev.filter((w) => w._id !== temp._id)
@@ -184,6 +191,8 @@ export default function WorldsTab() {
             setSetting(payload.setting);
             setLocations(payload.locations);
             setOpen(true);
+        } finally {
+            setIsCreating(false);
         }
     };
 
@@ -296,7 +305,7 @@ export default function WorldsTab() {
                 >
                     <DialogTrigger asChild>
                         <Button>
-                            <Plus className="w-4 h-4 mr-2" /> Add World
+                            <Plus className="w-4 h-4" /> Add World
                         </Button>
                     </DialogTrigger>
                     <DialogContent className="sm:max-w-2xl max-h-[90vh] overflow-y-auto">
@@ -451,6 +460,7 @@ export default function WorldsTab() {
                                     type="button"
                                     variant="outline"
                                     onClick={() => setOpen(false)}
+                                    disabled={isCreating}
                                     className="flex-1"
                                 >
                                     Cancel
@@ -458,8 +468,11 @@ export default function WorldsTab() {
                                 <Button
                                     type="submit"
                                     className="flex-1"
+                                    disabled={isCreating}
                                 >
-                                    Create World
+                                    {isCreating
+                                        ? "Creating..."
+                                        : "Create World"}
                                 </Button>
                             </div>
                         </form>

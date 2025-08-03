@@ -15,6 +15,7 @@ import type {
 } from "convex/server";
 import type * as auth from "../auth.js";
 import type * as http from "../http.js";
+import type * as myFunctions from "../myFunctions.js";
 import type * as parties from "../parties.js";
 import type * as worlds from "../worlds.js";
 
@@ -29,6 +30,7 @@ import type * as worlds from "../worlds.js";
 declare const fullApi: ApiFromModules<{
   auth: typeof auth;
   http: typeof http;
+  myFunctions: typeof myFunctions;
   parties: typeof parties;
   worlds: typeof worlds;
 }>;
