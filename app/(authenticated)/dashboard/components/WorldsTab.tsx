@@ -1,6 +1,7 @@
 /** @format */
 
 // app/worlds/page.tsx
+
 "use client";
 
 import React, { useState, useMemo, useEffect } from "react";
@@ -41,8 +42,8 @@ import {
 } from "@/components/ui/alert-dialog";
 import { Plus, Trash2, Edit, Globe, MapPin } from "lucide-react";
 import { usePersistedQuery } from "@/app/hooks/usePersistedQuery";
-import { Router } from "next/router";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 type WorldWithOptimistic = (
     | Doc<"worlds">
@@ -791,6 +792,11 @@ export default function WorldsTab() {
                                             </div>
                                         </div>
                                     )}
+                                    <Button asChild>
+                                        <Link href={`/world/${world._id}`}>
+                                            Open World
+                                        </Link>
+                                    </Button>
                                 </div>
                             </CardContent>
                         </Card>

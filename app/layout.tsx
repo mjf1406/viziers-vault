@@ -5,8 +5,8 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "../components/ConvexClientProvider";
 import { ThemeProvider } from "@/components/theme/theme-provider";
-import Footer from "@/components/nav/Footer";
 import { ConvexAuthNextjsServerProvider } from "@convex-dev/auth/nextjs/server";
+import { NuqsAdapter } from "nuqs/adapters/next/app";
 
 const geistSans = Geist({
     variable: "--font-geist-sans",
@@ -43,7 +43,9 @@ export default function RootLayout({
                         enableSystem
                         disableTransitionOnChange
                     >
-                        <ConvexClientProvider>{children}</ConvexClientProvider>
+                        <ConvexClientProvider>
+                            <NuqsAdapter>{children}</NuqsAdapter>
+                        </ConvexClientProvider>
                     </ThemeProvider>
                 </body>
             </html>
