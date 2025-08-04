@@ -5,8 +5,8 @@
 import { useSearchParams } from "next/navigation";
 import { useQueryState } from "nuqs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import PartiesTab from "./components/PartiesTab";
-import WorldsTab from "./components/WorldsTab";
+import PartiesTab from "./_components/PartiesTab";
+import WorldsTab from "./_components/WorldsTab";
 import { Globe, MapPinned, ShoppingBag, Swords, Users } from "lucide-react";
 
 export default function DashboardPage() {

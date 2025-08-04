@@ -32,7 +32,7 @@ import {
     AlertDialogTitle,
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { usePersistedQuery } from "@/app/hooks/usePersistedQuery";
+import { usePersistedQuery } from "@/hooks/usePersistedQuery";
 
 type PartyWithOptimistic = (
     | Doc<"parties">

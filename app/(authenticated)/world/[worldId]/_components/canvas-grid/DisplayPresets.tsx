@@ -27,7 +27,7 @@ import {
     type GridConfigType,
 } from "@/utils/gridConfigStorage";
 import { getHexagonProperties, HexagonProperties } from "@/utils/hexagon";
-import { GridType } from "../../hooks/useGridState";
+import { GridType } from "../../_hooks/useGridState";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 
 const TV_SIZES = [

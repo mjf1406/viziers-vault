@@ -1,16 +1,15 @@
 /** @format */
 
 // app/(authenticated)/world/[worldId]/page.tsx
-/** @format */
+import CanvasGridNoSSR from "./_components/CanvasGridNoSSR";
+import WorldHeader from "./_components/WorldHeader";
 
-import CanvasGridNoSSR from "./components/CanvasGridNoSSR";
-import WorldHeader from "./components/WorldHeader.";
-
-type PageProps = { params: { worldId: string } };
+type PageProps = {
+    params: Promise<{ worldId: string }>;
+};
 
 export default async function WorldPage({ params }: PageProps) {
     const { worldId } = await params;
-
     return (
         <div className="flex flex-col h-screen overflow-hidden">
             <WorldHeader />

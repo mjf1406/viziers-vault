@@ -41,7 +41,7 @@ import {
     AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import { Plus, Trash2, Edit, Globe, MapPin } from "lucide-react";
-import { usePersistedQuery } from "@/app/hooks/usePersistedQuery";
+import { usePersistedQuery } from "@/hooks/usePersistedQuery";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 

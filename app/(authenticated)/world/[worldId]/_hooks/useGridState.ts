@@ -7,7 +7,7 @@ import {
     getGridConfigType,
     type GridConfig,
 } from "@/utils/gridConfigStorage";
-import { BIOMES } from "../components/canvas-grid/BiomeBrush";
+import { BIOMES } from "../_components/canvas-grid/BiomeBrush";
 
 export type GridType =
     | "square"

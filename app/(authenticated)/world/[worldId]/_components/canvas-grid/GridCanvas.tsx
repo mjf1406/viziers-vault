@@ -4,7 +4,7 @@ import React, { useRef, useEffect, useCallback } from "react";
 import { calculateGridDimensions } from "@/utils/gridCoordinates";
 import { drawSquareGrid } from "@/utils/square";
 import { drawHexGrid } from "@/utils/hexagon";
-import { GridType } from "../../hooks/useGridState";
+import { GridType } from "../../_hooks/useGridState";
 
 interface GridCanvasProps {
     gridType: GridType;

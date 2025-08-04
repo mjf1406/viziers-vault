@@ -1,6 +1,6 @@
 /** @format */
 
-import { GridType } from "@/app/(authenticated)/world/[worldId]/hooks/useGridState";
+import { GridType } from "@/app/(authenticated)/world/[worldId]/_hooks/useGridState";
 
 const MAX_CANVAS_SIZE = 100000;
 

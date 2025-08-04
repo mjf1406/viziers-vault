@@ -6,7 +6,7 @@ import {
     getGridCoordinates,
 } from "@/utils/gridCoordinates";
 import { GridType } from "./useGridState";
-import { Tool } from "../components/canvas-grid/ToolPalette";
+import { Tool } from "../_components/canvas-grid/ToolPalette";
 
 interface UseCanvasInteractionProps {
     gridType: GridType;
