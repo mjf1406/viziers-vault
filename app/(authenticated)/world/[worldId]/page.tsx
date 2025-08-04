@@ -1,14 +1,12 @@
 /** @format */
 
-import CanvasGrid from "./components/CanvasGrid";
+// app/(authenticated)/world/[worldId]/page.tsx
+/** @format */
+
+import CanvasGridNoSSR from "./components/CanvasGridNoSSR";
 import WorldHeader from "./components/WorldHeader.";
 
-type PageProps = {
-    // Next.js now passes params as a Promise
-    params: Promise<{
-        worldId: string;
-    }>;
-};
+type PageProps = { params: { worldId: string } };
 
 export default async function WorldPage({ params }: PageProps) {
     const { worldId } = await params;
@@ -17,7 +15,7 @@ export default async function WorldPage({ params }: PageProps) {
         <div className="flex flex-col h-screen overflow-hidden">
             <WorldHeader />
             <div className="flex-1 min-h-0">
-                <CanvasGrid worldId={worldId} />
+                <CanvasGridNoSSR worldId={worldId} />
             </div>
         </div>
     );
