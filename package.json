@@ -42,6 +42,7 @@
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "@webgpu/types": "^0.1.64",
+    "raw-loader": "^4.0.2",
     "tailwindcss": "^4",
     "tw-animate-css": "^1.3.6",
     "typescript": "^5"
