@@ -7,7 +7,14 @@ import { useQueryState } from "nuqs";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import PartiesTab from "./_components/PartiesTab";
 import WorldsTab from "./_components/WorldsTab";
-import { Globe, MapPinned, ShoppingBag, Swords, Users } from "lucide-react";
+import {
+    Globe,
+    Map,
+    MapPinned,
+    ShoppingBag,
+    Swords,
+    Users,
+} from "lucide-react";
 
 export default function DashboardPage() {
     const searchParams = useSearchParams();
@@ -54,6 +61,14 @@ export default function DashboardPage() {
                         <span className="hidden md:inline">Parties</span>
                     </TabsTrigger>
                     <TabsTrigger
+                        value="regions"
+                        className="border-b-none rounded-b-none data-[state=active]:shadow-none
+                       data-[state=active]:dark:border-none data-[state=active]:dark:bg-background"
+                    >
+                        <Map />
+                        <span className="hidden md:inline">Region Maps</span>
+                    </TabsTrigger>
+                    <TabsTrigger
                         value="worlds"
                         className="border-b-none rounded-b-none data-[state=active]:shadow-none
                        data-[state=active]:dark:border-none data-[state=active]:dark:bg-background"
@@ -75,6 +90,10 @@ export default function DashboardPage() {
                     </TabsContent>
                     <TabsContent value="parties">
                         <PartiesTab />
+                    </TabsContent>
+                    <TabsContent value="regions">
+                        <h2 className="text-2xl">Region Maps</h2>
+                        {/* Region Maps content here */}
                     </TabsContent>
                     <TabsContent value="worlds">
                         <WorldsTab />
