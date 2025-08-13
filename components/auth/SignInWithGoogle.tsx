@@ -19,7 +19,7 @@ export function SignInWithGoogle() {
         setIsLoading(true);
         try {
             await signIn("google");
-            router.push("/parties");
+            router.push("/dashboard");
         } catch (error) {
             setIsLoading(false);
         }

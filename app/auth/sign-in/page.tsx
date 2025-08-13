@@ -30,7 +30,7 @@ export default function SignInPage() {
         try {
             await signIn("password", formData);
             // Redirect on success:
-            router.push("/parties");
+            router.push("/dashboard");
         } catch (err: any) {
             const msg = err.message.includes("Invalid password")
                 ? "Invalid password. Please try again."
@@ -48,7 +48,7 @@ export default function SignInPage() {
         try {
             await signIn("anonymous");
             // Redirect on success:
-            router.push("/parties");
+            router.push("/dashboard");
         } finally {
             setLoading((s) => ({ ...s, anonymous: false }));
         }

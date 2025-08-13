@@ -11,7 +11,7 @@ export default function GetStartedButton() {
         <>
             <Authenticated>
                 <Button asChild>
-                    <Link href="/parties">Get started</Link>
+                    <Link href="/dashboard">Get started</Link>
                 </Button>
             </Authenticated>
             <Unauthenticated>

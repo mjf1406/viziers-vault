@@ -18,7 +18,7 @@ export function SignInWithGithub() {
         setIsLoading(true);
         try {
             await signIn("github");
-            router.push("/parties");
+            router.push("/dashboard");
         } catch (error) {
             setIsLoading(false);
         }
