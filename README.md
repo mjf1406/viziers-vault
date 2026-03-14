@@ -22,3 +22,7 @@ There are three deployment options and all maintain feature-parity with the Web 
 - added Electron for desktop applications
 
 ## Change Log
+
+### 2026/03/14
+
+- landing page deployed to Vercel [https://viziersvault.com](https://viziersvault.com)
