@@ -111,7 +111,7 @@ export const FooterSection = () => {
                         <h3 className="font-bold text-lg">Community</h3>
                         <div>
                             <Link
-                                href="https://github.com/mjf1406/viziers-vault-app"
+                                href="https://github.com/mjf1406/viziers-vault"
                                 target="_blank"
                                 rel="noopener noreferrer"
                                 prefetch={false}

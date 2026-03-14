@@ -127,7 +127,7 @@ export const Navbar = () => {
                                         className="hidden sm:flex"
                                     >
                                         <a
-                                            href="https://github.com/mjf1406/viziers-vault-app"
+                                            href="https://github.com/mjf1406/viziers-vault"
                                             rel="noopener noreferrer"
                                             target="_blank"
                                         >
@@ -166,7 +166,7 @@ export const Navbar = () => {
                         className="hidden sm:flex"
                     >
                         <a
-                            href="https://github.com/mjf1406/viziers-vault-app"
+                            href="https://github.com/mjf1406/viziers-vault"
                             rel="noopener noreferrer"
                             target="_blank"
                         >

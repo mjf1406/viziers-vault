@@ -94,7 +94,7 @@ export const ContactSection = () => {
                             className="w-full"
                         >
                             <Link
-                                href="https://github.com/mjf1406/viziers-vault-app"
+                                href="https://github.com/mjf1406/viziers-vault"
                                 rel="noopener noreferrer"
                                 target="_blank"
                             >
