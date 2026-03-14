@@ -14,8 +14,6 @@ There are three deployment options and all maintain feature-parity with the Web 
 
 ## To-do List
 
-- added Drizzle
-- added Postgres
 - added Postrgres Docker for self-hosting
 - added web Docker for self-hosting
 - added server Docker for self-hosting
@@ -25,5 +23,9 @@ There are three deployment options and all maintain feature-parity with the Web 
 
 ### 2026/03/14
 
-- landing page deployed to Vercel [https://viziersvault.com](https://viziersvault.com)
+- landing page deployed to Vercel [https://www.viziersvault.com](https://www.viziersvault.com)
 - app deployed to Cloudflare Pages [https://app.viziersvault.com](https://app.viziersvault.com)
+- api deployed to Cloudflare Workers [https://api.viziersvault.com](https://api.viziersvault.com)
+- added Postgres
+- added Drizzle
+- started Electron desktop application development

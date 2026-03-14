@@ -2,9 +2,35 @@
   "name": "desktop",
   "version": "0.0.1",
   "private": true,
-  "main": "src/main.ts",
+  "type": "module",
+  "main": "dist/main.js",
+  "build": {
+    "appId": "com.viziers.vault",
+    "productName": "Viziers Vault",
+    "directories": { "output": "out" },
+    "files": ["dist/**"],
+    "extraResources": [{ "from": "../app/dist", "to": "app-dist", "filter": ["**/*"] }],
+    "win": { "target": "nsis" },
+    "mac": { "target": "dmg", "category": "public.app-category.productivity" },
+    "linux": { "target": "AppImage" }
+  },
   "scripts": {
-    "dev": "node -e \"console.log('packages/desktop: Add Electron to implement')\"",
-    "build": "node -e \"console.log('packages/desktop: Add Electron to implement')\""
+    "build": "tsc",
+    "build:app": "cd ../app && bun run build",
+    "dev": "bun run build:app && tsc && electron .",
+    "pack": "bun run build:app && tsc && electron-builder --dir",
+    "dist": "bun run build:app && tsc && electron-builder"
+  },
+  "dependencies": {
+    "@electric-sql/pglite": "^0.2.0",
+    "@hono/node-server": "^1.13.7",
+    "drizzle-orm": "^0.38.3",
+    "hono": "^4.10.8",
+    "shared": "workspace:*"
+  },
+  "devDependencies": {
+    "electron": "^33.2.0",
+    "electron-builder": "^25.1.8",
+    "typescript": "^5.9.3"
   }
 }
