@@ -1,3 +1,0 @@
-module.exports=[40893,a=>{"use strict";var b=a.i(13268),c=a.i(80190),d=a.i(10629);function e({className:a,orientation:e="horizontal",decorative:f=!0,...g}){return(0,b.jsx)(c.Root,{"data-slot":"separator",decorative:f,orientation:e,className:(0,d.cn)("bg-border shrink-0 data-[orientation=horizontal]:h-px data-[orientation=horizontal]:w-full data-[orientation=vertical]:h-full data-[orientation=vertical]:w-px",a),...g})}a.s(["Separator",()=>e])}];
-
-//# sourceMappingURL=c1d23_mjf1406_viziers-vault_packages_web_components_ui_separator_tsx_d826bbe1._.js.map

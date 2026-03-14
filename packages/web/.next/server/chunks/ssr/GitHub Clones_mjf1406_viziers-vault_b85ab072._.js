@@ -1,3 +1,0 @@
-module.exports=[24773,a=>{a.n(a.i(43698))},28893,a=>{a.n(a.i(51342))},82634,a=>{a.n(a.i(86207))},97366,a=>{a.n(a.i(73985))},23835,a=>{a.n(a.i(93783))},86182,a=>{a.n(a.i(80597))},89912,a=>{"use strict";var b=a.i(50487);function c(){return(0,b.jsx)(b.Fragment,{children:(0,b.jsx)("div",{className:"text-2xl font-semibold",children:"🚧UNDER CONSTRUCTION🚧"})})}a.s(["default",()=>c,"metadata",0,{title:"Vizier's Vault - D&D 5e Tools",description:"Generate magic shops, encounters, spellbooks, battle maps, and worlds for D&D 5e 2024"}])}];
-
-//# sourceMappingURL=GitHub%20Clones_mjf1406_viziers-vault_b85ab072._.js.map

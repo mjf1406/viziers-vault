@@ -1,6 +1,0 @@
-{
-  "version": 3,
-  "sources": [],
-  "sections": [
-    {"offset": {"line": 4, "column": 0}, "map": {"version":3,"sources":["file:///C:/Users/mfitz/GitHub%20Clones/mjf1406/viziers-vault/packages/web/components/theme/theme-provider.tsx"],"sourcesContent":["/** @format */\r\n\r\n\"use client\";\r\n\r\nimport * as React from \"react\";\r\nimport { ThemeProvider as NextThemesProvider } from \"next-themes\";\r\n\r\nexport function ThemeProvider({\r\n    children,\r\n    ...props\r\n}: React.ComponentProps<typeof NextThemesProvider>) {\r\n    return <NextThemesProvider {...props}>{children}</NextThemesProvider>;\r\n}\r\n"],"names":[],"mappings":";;;;;AAKA;AALA,YAAY,GAEZ;;;AAKO,SAAS,cAAc,EAC1B,QAAQ,EACR,GAAG,OAC2C;IAC9C,qBAAO,8OAAC,qNAAkB;QAAE,GAAG,KAAK;kBAAG;;;;;;AAC3C;KALgB"}}]
-}
