@@ -26,3 +26,4 @@ There are three deployment options and all maintain feature-parity with the Web 
 ### 2026/03/14
 
 - landing page deployed to Vercel [https://viziersvault.com](https://viziersvault.com)
+- app deployed to Cloudflare Pages [https://app.viziersvault.com](https://app.viziersvault.com)
