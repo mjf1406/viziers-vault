@@ -6,11 +6,11 @@ A semi-OSS procedural hex world and battle map generator for TTRPGs.
 
 ## Deployments
 
-We offer three deployment options and all maintain feature-parity with the Web application.
+There are three deployment options and all maintain feature-parity with the Web application:
 
-- FREE: Desktop applications for Windows, macOS, and Linux at [https://github.com/mjf1406/viziers-vault/releases/latest](https://github.com/mjf1406/viziers-vault/releases/latest)
-- FREE: Self-hostable via Docker at [https://github.com/mjf1406/viziers-vault/docker.md](https://github.com/mjf1406/viziers-vault/docker.md)
-- PREMIUM: Web application for premium users at [https://www.viziersvault.com](https://www.viziersvault.com)
+1. FREE: Desktop applications for Windows, macOS, and Linux at [https://github.com/mjf1406/viziers-vault/releases/latest](https://github.com/mjf1406/viziers-vault/releases/latest)
+2. FREE: Self-hostable via Docker at [https://github.com/mjf1406/viziers-vault/docker.md](https://github.com/mjf1406/viziers-vault/docker.md)
+3. PREMIUM: Web application for premium users at [https://www.viziersvault.com](https://www.viziersvault.com)
 
 ## To-do List
 
