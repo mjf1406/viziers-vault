@@ -2,7 +2,7 @@
 
 # Vizier's Vault
 
-A procedural hex world and battle map generator for TTRPGs.
+A semi-OSS procedural hex world and battle map generator for TTRPGs.
 
 ## Deployments
 
