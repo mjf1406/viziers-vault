@@ -7,16 +7,18 @@
   "homepage": "https://github.com/stevedylandev/bhvr",
   "packageManager": "bun@1.2.4",
   "workspaces": [
-    "./server",
-    "./client",
-    "./shared"
+    "./packages/app",
+    "./packages/server",
+    "./packages/shared",
+    "./packages/web",
+    "./packages/desktop"
   ],
   "scripts": {
     "dev": "turbo dev",
-    "dev:client": "turbo dev --filter=client",
+    "dev:client": "turbo dev --filter=app",
     "dev:server": "turbo dev --filter=server",
     "build": "turbo build",
-    "build:client": "turbo build --filter=client",
+    "build:client": "turbo build --filter=app",
     "build:server": "turbo build --filter=server",
     "lint": "turbo lint",
     "type-check": "turbo type-check",

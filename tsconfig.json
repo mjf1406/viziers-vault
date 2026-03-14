@@ -11,9 +11,9 @@
     // Path resolution
     "baseUrl": "./",
     "paths": {
-      "@server/*": ["./server/src/*"],
-      "@client/*": ["./client/src/*"],
-      "@shared/*": ["./shared/src/*"]
+      "@server/*": ["./packages/server/src/*"],
+      "@app/*": ["./packages/app/src/*"],
+      "@shared/*": ["./packages/shared/src/*"]
     },
 
     // Module resolution

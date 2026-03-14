@@ -1,0 +1,10 @@
+{
+  "name": "desktop",
+  "version": "0.0.1",
+  "private": true,
+  "main": "src/main.ts",
+  "scripts": {
+    "dev": "node -e \"console.log('packages/desktop: Add Electron to implement')\"",
+    "build": "node -e \"console.log('packages/desktop: Add Electron to implement')\""
+  }
+}
