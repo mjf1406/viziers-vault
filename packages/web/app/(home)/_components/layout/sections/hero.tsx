@@ -3,7 +3,11 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Monitor, Server } from "lucide-react";
+import {
+    DesktopAppButton,
+    SelfHostButton,
+    SubscribeNowButton,
+} from "../../cta-buttons";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 
@@ -42,28 +46,8 @@ export const HeroSection = () => {
                     </p>
 
                     <div className="flex justify-center space-x-4">
-                        <Button
-                            asChild
-                            variant="default"
-                            className="w-5/6 md:w-1/4 font-bold"
-                        >
-                            <Link href="https://github.com/mjf1406/viziers-vault/releases/latest">
-                                <Monitor className="size-5 mr-2" />
-                                Desktop App
-                            </Link>
-                        </Button>
-
-                        <Button
-                            asChild
-                            variant="outline"
-                            className="w-5/6 md:w-1/4 font-bold"
-                        >
-                            <Link href="https://github.com/mjf1406/viziers-vault/docker.md">
-                                <Server className="size-5 mr-2" />
-                                Self-host
-                            </Link>
-                        </Button>
-
+                        <DesktopAppButton className="w-5/6 md:w-1/4 font-bold" />
+                        <SelfHostButton className="w-5/6 md:w-1/4 font-bold" />
                         <Button
                             asChild
                             variant="secondary"
@@ -71,17 +55,7 @@ export const HeroSection = () => {
                         >
                             <Link href="#features">Learn more</Link>
                         </Button>
-
-                        <Button
-                            asChild
-                            className="w-5/6 md:w-1/4 font-bold group/arrow"
-                            variant={"ghost"}
-                        >
-                            <Link href={"/app/dashboard"}>
-                                Subscribe Now
-                                <ArrowRight className="size-5 ml-2 group-hover/arrow:translate-x-1 transition-transform" />
-                            </Link>
-                        </Button>
+                        <SubscribeNowButton className="w-5/6 md:w-1/4" />
                     </div>
                     <p className="-mt-3 text-sm text-muted-foreground">
                         Download the Desktop App to try it locally for free

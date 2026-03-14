@@ -2,7 +2,6 @@
 
 "use client";
 
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -13,6 +12,11 @@ import {
     CardTitle,
 } from "@/components/ui/card";
 import { Check, CheckCircle } from "lucide-react";
+import {
+    DesktopAppButton,
+    SelfHostButton,
+    SubscribeNowButton,
+} from "../../cta-buttons";
 import { features } from "@/lib/features";
 import { plans, type TierId } from "@/lib/plans";
 
@@ -123,23 +127,22 @@ export const PricingSection = () => {
 
                             <CardFooter className="flex flex-col w-full gap-2 justify-center items-center">
                                 {plan.id === "basic" && (
-                                    <Button
+                                    <SubscribeNowButton
                                         className="w-full"
-                                        variant={"default"}
-                                        asChild
-                                    >
-                                        <Link href="/app/account">
-                                            {plan.ctaText}
-                                        </Link>
-                                    </Button>
+                                        variant="default"
+                                    />
                                 )}
                                 {plan.id === "free" && (
-                                    <Button
-                                        className="w-full"
-                                        variant="outline"
-                                    >
-                                        {plan.ctaText}
-                                    </Button>
+                                    <div className="flex flex-col w-full gap-2">
+                                        <DesktopAppButton
+                                            className="w-full"
+                                            variant="outline"
+                                        />
+                                        <SelfHostButton
+                                            className="w-full"
+                                            variant="outline"
+                                        />
+                                    </div>
                                 )}
                                 {plan.id !== "free" && plan.id !== "basic" && (
                                     <Button
