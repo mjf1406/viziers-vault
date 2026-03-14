@@ -42,5 +42,9 @@
   },
   "dependencies": {
     "hono": "^4.12.7"
+  },
+  "overrides": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0"
   }
 }

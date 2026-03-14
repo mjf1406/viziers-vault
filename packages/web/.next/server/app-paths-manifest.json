@@ -1,0 +1,13 @@
+{
+  "/(home)/page": "app/(home)/page.js",
+  "/(home)/web/about/page": "app/(home)/web/about/page.js",
+  "/(home)/web/contact/page": "app/(home)/web/contact/page.js",
+  "/(home)/web/cookie-policy/page": "app/(home)/web/cookie-policy/page.js",
+  "/(home)/web/faq/page": "app/(home)/web/faq/page.js",
+  "/(home)/web/pricing/page": "app/(home)/web/pricing/page.js",
+  "/(home)/web/privacy-policy/page": "app/(home)/web/privacy-policy/page.js",
+  "/(home)/web/team/page": "app/(home)/web/team/page.js",
+  "/(home)/web/terms-of-service/page": "app/(home)/web/terms-of-service/page.js",
+  "/_global-error/page": "app/_global-error/page.js",
+  "/_not-found/page": "app/_not-found/page.js"
+}
