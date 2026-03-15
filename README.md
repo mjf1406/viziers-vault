@@ -12,6 +12,15 @@ There are three deployment options and all maintain feature-parity with the Web 
 2. FREE: Self-hostable via Docker that requires an internet connection at [https://github.com/mjf1406/viziers-vault/docker.md](https://github.com/mjf1406/viziers-vault/docker.md)
 3. PREMIUM: Web application with PWA support for premium users that requires an internet connection at [https://www.viziersvault.com](https://www.viziersvault.com)
 
+## Initial Setup
+- [ ] Docker image of server
+- [ ] Docker image of app
+- [ ] db compose for server/app/db for self-hosting
+- [ ] Spin up docker container for local postgres db in dev
+- [ ] 
+- [ ] 
+- [ ] 
+
 ## To-do List
 
 - added Postrgres Docker for self-hosting
