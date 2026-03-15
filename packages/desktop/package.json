@@ -9,10 +9,13 @@
     "productName": "Viziers Vault",
     "directories": { "output": "out" },
     "files": ["dist/**"],
-    "extraResources": [{ "from": "../app/dist", "to": "app-dist", "filter": ["**/*"] }],
-    "win": { "target": "nsis" },
+    "extraResources": [
+      { "from": "../app/dist", "to": "app-dist", "filter": ["**/*"] },
+      { "from": "../shared/src/favicon.ico", "to": "favicon.ico" }
+    ],
+    "win": { "target": "nsis", "icon": "../shared/src/favicon.ico" },
     "mac": { "target": "dmg", "category": "public.app-category.productivity" },
-    "linux": { "target": "AppImage" }
+    "linux": { "target": "AppImage", "icon": "../shared/src/favicon.ico" }
   },
   "scripts": {
     "build": "tsc",

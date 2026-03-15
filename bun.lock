@@ -3,7 +3,7 @@
   "configVersion": 0,
   "workspaces": {
     "": {
-      "name": "bhvr",
+      "name": "viziers-vault",
       "dependencies": {
         "hono": "^4.12.7",
       },

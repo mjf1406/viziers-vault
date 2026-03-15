@@ -12,16 +12,31 @@
 		"./schema": {
 			"types": "./dist/schema/index.d.ts",
 			"default": "./dist/schema/index.js"
-		}
+		},
+		"./styles": "./src/styles/globals.css"
 	},
 	"scripts": {
 		"build": "tsc",
 		"dev": "tsc --watch"
 	},
+	"peerDependencies": {
+		"react": "^18.0.0 || ^19.0.0",
+		"react-dom": "^18.0.0 || ^19.0.0"
+	},
 	"dependencies": {
-		"drizzle-orm": "^0.38.3"
+		"@radix-ui/react-dialog": "^1.1.15",
+		"@radix-ui/react-separator": "^1.1.7",
+		"@radix-ui/react-slot": "^1.2.3",
+		"@tabler/icons-react": "^3.34.1",
+		"class-variance-authority": "^0.7.1",
+		"clsx": "^2.1.1",
+		"drizzle-orm": "^0.38.3",
+		"lucide-react": "^0.507.0",
+		"tailwind-merge": "^3.4.0"
 	},
 	"devDependencies": {
+		"@types/react": "^19.0.0",
+		"@types/react-dom": "^19.0.0",
 		"typescript": "^5.9.3"
 	}
 }

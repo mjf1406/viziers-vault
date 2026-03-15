@@ -19,6 +19,9 @@ export default function RootLayout({
             suppressHydrationWarning
             data-scroll-behavior="smooth"
         >
+            <head>
+                <meta name="darkreader-lock" />
+            </head>
             <body suppressHydrationWarning>
                 <ThemeProvider
                     attribute="class"

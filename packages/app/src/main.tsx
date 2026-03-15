@@ -1,16 +1,21 @@
 import { StrictMode } from "react";
 import ReactDOM from "react-dom/client";
-import { RouterProvider, createRouter } from "@tanstack/react-router";
+import {
+	RouterProvider,
+	createRouter,
+	createHashHistory,
+} from "@tanstack/react-router";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import "./index.css";
+import sharedFaviconUrl from "../../shared/src/favicon.ico";
 
 const queryClient = new QueryClient();
 
 // Import the generated route tree
 import { routeTree } from "./routeTree.gen";
 
-// Create a new router instance
-const router = createRouter({ routeTree });
+// Use hash history so routing works with file:// in Electron
+const router = createRouter({ routeTree, history: createHashHistory() });
 
 // Register the router instance for type safety
 declare module "@tanstack/react-router" {
@@ -20,6 +25,16 @@ declare module "@tanstack/react-router" {
 }
 
 const rootElement = document.getElementById("root");
+
+const faviconLink =
+	document.querySelector<HTMLLinkElement>('link[rel~="icon"]') ||
+	document.createElement("link");
+faviconLink.rel = "icon";
+faviconLink.type = "image/x-icon";
+faviconLink.href = sharedFaviconUrl;
+if (!faviconLink.parentElement) {
+	document.head.appendChild(faviconLink);
+}
 
 if (!rootElement) {
 	throw new Error(
