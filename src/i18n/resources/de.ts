@@ -43,7 +43,7 @@ const de = {
     termsAndConditions: "Nutzungsbedingungen",
     cookiePolicy: "Cookie-Richtlinie",
     copyright: "© {{year}} {{appName}}",
-    footerTagline: "Gamifiziere deinen Unterricht und motiviere deine Schüler.",
+    footerTagline: "Procedural hex world and battle map generator for TTRPGs",
     footerProduct: "Produkt",
     footerResources: "Ressourcen",
     footerLegal: "Rechtliches",

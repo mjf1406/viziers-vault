@@ -1,12 +1,12 @@
 {
-  "name": "vctr",
+  "name": "viziers-vault-app",
   "version": "0.0.0",
   "private": true,
-  "description": "vctr — classroom app template (web, self-host, Electron)",
-  "author": "vctr",
+  "description": "viziers-vault-app — Vite+ / React / Convex app",
+  "author": "viziers-vault-app",
   "repository": {
     "type": "git",
-    "url": "https://github.com/mjf1406/vctr.git"
+    "url": "https://github.com/mjf1406/viziers-vault-app.git"
   },
   "type": "module",
   "main": "dist-electron/main.js",

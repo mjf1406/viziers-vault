@@ -62,7 +62,7 @@ export function Logo() {
       src={logo}
       alt={`${APP_CONFIG.name} Logo`}
       width={169}
-      height={53}
+      height={92}
       objectFit="contain"
     />
   );

@@ -42,7 +42,7 @@ const uk = {
     termsAndConditions: "Умови використання",
     cookiePolicy: "Політика cookie",
     copyright: "© {{year}} {{appName}}",
-    footerTagline: "Гейміфікуйте клас, щоб мотивувати учнів.",
+    footerTagline: "Procedural hex world and battle map generator for TTRPGs",
     footerProduct: "Продукт",
     footerResources: "Ресурси",
     footerLegal: "Правова інформація",

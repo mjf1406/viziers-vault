@@ -42,7 +42,7 @@ const ru = {
     termsAndConditions: "Условия использования",
     cookiePolicy: "Политика cookie",
     copyright: "© {{year}} {{appName}}",
-    footerTagline: "Геймифицируйте класс, чтобы мотивировать учеников.",
+    footerTagline: "Procedural hex world and battle map generator for TTRPGs",
     footerProduct: "Продукт",
     footerResources: "Ресурсы",
     footerLegal: "Правовая информация",

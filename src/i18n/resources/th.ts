@@ -41,7 +41,7 @@ const th = {
     termsAndConditions: "ข้อกำหนดและเงื่อนไข",
     cookiePolicy: "นโยบายคุกกี้",
     copyright: "© {{year}} {{appName}}",
-    footerTagline: "ทำให้ห้องเรียนเป็นเกม เพื่อสร้างแรงจูงใจให้นักเรียน",
+    footerTagline: "Procedural hex world and battle map generator for TTRPGs",
     footerProduct: "ผลิตภัณฑ์",
     footerResources: "ทรัพยากร",
     footerLegal: "กฎหมาย",

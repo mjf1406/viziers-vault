@@ -41,7 +41,7 @@ const ja = {
     termsAndConditions: "利用規約",
     cookiePolicy: "Cookieポリシー",
     copyright: "© {{year}} {{appName}}",
-    footerTagline: "教室をゲーミファイして、生徒のやる気を引き出そう。",
+    footerTagline: "Procedural hex world and battle map generator for TTRPGs",
     footerProduct: "プロダクト",
     footerResources: "リソース",
     footerLegal: "法的情報",

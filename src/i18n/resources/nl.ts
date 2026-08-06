@@ -42,7 +42,7 @@ const nl = {
     termsAndConditions: "Algemene voorwaarden",
     cookiePolicy: "Cookiebeleid",
     copyright: "© {{year}} {{appName}}",
-    footerTagline: "Gamificeer je klaslokaal om je leerlingen te motiveren.",
+    footerTagline: "Procedural hex world and battle map generator for TTRPGs",
     footerProduct: "Product",
     footerResources: "Bronnen",
     footerLegal: "Juridisch",

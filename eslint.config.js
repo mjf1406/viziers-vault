@@ -110,28 +110,11 @@ export default [
   ...convexPlugin.configs.recommended,
 
   // Additional Convex hardening for this template.
+  // Do not override projectService here: the top-level service already
+  // discovers convex/tsconfig.json, and reconfiguring it drops
+  // allowDefaultProject for eslint.config.js.
   {
     files: ["convex/**/*.ts"],
-    languageOptions: {
-      parser: tsParser,
-      parserOptions: {
-        projectService: {
-          // Use the dedicated tsconfig for Convex so type-aware rules
-          // (e.g. `@convex-dev/*`) have type info.
-          defaultProject: "./tsconfig.convex.json",
-          // Disallowing `**` keeps lint fast; we only need this for
-          // the current Convex directory depth.
-          allowDefaultProject: [
-            "convex/*.ts",
-            "convex/*/*.ts",
-            "convex/*/*/*.ts",
-            "eslint.config.js",
-          ],
-          maximumDefaultProjectFileMatchCount_THIS_WILL_SLOW_DOWN_LINTING: 80,
-        },
-        tsconfigRootDir,
-      },
-    },
     rules: {
       "@convex-dev/no-collect-in-query": "error",
     },

@@ -20,31 +20,31 @@ Do **not** reuse the template’s Convex deployment or copy `.env` / `.env.local
 
 <!-- clone:identity-package -->
 
-- [ ] `package.json` name / description / author / repository updated
+- [x] `package.json` name / description / author / repository updated
 
 <!-- clone:identity-app-config -->
 
-- [ ] `convex/appConfig.ts` fields set for the new product (`name`, `slug`, URLs, `authzTenantId`, …)
+- [x] `convex/appConfig.ts` fields set for the new product (`name`, `slug`, URLs, `authzTenantId`, …)
 
 <!-- clone:identity-title -->
 
-- [ ] `index.html` title updated
+- [x] `index.html` title updated
 
 <!-- clone:identity-footer-tagline -->
 
-- [ ] `common.footerTagline` updated in all locales under `src/i18n/resources/`
+- [x] `common.footerTagline` updated in all locales under `src/i18n/resources/`
 
 <!-- clone:identity-self-host-docs -->
 
-- [ ] `docs/SELF_HOSTING.md` Portainer/repo examples retargeted (not `mjf1406/vctr` / `classclarus-*`)
+- [x] `docs/SELF_HOSTING.md` Portainer/repo examples retargeted (not `mjf1406/vctr` / `classclarus-*`)
 
 <!-- clone:identity-compose -->
 
-- [ ] `docker-compose.yml` / `example.env` instance names updated
+- [x] `docker-compose.yml` / `example.env` instance names updated
 
 <!-- clone:env-example -->
 
-- [ ] `.env.example` present with Vite-side vars documented
+- [x] `.env.example` present with Vite-side vars documented
 
 `bun run post-clone` marks the identity items it edits. Product brand: `public/brand/` (+ `Logo.tsx`). Template favicon: `public/vctr/vctr-favicon.webp` (`index.html`) — replace file or update the `href` when rebranding.
 
@@ -65,7 +65,7 @@ vp install
 
 <!-- clone:install-deps -->
 
-- [ ] `vp install` / `bun install` completed with no errors
+- [x] `vp install` / `bun install` completed with no errors
 
 ---
 

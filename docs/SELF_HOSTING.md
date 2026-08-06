@@ -47,7 +47,7 @@ docker compose down -v          # stop and wipe data
 ## Option B — Portainer
 
 1. Stacks → **Add stack** → **Repository**
-2. Repository URL: `https://github.com/mjf1406/vctr`
+2. Repository URL: `https://github.com/mjf1406/viziers-vault-app`
 3. Repository Reference: `refs/heads/master`
 4. Compose path: `docker-compose.yml`
 5. Environment variables → **Load variables from .env file** → upload [`example.env`](../example.env) (edit `PUBLIC_HOST` first if needed)
@@ -166,16 +166,16 @@ bunx convex run lib/admin:grantAppAdmin '{"userId":"<convex-user-id>"}'
 
 ## Dashboard admin key
 
-Portainer names the project from the stack name (e.g. `classclarus`), so plain `docker compose exec` from your home directory often fails with “no configuration file provided”. Prefer the container name:
+Portainer names the project from the stack name (e.g. `viziers-vault-app`), so plain `docker compose exec` from your home directory often fails with “no configuration file provided”. Prefer the container name:
 
 ```bash
-sudo docker exec classclarus-backend-1 cat /convex/data/admin_key
+sudo docker exec viziers-vault-app-backend-1 cat /convex/data/admin_key
 ```
 
 Or pass the Portainer project/stack name:
 
 ```bash
-sudo docker compose -p classclarus exec backend cat /convex/data/admin_key
+sudo docker compose -p viziers-vault-app exec backend cat /convex/data/admin_key
 ```
 
 (If you used `docker compose` from a local clone, `docker compose exec backend cat /convex/data/admin_key` works inside that directory.)

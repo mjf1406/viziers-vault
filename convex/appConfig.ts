@@ -5,29 +5,29 @@
  * `name` is never translated — i18n uses it via defaultVariables.appName.
  */
 export const APP_CONFIG = {
-  name: "vctr",
+  name: "viziers-vault-app",
   /** Storage keys (`${slug}-…` via src/lib/storageKeys.ts) and package-name check. */
-  slug: "classclarus",
+  slug: "viziers-vault-app",
   /** Appended after name in the document title (`Name | suffix`). */
   titleSuffix: "App",
   /** Canonical app origin (printed join URLs, production deep links). */
-  appUrl: "https://app.classclarus.com",
-  marketingUrl: "https://www.classclarus.com",
-  privacyUrl: "https://www.classclarus.com/privacy-policy",
-  termsUrl: "https://www.classclarus.com/terms-and-conditions",
-  cookieUrl: "https://www.classclarus.com/cookie-policy",
-  changeLog: "https://change-log.pages.dev/classclarus",
-  roadMap: "https://change-log.pages.dev/classclarus/board",
-  github: "https://github.com/mjf1406/vctr",
+  appUrl: "https://app.viziersvault.com",
+  marketingUrl: "https://www.viziersvault.com",
+  privacyUrl: "https://www.viziersvault.com/privacy-policy",
+  termsUrl: "https://www.viziersvault.com/terms-and-conditions",
+  cookieUrl: "https://www.viziersvault.com/cookie-policy",
+  changeLog: "https://change-log.pages.dev/viziers-vault",
+  roadMap: "https://change-log.pages.dev/viziers-vault/board",
+  github: "https://github.com/mjf1406/viziers-vault-app",
   /** Electron / desktop release landing page. Billing Free downloads use desktopDownloads.ts. */
-  downloadUrl: "https://github.com/mjf1406/vctr/releases/latest",
+  downloadUrl: "https://github.com/mjf1406/viziers-vault-app/releases/latest",
   /** Self-hosting docs (billing Free card). Change when cloning. */
-  selfHostUrl: "https://github.com/mjf1406/vctr/blob/master/docs/SELF_HOSTING.md",
+  selfHostUrl: "https://github.com/mjf1406/viziers-vault-app/blob/master/docs/SELF_HOSTING.md",
   /** Tip / gift links (billing page; replace placeholders). */
-  kofiUrl: "https://ko-fi.com/YOUR_PAGE",
-  patreonUrl: "https://www.patreon.com/YOUR_PAGE",
+  kofiUrl: "https://ko-fi.com/michaelfitzgerald1406",
+  patreonUrl: "https://www.patreon.com/cw/MichaelFitzgerald",
   /** Product-level authz namespace — set before first real deploy; rematerialize if changed later. */
-  authzTenantId: "classclarus",
+  authzTenantId: "viziers-vault-app",
   /** Browser chrome — hex (meta theme-color is unreliable with oklch). */
   themeColors: {
     light: "#ffffff",

@@ -43,7 +43,7 @@ const fr = {
     termsAndConditions: "Conditions générales",
     cookiePolicy: "Politique relative aux cookies",
     copyright: "© {{year}} {{appName}}",
-    footerTagline: "Gamifiez votre classe pour motiver vos élèves.",
+    footerTagline: "Procedural hex world and battle map generator for TTRPGs",
     footerProduct: "Produit",
     footerResources: "Ressources",
     footerLegal: "Mentions légales",
