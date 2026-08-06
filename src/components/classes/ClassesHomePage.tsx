@@ -308,8 +308,6 @@ export function ClassesHomePage() {
         onSubmit={handleFormSubmit}
       />
 
-      <div>Cloudflare Test</div>
-
       <DeleteClassCredenza
         key={deleteTarget ? `delete:${deleteTarget._id}` : "delete"}
         open={deleteOpen}
