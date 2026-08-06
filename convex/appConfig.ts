@@ -5,7 +5,7 @@
  * `name` is never translated — i18n uses it via defaultVariables.appName.
  */
 export const APP_CONFIG = {
-  name: "viziers-vault-app",
+  name: "Vizier's Vault",
   /** Storage keys (`${slug}-…` via src/lib/storageKeys.ts) and package-name check. */
   slug: "viziers-vault-app",
   /** Appended after name in the document title (`Name | suffix`). */
