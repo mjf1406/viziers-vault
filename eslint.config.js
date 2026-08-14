@@ -14,15 +14,19 @@ export default [
   {
     ignores: [
       "node_modules",
-      "dist",
-      "dist-electron/**",
-      "release/**",
-      "resources/**",
-      "public/**",
-      "docker/**",
-      "convex/_generated/**",
-      "src/routeTree.gen.ts",
+      "**/node_modules",
+      "**/dist",
+      "**/dist-electron/**",
+      "**/release/**",
+      "apps/app/resources/**",
+      "apps/app/public/**",
+      "apps/app/docker/**",
+      "apps/app/convex/_generated/**",
+      "apps/app/src/routeTree.gen.ts",
+      "apps/web/src/routeTree.gen.ts",
+      "apps/web/dist/**",
       "convex/**/*.test.ts",
+      "apps/app/convex/**/*.test.ts",
     ],
   },
 
@@ -36,7 +40,7 @@ export default [
         projectService: {
           // allow running with TS default project options for files that
           // aren't part of any tsconfig (e.g. `eslint.config.js`)
-          allowDefaultProject: ["eslint.config.js"],
+          allowDefaultProject: ["eslint.config.js", "vite.config.ts"],
         },
         tsconfigRootDir,
       },
@@ -114,7 +118,7 @@ export default [
   // discovers convex/tsconfig.json, and reconfiguring it drops
   // allowDefaultProject for eslint.config.js.
   {
-    files: ["convex/**/*.ts"],
+    files: ["apps/app/convex/**/*.ts"],
     rules: {
       "@convex-dev/no-collect-in-query": "error",
     },
@@ -124,12 +128,12 @@ export default [
   // Do not list these paths in allowDefaultProject — they are already in
   // tsconfig.node.json; dual membership makes typed lint fail to parse.
   {
-    files: ["electron/*.ts", "shared/*.ts"],
+    files: ["apps/app/electron/*.ts", "apps/app/shared/*.ts"],
     languageOptions: {
       parser: tsParser,
       parserOptions: {
         projectService: {
-          defaultProject: "./tsconfig.node.json",
+          defaultProject: "./apps/app/tsconfig.node.json",
         },
         tsconfigRootDir,
       },
@@ -144,9 +148,17 @@ export default [
     },
   },
 
+  // TanStack file routes export `Route` plus page components.
+  {
+    files: ["apps/web/src/routes/**/*.{ts,tsx}"],
+    rules: {
+      "react-refresh/only-export-components": "off",
+    },
+  },
+
   // Bun/Node scripts + root builder configs (no TS project).
   {
-    files: ["scripts/**/*.{js,mjs,cjs}", "electron-builder.config.mjs"],
+    files: ["apps/app/scripts/**/*.{js,mjs,cjs}", "apps/app/electron-builder.config.mjs"],
     languageOptions: {
       globals: {
         ...globals.node,

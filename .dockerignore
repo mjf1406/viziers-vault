@@ -10,13 +10,14 @@ dist
 .env
 .env.*
 !example.env
+!apps/app/example.env
 agent-transcripts
 coverage
 **/__screenshots__
 **/*.test.ts
 **/*.test.tsx
 **/*.md
-!docs/SELF_HOSTING.md
+!apps/app/docs/SELF_HOSTING.md
 Dockerfile*
 docker-compose*.yml
 .gitignore

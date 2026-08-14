@@ -72,9 +72,9 @@ jobs:
         run: |
           bun -e '
             import { readFileSync, writeFileSync } from "node:fs";
-            const pkg = JSON.parse(readFileSync("package.json", "utf8"));
+            const pkg = JSON.parse(readFileSync("apps/app/package.json", "utf8"));
             pkg.version = process.env.VERSION;
-            writeFileSync("package.json", JSON.stringify(pkg, null, 2) + "\n");
+            writeFileSync("apps/app/package.json", JSON.stringify(pkg, null, 2) + "\n");
           '
         env:
           VERSION: ${{ needs.prepare.outputs.version }}
@@ -83,7 +83,7 @@ jobs:
         id: brand
         shell: bash
         run: |
-          NAME=$(bun -e 'import { APP_CONFIG } from "./convex/appConfig.ts"; process.stdout.write(APP_CONFIG.name)')
+          NAME=$(bun -e 'import { APP_CONFIG } from "./apps/app/convex/appConfig.ts"; process.stdout.write(APP_CONFIG.name)')
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
           echo "Artifact prefix: $NAME"
 
@@ -93,7 +93,7 @@ jobs:
           ELECTRON_ARCH: ${{ matrix.arch }}
           # Higher GitHub API rate limit when downloading convex-local-backend
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: bun scripts/electron-pack.mjs
+        run: bun --cwd apps/app scripts/electron-pack.mjs
 
       - name: Upload installer and update metadata
         uses: actions/upload-artifact@v4
@@ -102,8 +102,8 @@ jobs:
           # Installers + .blockmap (same ${name}-* prefix) + electron-updater feeds.
           # Do not also glob *.blockmap — that double-matches and races release upload.
           path: |
-            release/${{ steps.brand.outputs.name }}-*
-            release/latest*.yml
+            apps/app/release/${{ steps.brand.outputs.name }}-*
+            apps/app/release/latest*.yml
           if-no-files-found: error
 
   release:
@@ -122,7 +122,7 @@ jobs:
         id: brand
         shell: bash
         run: |
-          NAME=$(bun -e 'import { APP_CONFIG } from "./convex/appConfig.ts"; process.stdout.write(APP_CONFIG.name)')
+          NAME=$(bun -e 'import { APP_CONFIG } from "./apps/app/convex/appConfig.ts"; process.stdout.write(APP_CONFIG.name)')
           echo "name=$NAME" >> "$GITHUB_OUTPUT"
 
       - name: Download installers
@@ -163,14 +163,14 @@ jobs:
         env:
           VERSION: ${{ needs.prepare.outputs.version }}
         run: |
-          CURRENT="$(tr -d '[:space:]' < VERSION 2>/dev/null || true)"
+          CURRENT="$(tr -d '[:space:]' < apps/app/VERSION 2>/dev/null || true)"
           if [ "$CURRENT" = "$VERSION" ]; then
             echo "VERSION already ${VERSION}"
             exit 0
           fi
-          printf '%s\n' "$VERSION" > VERSION
+          printf '%s\n' "$VERSION" > apps/app/VERSION
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add VERSION
+          git add apps/app/VERSION
           git commit -m "chore: bump VERSION to ${VERSION}"
           git push
