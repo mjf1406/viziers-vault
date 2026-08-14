@@ -1,8 +1,10 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useForm } from "@tanstack/react-form";
 import { useTranslation } from "react-i18next";
+import type { z } from "zod";
 
-import { ClassRoleSelectLabel } from "@/components/badges/ClassRoleBadges";
+import { PartyRoleBadge } from "@/components/badges/PartyRoleBadges";
+import { WorldRoleSelectLabel } from "@/components/badges/WorldRoleBadges";
 import { Button } from "@/components/ui/button";
 import {
   Credenza,
@@ -25,19 +27,22 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import {
-  createJoinCodeFormSchema,
+  createWorldJoinCodeFormSchema,
   JOIN_CODE_TTL_OPTIONS,
   JOIN_CODE_USE_PRESETS,
-  type CreateJoinCodeFormValues,
+  type CreateWorldJoinCodeFormValues,
   type JoinCodeTtlOption,
 } from "@/lib/invitations/joinCodeFormSchema";
-import { isJoinCodeRole, type JoinCodeRole } from "@/lib/permissions/classPermissions";
+
+type InviteNamespace = "classes" | "worlds" | "parties";
 
 type CreateJoinCodeCredenzaProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  assignableRoles: Array<JoinCodeRole>;
-  onSubmit: (values: CreateJoinCodeFormValues) => Promise<void>;
+  assignableRoles: Array<string>;
+  onSubmit: (values: CreateWorldJoinCodeFormValues) => Promise<void>;
+  namespace?: InviteNamespace;
+  schema?: z.ZodType<CreateWorldJoinCodeFormValues>;
 };
 
 type FormDefaults = {
@@ -74,13 +79,26 @@ function ttlLabelKey(option: JoinCodeTtlOption): string {
   }
 }
 
+function roleLabel(namespace: InviteNamespace, role: string, colored = false): ReactNode {
+  switch (namespace) {
+    case "worlds":
+      return <WorldRoleSelectLabel role={role} className={colored ? undefined : undefined} />;
+    case "parties":
+      return <PartyRoleBadge role={role} />;
+    default:
+      return role;
+  }
+}
+
 export function CreateJoinCodeCredenza({
   open,
   onOpenChange,
   assignableRoles,
   onSubmit,
+  namespace = "worlds",
+  schema = createWorldJoinCodeFormSchema,
 }: CreateJoinCodeCredenzaProps) {
-  const { t } = useTranslation("classes");
+  const { t } = useTranslation(namespace);
   const { t: tCommon } = useTranslation("common");
   const [submitError, setSubmitError] = useState<string | null>(null);
   const skipNextResetRef = useRef(false);
@@ -89,7 +107,9 @@ export function CreateJoinCodeCredenza({
 
   const defaults = useMemo((): FormDefaults => {
     const preferredRole =
-      assignableRoles.find((role) => role === "student") ?? assignableRoles[0] ?? "";
+      assignableRoles.find((role) => role === "member" || role === "assistant_game_master") ??
+      assignableRoles[0] ??
+      "";
     return {
       role: preferredRole,
       ttlOption: "15m",
@@ -103,12 +123,9 @@ export function CreateJoinCodeCredenza({
 
   const form = useForm({
     defaultValues: defaults,
-    validators: {
-      onSubmit: createJoinCodeFormSchema,
-    },
     onSubmit: async ({ value }) => {
       setSubmitError(null);
-      const parsed = createJoinCodeFormSchema.parse(value);
+      const parsed = schema.parse(value);
       skipNextResetRef.current = true;
       onOpenChange(false);
       try {
@@ -166,10 +183,7 @@ export function CreateJoinCodeCredenza({
               <form.Field name="role">
                 {(field) => {
                   const error = fieldErrorMessage(field.state.meta.errors);
-                  const selectedRole =
-                    field.state.value && isJoinCodeRole(field.state.value)
-                      ? field.state.value
-                      : null;
+                  const selectedRole = field.state.value || null;
                   return (
                     <Field data-invalid={error ? true : undefined}>
                       <FieldLabel htmlFor="invite-role">
@@ -188,16 +202,14 @@ export function CreateJoinCodeCredenza({
                           aria-invalid={error ? true : undefined}
                         >
                           <SelectValue placeholder={t("inviteRolePlaceholder")}>
-                            {selectedRole ? (
-                              <ClassRoleSelectLabel role={selectedRole} colored />
-                            ) : null}
+                            {selectedRole ? roleLabel(namespace, selectedRole, true) : null}
                           </SelectValue>
                         </SelectTrigger>
                         <SelectContent>
                           <SelectGroup>
                             {assignableRoles.map((role) => (
                               <SelectItem key={role} value={role}>
-                                <ClassRoleSelectLabel role={role} />
+                                {roleLabel(namespace, role)}
                               </SelectItem>
                             ))}
                           </SelectGroup>

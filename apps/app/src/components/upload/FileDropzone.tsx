@@ -22,8 +22,10 @@ export type FileDropzoneVariant = "default" | "compact";
 type FileDropzoneProps = {
   presetKey?: UploadPresetKey;
   variant?: FileDropzoneVariant;
-  /** When set, finalized uploads attach to this class library. */
-  classId?: Id<"classes">;
+  /** When set, finalized uploads attach to this world library. */
+  worldId?: Id<"worlds">;
+  /** When set, finalized uploads attach to this party library. */
+  partyId?: Id<"parties">;
   /** Called once per upload item when finalize succeeds. */
   onUploaded?: (fileId: Id<"files">) => void;
   /** Allow selecting more than one file. Default true. */
@@ -36,7 +38,8 @@ type FileDropzoneProps = {
 export function FileDropzone({
   presetKey = "images",
   variant = "default",
-  classId,
+  worldId,
+  partyId,
   onUploaded,
   multiple = true,
   title,
@@ -48,7 +51,10 @@ export function FileDropzone({
   const inputRef = useRef<HTMLInputElement | null>(null);
   const notifiedRef = useRef(new Set<string>());
 
-  const { items, uploadFiles, abortFile, retryFile } = useUploadFiles(presetKey, { classId });
+  const { items, uploadFiles, abortFile, retryFile } = useUploadFiles(presetKey, {
+    worldId,
+    partyId,
+  });
 
   useEffect(() => {
     if (!onUploaded) return;

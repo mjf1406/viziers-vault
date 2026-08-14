@@ -6,18 +6,18 @@ import { api } from "../../../convex/_generated/api";
 import type { FunctionReturnType } from "convex/server";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { toast } from "@/components/ui/toast-manager";
-import { classFilesListQueryKey } from "@/hooks/files/useClassFiles";
+import { worldFilesListQueryKey } from "@/hooks/files/useWorldFiles";
 import { fileBytesQueryKey } from "@/hooks/files/useFileBytes";
 import { useOptimisticMutation } from "@/hooks/useOptimisticMutation";
 import { messageFromError } from "@/lib/errors/convexError";
 import { removeById } from "@/lib/optimistic";
 
-type ClassFilePublic = FunctionReturnType<typeof api.files.listClassFiles>[number];
+type WorldFilePublic = FunctionReturnType<typeof api.files.listWorldFiles>[number];
 
 type DeleteFileArgs = {
   fileId: Id<"files">;
-  /** When set, optimistically removes the file from the class library list. */
-  classId?: Id<"classes">;
+  /** When set, optimistically removes the file from the world library list. */
+  worldId?: Id<"worlds">;
 };
 
 export function useDeleteFile() {
@@ -29,17 +29,17 @@ export function useDeleteFile() {
     mutationFn: (args: DeleteFileArgs) => mutationFn({ fileId: args.fileId }),
     queryKeys: (args) => {
       const keys: QueryKey[] = [fileBytesQueryKey(args.fileId)];
-      if (args.classId !== undefined) {
-        keys.push(classFilesListQueryKey(args.classId));
+      if (args.worldId !== undefined) {
+        keys.push(worldFilesListQueryKey(args.worldId));
       }
       return keys;
     },
     applyOptimisticUpdate: (queryClient, args) => {
-      if (args.classId === undefined) {
+      if (args.worldId === undefined) {
         return;
       }
-      const listKey = classFilesListQueryKey(args.classId);
-      queryClient.setQueryData<ClassFilePublic[]>(listKey, (old) =>
+      const listKey = worldFilesListQueryKey(args.worldId);
+      queryClient.setQueryData<WorldFilePublic[]>(listKey, (old) =>
         old ? removeById(old, args.fileId) : old,
       );
     },

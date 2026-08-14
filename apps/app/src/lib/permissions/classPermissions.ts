@@ -1,55 +1,42 @@
-import { matchesPermissionPattern } from "@djpanda/convex-authz";
-
+/**
+ * @deprecated Import from `@/lib/permissions/worldPermissions` instead.
+ * Compatibility re-exports for the classroom → world migration.
+ */
 export type {
-  ClassPermission,
-  ClassRole,
-  JoinCodeRole,
+  WorldPermission as ClassPermission,
+  WorldRole as ClassRole,
+  WorldJoinCodeRole as JoinCodeRole,
+  PartyJoinCodeRole,
   MemberListRole,
   PermissionOverrideEffect,
   PermissionOverrideTargetRole,
-} from "../../../convex/lib/authzModel";
+} from "./worldPermissions";
+
 export {
-  CLASS_ROLE_RANK,
-  CLASS_ROLES,
-  GRANTABLE_CLASS_PERMISSIONS,
-  JOIN_CODE_INVITE_PERMISSION_BY_ROLE,
-  JOIN_CODE_ROLES,
+  WORLD_ROLE_RANK as CLASS_ROLE_RANK,
+  WORLD_ROLES as CLASS_ROLES,
+  GRANTABLE_WORLD_PERMISSIONS as GRANTABLE_CLASS_PERMISSIONS,
+  JOIN_CODE_INVITE_PERMISSION_BY_WORLD_ROLE as JOIN_CODE_INVITE_PERMISSION_BY_ROLE,
+  WORLD_JOIN_CODE_ROLES as JOIN_CODE_ROLES,
   MEMBER_LIST_AUTHZ_ROLES,
   MEMBER_LIST_READ_PERMISSION_BY_ROLE,
   PERMISSION_OVERRIDE_TARGET_ROLES,
   REMOVE_PERMISSION_BY_ROLE,
-  assignableRolesFor,
+  assignableWorldRolesFor as assignableRolesFor,
   canChangeMemberRole,
-  canManageClassRoles,
-  classScope,
+  canManageWorldRoles as canManageClassRoles,
+  worldScope as classScope,
   effectivePermissionEnabled,
   grantablePermissionGroups,
-  isClassRole,
-  isGrantableClassPermission,
-  isJoinCodeRole,
+  isWorldRole as isClassRole,
+  isGrantableWorldPermission as isGrantableClassPermission,
+  isWorldJoinCodeRole as isJoinCodeRole,
+  isPartyJoinCodeRole,
   isPermissionOverrideTargetRole,
   isStrictlyBelow,
   permissionsForRole,
-  pickHighestClassRole,
+  pickHighestWorldRole as pickHighestClassRole,
   SUSPEND_PERMISSION_BY_ROLE,
-} from "../../../convex/lib/authzModel";
-
-import {
-  permissionsForRole,
-  type ClassPermission,
-  type ClassRole,
-} from "../../../convex/lib/authzModel";
-
-export function createPermissionChecker(granted: ReadonlyArray<string>) {
-  return function can(permission: ClassPermission | string): boolean {
-    if (granted.length === 0) return false;
-    // Exact allow, or a stored allow pattern that matches the requested permission.
-    if (granted.includes(permission)) return true;
-    return granted.some((pattern) => matchesPermissionPattern(permission, pattern));
-  };
-}
-
-export function permissionsFromRole(role: ClassRole | null | undefined): Array<string> {
-  if (!role) return [];
-  return permissionsForRole(role);
-}
+  createPermissionChecker,
+  permissionsFromRole,
+} from "./worldPermissions";

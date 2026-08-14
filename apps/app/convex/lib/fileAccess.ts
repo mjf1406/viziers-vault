@@ -2,8 +2,8 @@ import { ConvexError } from "convex/values";
 
 import type { Doc, Id } from "../_generated/dataModel.js";
 import type { MutationCtx, QueryCtx } from "../_generated/server.js";
-import { authz } from "../authz.js";
-import { classScope } from "./authzModel.js";
+import { canOnWorld } from "./worldAccess.js";
+import { canReadParty } from "./partyMembership.js";
 
 /**
  * Load a file the caller owns. Uniform deny when missing or not owned.
@@ -25,7 +25,7 @@ export async function requireFileOwner(
 
 /**
  * Whether the caller may read file bytes / metadata.
- * Owner always; otherwise class members with `files:read` when `classId` is set.
+ * Owner always; otherwise scoped world `files:read` or party membership.
  */
 export async function canAccessFile(
   ctx: QueryCtx | MutationCtx,
@@ -35,8 +35,20 @@ export async function canAccessFile(
   if (file.userId === userId) {
     return true;
   }
-  if (file.classId === undefined) {
-    return false;
+  if (file.worldId !== undefined) {
+    return await canOnWorld(ctx, userId, file.worldId, "files:read");
   }
-  return await authz.can(ctx, userId, "files:read", classScope(file.classId));
+  if (file.partyId !== undefined) {
+    return await canReadParty(ctx, file.partyId, userId);
+  }
+  if (file.classId !== undefined) {
+    const world = await ctx.db
+      .query("worlds")
+      .withIndex("by_legacyClassId", (q) => q.eq("legacyClassId", file.classId!))
+      .unique();
+    if (world) {
+      return await canOnWorld(ctx, userId, world._id, "files:read");
+    }
+  }
+  return false;
 }

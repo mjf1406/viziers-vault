@@ -5,8 +5,9 @@ import { APP_CONFIG } from "./appConfig.js";
 import type { Id } from "./_generated/dataModel.js";
 import { internalMutation, internalQuery } from "./_generated/server.js";
 import { authz } from "./authz.js";
-import { classScope } from "./lib/authzModel.js";
+import { worldScope } from "./lib/authzModel.js";
 import { canAccessFile } from "./lib/fileAccess.js";
+import { isPartyOwner } from "./lib/partyMembership.js";
 import {
   isEnabledUploadPreset,
   isUploadPresetKey,
@@ -23,6 +24,8 @@ const accessibleFileValidator = v.object({
   userId: v.id("users"),
   /** Authenticated caller who passed the access check (for rate limiting). */
   viewerId: v.id("users"),
+  worldId: v.optional(v.id("worlds")),
+  partyId: v.optional(v.id("parties")),
   classId: v.optional(v.id("classes")),
   name: v.string(),
   contentType: v.string(),
@@ -32,7 +35,7 @@ const accessibleFileValidator = v.object({
 });
 
 /**
- * Load a file the authenticated caller may read (owner or class `files:read`).
+ * Load a file the authenticated caller may read (owner or scoped access).
  * Used by `files.getFileBytes` so access is re-checked on every fetch.
  */
 export const getAccessibleFile = internalQuery({
@@ -57,6 +60,8 @@ export const getAccessibleFile = internalQuery({
       storageId: file.storageId,
       userId: file.userId,
       viewerId: userId,
+      worldId: file.worldId,
+      partyId: file.partyId,
       classId: file.classId,
       name: file.name,
       contentType: file.contentType,
@@ -70,7 +75,7 @@ export const getAccessibleFile = internalQuery({
 /**
  * Register a finalized upload after magic-byte validation in the action layer.
  * Enforces per-user quota; deletes the blob before throwing on failure.
- * Optional `classId` requires `files:create` in that class scope.
+ * Optional `worldId` requires `files:create`; optional `partyId` requires party ownership.
  *
  * Invariant: the `files` table is the sole registry for app-owned blobs.
  * Anything in `_storage` without a matching `files` row is considered orphaned.
@@ -82,6 +87,8 @@ export const registerFinalizedUpload = internalMutation({
     preset: v.union(v.literal("images"), v.literal("documents"), v.literal("audio")),
     contentType: v.string(),
     size: v.number(),
+    worldId: v.optional(v.id("worlds")),
+    partyId: v.optional(v.id("parties")),
     classId: v.optional(v.id("classes")),
   },
   returns: v.id("files"),
@@ -137,8 +144,44 @@ export const registerFinalizedUpload = internalMutation({
       });
     }
 
+    let worldId: Id<"worlds"> | undefined;
+    let partyId: Id<"parties"> | undefined;
     let classId: Id<"classes"> | undefined;
-    if (args.classId !== undefined) {
+
+    if (args.worldId !== undefined) {
+      const worldDoc = await ctx.db.get("worlds", args.worldId);
+      if (!worldDoc) {
+        await ctx.storage.delete(args.storageId);
+        throw new ConvexError({
+          code: "UPLOAD_FORBIDDEN",
+          message: "File not found or access denied",
+        });
+      }
+      try {
+        await authz.require(ctx, userId, "files:create", worldScope(args.worldId));
+      } catch {
+        await ctx.storage.delete(args.storageId);
+        throw new ConvexError({
+          code: "UPLOAD_FORBIDDEN",
+          message: "File not found or access denied",
+        });
+      }
+      worldId = args.worldId;
+    }
+
+    if (args.partyId !== undefined) {
+      const partyDoc = await ctx.db.get("parties", args.partyId);
+      if (!partyDoc || !(await isPartyOwner(ctx, args.partyId, userId))) {
+        await ctx.storage.delete(args.storageId);
+        throw new ConvexError({
+          code: "UPLOAD_FORBIDDEN",
+          message: "File not found or access denied",
+        });
+      }
+      partyId = args.partyId;
+    }
+
+    if (args.classId !== undefined && worldId === undefined && partyId === undefined) {
       const classDoc = await ctx.db.get("classes", args.classId);
       if (!classDoc) {
         await ctx.storage.delete(args.storageId);
@@ -147,16 +190,24 @@ export const registerFinalizedUpload = internalMutation({
           message: "File not found or access denied",
         });
       }
-      try {
-        await authz.require(ctx, userId, "files:create", classScope(args.classId));
-      } catch {
-        await ctx.storage.delete(args.storageId);
-        throw new ConvexError({
-          code: "UPLOAD_FORBIDDEN",
-          message: "File not found or access denied",
-        });
+      const migratedWorld = await ctx.db
+        .query("worlds")
+        .withIndex("by_legacyClassId", (q) => q.eq("legacyClassId", args.classId!))
+        .unique();
+      if (migratedWorld) {
+        try {
+          await authz.require(ctx, userId, "files:create", worldScope(migratedWorld._id));
+          worldId = migratedWorld._id;
+        } catch {
+          await ctx.storage.delete(args.storageId);
+          throw new ConvexError({
+            code: "UPLOAD_FORBIDDEN",
+            message: "File not found or access denied",
+          });
+        }
+      } else {
+        classId = args.classId;
       }
-      classId = args.classId;
     }
 
     // eslint-disable-next-line @convex-dev/no-collect-in-query -- per-user uploads are quota-bounded
@@ -177,6 +228,8 @@ export const registerFinalizedUpload = internalMutation({
     return await ctx.db.insert("files", {
       storageId: args.storageId,
       userId,
+      ...(worldId !== undefined ? { worldId } : {}),
+      ...(partyId !== undefined ? { partyId } : {}),
       ...(classId !== undefined ? { classId } : {}),
       name,
       contentType: args.contentType,

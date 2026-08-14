@@ -5,11 +5,6 @@ import { v } from "convex/values";
 
 const schema = defineSchema({
   ...authTables,
-  /**
-   * Extends Convex Auth `users` with an optional self-host/Electron avatar
-   * file. Display URLs are resolved at query time from this id (see
-   * `resolveUserImageUrl`); OAuth provider URLs remain in `image`.
-   */
   users: defineTable({
     name: v.optional(v.string()),
     image: v.optional(v.string()),
@@ -18,7 +13,6 @@ const schema = defineSchema({
     phone: v.optional(v.string()),
     phoneVerificationTime: v.optional(v.number()),
     isAnonymous: v.optional(v.boolean()),
-    /** Personal `files` row used as the profile photo (self-host / Electron). */
     avatarFileId: v.optional(v.id("files")),
   })
     .index("email", ["email"])
@@ -27,62 +21,94 @@ const schema = defineSchema({
     userId: v.id("users"),
     language: languageValidator,
   }).index("by_userId", ["userId"]),
+  worlds: defineTable({
+    ownerId: v.id("users"),
+    name: v.string(),
+    description: v.optional(v.string()),
+    icon: v.optional(v.string()),
+    imageFileId: v.optional(v.id("files")),
+    updatedAt: v.number(),
+    archivedAt: v.optional(v.number()),
+    /** Set during class→world migration for legacy URL redirects. */
+    legacyClassId: v.optional(v.id("classes")),
+  })
+    .index("by_owner", ["ownerId"])
+    .index("by_legacyClassId", ["legacyClassId"]),
+  parties: defineTable({
+    ownerId: v.id("users"),
+    name: v.string(),
+    description: v.optional(v.string()),
+    icon: v.optional(v.string()),
+    imageFileId: v.optional(v.id("files")),
+    updatedAt: v.number(),
+    archivedAt: v.optional(v.number()),
+  }).index("by_owner", ["ownerId"]),
+  partyMemberships: defineTable({
+    partyId: v.id("parties"),
+    userId: v.id("users"),
+    role: v.union(v.literal("leader"), v.literal("member")),
+    createdAt: v.number(),
+  })
+    .index("by_party", ["partyId"])
+    .index("by_party_and_user", ["partyId", "userId"])
+    .index("by_user", ["userId"])
+    .index("by_party_and_role", ["partyId", "role"]),
+  worldPartyGrants: defineTable({
+    worldId: v.id("worlds"),
+    partyId: v.id("parties"),
+    grantedBy: v.id("users"),
+    createdAt: v.number(),
+  })
+    .index("by_world", ["worldId"])
+    .index("by_party", ["partyId"])
+    .index("by_world_and_party", ["worldId", "partyId"]),
+  /** Legacy classroom table — retained for migration and redirects. */
   classes: defineTable({
     ownerId: v.id("users"),
     name: v.string(),
     year: v.number(),
     description: v.optional(v.string()),
     icon: v.optional(v.string()),
-    /** Class-scoped image file shown on the dashboard. */
     bannerFileId: v.optional(v.id("files")),
     updatedAt: v.number(),
     archivedAt: v.optional(v.number()),
   }).index("by_owner", ["ownerId"]),
   joinCodes: defineTable({
     code: v.string(),
-    classId: v.id("classes"),
+    targetKind: v.union(v.literal("world"), v.literal("party"), v.literal("class")),
+    worldId: v.optional(v.id("worlds")),
+    partyId: v.optional(v.id("parties")),
+    /** @deprecated legacy class invites */
+    classId: v.optional(v.id("classes")),
     createdBy: v.id("users"),
-    role: v.union(
-      v.literal("teacher"),
-      v.literal("assistant_teacher"),
-      v.literal("student"),
-      v.literal("guardian"),
-    ),
+    role: v.string(),
     expiresAt: v.number(),
     maxUses: v.number(),
     useCount: v.number(),
     expirationJobId: v.optional(v.id("_scheduled_functions")),
   })
     .index("by_code", ["code"])
+    .index("by_world", ["worldId"])
+    .index("by_party", ["partyId"])
     .index("by_class", ["classId"])
     .index("by_creator", ["createdBy"]),
-  /**
-   * One card-less trial grant per normalized email.
-   * Survives account delete/recreate — never re-grant for the same emailKey.
-   */
   trialGrants: defineTable({
     emailKey: v.string(),
-    /** Cleared on account deletion; reattached on re-signup via emailKey. */
     userId: v.optional(v.id("users")),
     startedAt: v.number(),
     endsAt: v.number(),
-    /** Set by the scheduled `markExpired` job when the trial lapses. */
     expiredAt: v.optional(v.number()),
     expirationJobId: v.optional(v.id("_scheduled_functions")),
   })
     .index("by_emailKey", ["emailKey"])
     .index("by_userId", ["userId"])
     .index("by_endsAt", ["endsAt"]),
-  /**
-   * Ownership registry for Convex storage blobs.
-   * Only finalized uploads (validated MIME/size) get a row.
-   * Optional `classId` places the file in a class library (`files:read` for members;
-   * `files:create` for owner/teacher; uploader retains update/delete).
-   * Absent `classId` = personal / owner-only.
-   */
   files: defineTable({
     storageId: v.id("_storage"),
     userId: v.id("users"),
+    worldId: v.optional(v.id("worlds")),
+    partyId: v.optional(v.id("parties")),
+    /** @deprecated migrated to worldId */
     classId: v.optional(v.id("classes")),
     name: v.string(),
     contentType: v.string(),
@@ -92,11 +118,9 @@ const schema = defineSchema({
   })
     .index("by_userId", ["userId"])
     .index("by_storageId", ["storageId"])
+    .index("by_worldId", ["worldId"])
+    .index("by_partyId", ["partyId"])
     .index("by_classId", ["classId"]),
-  /**
-   * Many-to-many guardian ↔ student links within a class.
-   * Cleared when either side leaves the guardian/student role.
-   */
   guardianStudentLinks: defineTable({
     classId: v.id("classes"),
     guardianUserId: v.id("users"),
@@ -107,17 +131,10 @@ const schema = defineSchema({
     .index("by_class_guardian", ["classId", "guardianUserId"])
     .index("by_class_student", ["classId", "studentUserId"])
     .index("by_class_guardian_student", ["classId", "guardianUserId", "studentUserId"]),
-  /**
-   * Anonymous Free-card CTA clicks (cloud prod only). No user/IP fields.
-   * Aggregated via @convex-dev/aggregate for range counts.
-   */
   anonymousUsageEvents: defineTable({
     kind: v.union(v.literal("desktop_download"), v.literal("self_host_click")),
     os: v.optional(v.union(v.literal("windows"), v.literal("mac"), v.literal("ubuntu"))),
   }),
-  /**
-   * Daily GitHub Traffic clone counts (CI-adjusted). Synced by cron.
-   */
   githubCloneDays: defineTable({
     dayKey: v.string(),
     dayStartMs: v.number(),
@@ -127,9 +144,6 @@ const schema = defineSchema({
     uniques: v.number(),
     syncedAt: v.number(),
   }).index("by_dayKey", ["dayKey"]),
-  /**
-   * Cloud product feedback (message-in-a-bottle). Not used on self-host / Electron.
-   */
   feedback: defineTable({
     userId: v.id("users"),
     type: v.union(v.literal("bug"), v.literal("feature"), v.literal("concern"), v.literal("other")),
@@ -149,7 +163,6 @@ const schema = defineSchema({
     attachmentFileIds: v.array(v.id("files")),
     createdAt: v.number(),
     archivedAt: v.optional(v.number()),
-    /** Demo / seed rows — deletable via clearDemo. */
     isSeed: v.optional(v.boolean()),
   })
     .index("by_createdAt", ["createdAt"])

@@ -8,29 +8,29 @@ import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 
 export function presenceDisplaySummariesQueryKey(
-  classId: Id<"classes">,
+  worldId: Id<"worlds">,
   onlineUserIds: readonly string[],
 ) {
   return convexQuery(api.presence.displaySummaries, {
-    classId,
+    worldId,
     userIds: [...onlineUserIds],
   }).queryKey;
 }
 
 /**
- * Cached display fields for online users in a class room.
+ * Cached display fields for online users in a world room.
  *
  * gcTime: ONE_HOUR — stable member avatars/names; Convex keeps mounted data live.
  */
 export function usePresenceDisplaySummaries(
-  classId: Id<"classes">,
+  worldId: Id<"worlds">,
   onlineUserIds: ReadonlySet<string> | undefined,
 ) {
   const normalizedUserIds = useMemo(() => normalizeOnlineUserIds(onlineUserIds), [onlineUserIds]);
 
   return useAuthedQuery(
     api.presence.displaySummaries,
-    normalizedUserIds.length > 0 ? { classId, userIds: normalizedUserIds } : "skip",
+    normalizedUserIds.length > 0 ? { worldId, userIds: normalizedUserIds } : "skip",
     { gcTime: ONE_HOUR },
   );
 }

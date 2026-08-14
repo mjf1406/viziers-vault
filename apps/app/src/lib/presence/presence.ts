@@ -1,4 +1,4 @@
-import type { PresenceState } from "@/hooks/presence/useClassPresence";
+import type { PresenceState } from "@convex-dev/presence/react";
 
 /** Matches `@convex-dev/presence` default list limit. */
 export const PRESENCE_LIST_LIMIT = 104;

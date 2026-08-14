@@ -5,7 +5,7 @@ import {
   normalizeOnlineUserIds,
   PRESENCE_LIST_LIMIT,
 } from "@/lib/presence/presence";
-import type { PresenceState } from "@/hooks/presence/useClassPresence";
+import type { PresenceState } from "@convex-dev/presence/react";
 
 function presenceEntry(userId: string, online = true): PresenceState {
   return { userId, online, lastDisconnected: 0 };

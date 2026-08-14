@@ -4,10 +4,9 @@ import { ConvexError, v } from "convex/values";
 import { components } from "./_generated/api.js";
 import type { Id } from "./_generated/dataModel.js";
 import { mutation, query } from "./_generated/server.js";
-import { authz } from "./authz.js";
-import { authedMutation, classQuery } from "./lib/customFunctions.js";
-import { classScope } from "./lib/authzModel.js";
+import { authedMutation, worldQuery } from "./lib/customFunctions.js";
 import { isClassPresenceEnabled } from "./lib/presenceEnabled.js";
+import { canOnWorld } from "./lib/worldAccess.js";
 import { resolveUserImageUrl } from "./lib/userImage.js";
 
 const presence = new Presence(components.presence);
@@ -34,8 +33,8 @@ const presenceDisplaySummaryValidator = v.object({
 });
 
 /**
- * Keepalive for class presence rooms (`roomId` = class id).
- * Requires auth + `class:read`.
+ * Keepalive for world presence rooms (`roomId` = world id).
+ * Requires auth + `world:read`.
  * Always heartbeats as the authenticated user — ignores spoofed `userId`.
  */
 export const heartbeat = authedMutation({
@@ -50,43 +49,42 @@ export const heartbeat = authedMutation({
     if (!isClassPresenceEnabled()) {
       throw new ConvexError({
         code: "PRESENCE_DISABLED",
-        message: "Class presence is disabled",
+        message: "Presence is disabled",
       });
     }
 
     if (userId !== ctx.userId) {
       throw new ConvexError({
-        code: "CLASS_UNAVAILABLE",
-        message: "Class not found or access denied",
+        code: "WORLD_UNAVAILABLE",
+        message: "World not found or access denied",
       });
     }
 
-    const classId = ctx.db.normalizeId("classes", roomId);
-    if (!classId) {
+    const worldId = ctx.db.normalizeId("worlds", roomId);
+    if (!worldId) {
       throw new ConvexError({
-        code: "CLASS_UNAVAILABLE",
-        message: "Class not found or access denied",
+        code: "WORLD_UNAVAILABLE",
+        message: "World not found or access denied",
       });
     }
 
-    const classDoc = await ctx.db.get("classes", classId);
-    if (!classDoc) {
+    const worldDoc = await ctx.db.get("worlds", worldId);
+    if (!worldDoc) {
       throw new ConvexError({
-        code: "CLASS_UNAVAILABLE",
-        message: "Class not found or access denied",
+        code: "WORLD_UNAVAILABLE",
+        message: "World not found or access denied",
       });
     }
 
-    try {
-      await authz.require(ctx, ctx.userId, "class:read", classScope(classId));
-    } catch {
+    const allowed = await canOnWorld(ctx, ctx.userId, worldId, "world:read");
+    if (!allowed) {
       throw new ConvexError({
-        code: "CLASS_UNAVAILABLE",
-        message: "Class not found or access denied",
+        code: "WORLD_UNAVAILABLE",
+        message: "World not found or access denied",
       });
     }
 
-    return await presence.heartbeat(ctx, classId, ctx.userId, sessionId, interval);
+    return await presence.heartbeat(ctx, worldId, ctx.userId, sessionId, interval);
   },
 });
 
@@ -106,10 +104,10 @@ export const list = query({
 });
 
 /**
- * Display summaries for online users in a class room.
- * Requires auth + `class:read`; skips users who cannot read the class.
+ * Display summaries for online users in a world room.
+ * Requires auth + `world:read`; skips users who cannot read the world.
  */
-export const displaySummaries = classQuery({
+export const displaySummaries = worldQuery({
   args: {
     userIds: v.array(v.string()),
   },
@@ -119,6 +117,7 @@ export const displaySummaries = classQuery({
       return [];
     }
 
+    const worldId = ctx.worldDoc._id;
     const uniqueUserIds = [...new Set(userIds)].slice(0, PRESENCE_LIST_LIMIT);
     const summaries: Array<{
       userId: Id<"users">;
@@ -132,8 +131,8 @@ export const displaySummaries = classQuery({
         continue;
       }
 
-      const canReadClass = await authz.can(ctx, normalizedUserId, "class:read", ctx.scope);
-      if (!canReadClass) {
+      const canReadWorld = await canOnWorld(ctx, normalizedUserId, worldId, "world:read");
+      if (!canReadWorld) {
         continue;
       }
 

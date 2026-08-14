@@ -6,102 +6,88 @@ import {
 } from "@djpanda/convex-authz";
 
 /**
- * Single source of truth for class permissions and roles.
- * No Convex imports — safe to import from `src/` at runtime (same pattern as appConfig).
+ * Single source of truth for world permissions and roles.
+ * No Convex imports — safe to import from `src/` at runtime.
  */
 
 export const permissions = definePermissions({
-  class: { read: true, update: true, archive: true, delete: true },
-  activity: { read: true },
-  teachers: { read: true, invite: true, remove: true, suspend: true },
-  assistantTeachers: { read: true, invite: true, remove: true, suspend: true },
-  students: { read: true, add: true, remove: true, suspend: true },
-  guardians: { read: true, invite: true, remove: true, suspend: true },
+  world: { read: true, update: true, archive: true, delete: true },
+  game_masters: { read: true, invite: true, remove: true, suspend: true },
+  assistant_game_masters: { read: true, invite: true, remove: true, suspend: true },
+  players: { read: true },
+  parties: { read: true, grant: true, revoke: true },
   invitations: { read: true, create: true, revoke: true },
-  /** Class file library — create is teacher+; mutate stays ownership-based (uploader). */
   files: { read: true, create: true },
-  /** Owner-only: manage fine-grained permission overrides for staff. */
   permissions: { manage: true },
-  /** App-level admin (global / unscoped). Not a class membership role. */
   admin: { syncProducts: true, viewHealth: true, manageUsers: true, viewFeedback: true },
 });
 
 export const roles = defineRoles(permissions, {
-  class_member: { class: ["read"], files: ["read"] },
-  student: { inherits: "class_member" },
-  guardian: { inherits: "class_member" },
-  assistant_teacher: {
-    inherits: "class_member",
-    activity: ["read"],
-    teachers: ["read"],
-    assistantTeachers: ["read"],
-    students: ["read"],
-    guardians: ["read"],
+  world_member: { world: ["read"], files: ["read"] },
+  player: { inherits: "world_member" },
+  assistant_game_master: {
+    inherits: "world_member",
+    game_masters: ["read"],
+    assistant_game_masters: ["read"],
+    players: ["read"],
+    parties: ["read"],
   },
-  teacher: {
-    inherits: "assistant_teacher",
-    class: ["update", "archive"],
-    students: ["add", "remove", "suspend"],
-    guardians: ["invite", "remove", "suspend"],
-    assistantTeachers: ["invite", "remove", "suspend"],
+  game_master: {
+    inherits: "assistant_game_master",
+    world: ["update", "archive"],
+    assistant_game_masters: ["invite", "remove", "suspend"],
     invitations: ["read", "create", "revoke"],
     files: ["create"],
+    parties: ["grant", "revoke"],
   },
   owner: {
-    inherits: "teacher",
-    class: ["delete"],
-    teachers: ["invite", "remove", "suspend"],
+    inherits: "game_master",
+    world: ["delete"],
+    game_masters: ["invite", "remove", "suspend"],
     permissions: ["manage"],
   },
-  /** Global unscoped role — assigned without a class scope. */
   app_admin: {
     admin: ["syncProducts", "viewHealth", "manageUsers", "viewFeedback"],
   },
 });
 
 export type AppPermission = PermissionString<typeof permissions>;
-/** Permissions used inside class scopes (excludes app-level `admin:*`). */
-export type ClassPermission = Exclude<AppPermission, `admin:${string}`>;
+export type WorldPermission = Exclude<AppPermission, `admin:${string}`>;
 
-/** Explicit class membership roles — does NOT include `app_admin`. */
-export const CLASS_ROLE_NAMES = [
+export const WORLD_ROLE_NAMES = [
   "owner",
-  "teacher",
-  "assistant_teacher",
-  "student",
-  "guardian",
-  "class_member",
+  "game_master",
+  "assistant_game_master",
+  "player",
+  "world_member",
 ] as const;
 
-export type ClassRole = (typeof CLASS_ROLE_NAMES)[number];
+export type WorldRole = (typeof WORLD_ROLE_NAMES)[number];
 
-export const CLASS_ROLES: Array<ClassRole> = [...CLASS_ROLE_NAMES];
+export const WORLD_ROLES: Array<WorldRole> = [...WORLD_ROLE_NAMES];
 
-/** Privilege order for resolving a single display role when multiple are assigned. */
-export const CLASS_ROLE_RANK: Record<ClassRole, number> = {
+export const WORLD_ROLE_RANK: Record<WorldRole, number> = {
   owner: 60,
-  teacher: 50,
-  assistant_teacher: 40,
-  student: 30,
-  guardian: 30,
-  class_member: 10,
+  game_master: 50,
+  assistant_game_master: 40,
+  player: 30,
+  world_member: 10,
 };
 
-export function classScope(classId: string) {
-  return { type: "class", id: classId } as const;
+export function worldScope(worldId: string) {
+  return { type: "world", id: worldId } as const;
 }
 
-export function permissionsForRole(role: ClassRole): Array<string> {
+export function permissionsForRole(role: WorldRole): Array<string> {
   return flattenRolePermissions(roles, role);
 }
 
-const NON_GRANTABLE_CLASS_PERMISSIONS = new Set<string>(["permissions:manage", "class:delete"]);
+const NON_GRANTABLE_WORLD_PERMISSIONS = new Set<string>(["permissions:manage", "world:delete"]);
 
-/** Staff roles that may receive fine-grained permission overrides. */
 export const PERMISSION_OVERRIDE_TARGET_ROLES = [
-  "teacher",
-  "assistant_teacher",
-] as const satisfies ReadonlyArray<ClassRole>;
+  "game_master",
+  "assistant_game_master",
+] as const satisfies ReadonlyArray<WorldRole>;
 
 export type PermissionOverrideTargetRole = (typeof PERMISSION_OVERRIDE_TARGET_ROLES)[number];
 
@@ -111,28 +97,22 @@ export function isPermissionOverrideTargetRole(
   return (PERMISSION_OVERRIDE_TARGET_ROLES as ReadonlyArray<string>).includes(value);
 }
 
-export function isGrantableClassPermission(value: string): value is ClassPermission {
+export function isGrantableWorldPermission(value: string): value is WorldPermission {
   if (value.startsWith("admin:")) return false;
-  if (NON_GRANTABLE_CLASS_PERMISSIONS.has(value)) return false;
-  // Must be a known class permission from the owner role catalog (full class set).
+  if (NON_GRANTABLE_WORLD_PERMISSIONS.has(value)) return false;
   return permissionsForRole("owner").includes(value);
 }
 
-/**
- * Grantable class permissions for the Permissions page, derived from the owner
- * role catalog minus owner-exclusive / meta permissions.
- */
-export const GRANTABLE_CLASS_PERMISSIONS: Array<ClassPermission> = permissionsForRole("owner")
-  .filter(isGrantableClassPermission)
+export const GRANTABLE_WORLD_PERMISSIONS: Array<WorldPermission> = permissionsForRole("owner")
+  .filter(isGrantableWorldPermission)
   .sort((a, b) => a.localeCompare(b));
 
-/** Resource key → grantable permissions for that resource (UI grouping). */
 export function grantablePermissionGroups(): Array<{
   resource: string;
-  permissions: Array<ClassPermission>;
+  permissions: Array<WorldPermission>;
 }> {
-  const byResource = new Map<string, Array<ClassPermission>>();
-  for (const permission of GRANTABLE_CLASS_PERMISSIONS) {
+  const byResource = new Map<string, Array<WorldPermission>>();
+  for (const permission of GRANTABLE_WORLD_PERMISSIONS) {
     const resource = permission.split(":")[0] ?? permission;
     const list = byResource.get(resource) ?? [];
     list.push(permission);
@@ -145,7 +125,6 @@ export function grantablePermissionGroups(): Array<{
 
 export type PermissionOverrideEffect = "allow" | "deny";
 
-/** Effective allow after role baseline + optional override (deny wins). */
 export function effectivePermissionEnabled(
   roleDefault: boolean,
   override: PermissionOverrideEffect | null,
@@ -155,16 +134,16 @@ export function effectivePermissionEnabled(
   return roleDefault;
 }
 
-export function isClassRole(value: string): value is ClassRole {
-  return (CLASS_ROLE_NAMES as ReadonlyArray<string>).includes(value);
+export function isWorldRole(value: string): value is WorldRole {
+  return (WORLD_ROLE_NAMES as ReadonlyArray<string>).includes(value);
 }
 
-export function pickHighestClassRole(roleNames: Array<string>): ClassRole | null {
-  let best: ClassRole | null = null;
+export function pickHighestWorldRole(roleNames: Array<string>): WorldRole | null {
+  let best: WorldRole | null = null;
   let bestRank = -1;
   for (const name of roleNames) {
-    if (!isClassRole(name)) continue;
-    const rank = CLASS_ROLE_RANK[name];
+    if (!isWorldRole(name)) continue;
+    const rank = WORLD_ROLE_RANK[name];
     if (rank > bestRank) {
       best = name;
       bestRank = rank;
@@ -173,91 +152,84 @@ export function pickHighestClassRole(roleNames: Array<string>): ClassRole | null
   return best;
 }
 
-/** Which permission gates suspending a member, based on the target's role. */
 export const SUSPEND_PERMISSION_BY_ROLE = {
   owner: null,
-  teacher: "teachers:suspend",
-  assistant_teacher: "assistantTeachers:suspend",
-  student: "students:suspend",
-  guardian: "guardians:suspend",
-  class_member: null,
-} as const satisfies Record<ClassRole, ClassPermission | null>;
+  game_master: "game_masters:suspend",
+  assistant_game_master: "assistant_game_masters:suspend",
+  player: null,
+  world_member: null,
+} as const satisfies Record<WorldRole, WorldPermission | null>;
 
-/** Which permission gates removing a member, based on the target's role. */
 export const REMOVE_PERMISSION_BY_ROLE = {
   owner: null,
-  teacher: "teachers:remove",
-  assistant_teacher: "assistantTeachers:remove",
-  student: "students:remove",
-  guardian: "guardians:remove",
-  class_member: null,
-} as const satisfies Record<ClassRole, ClassPermission | null>;
+  game_master: "game_masters:remove",
+  assistant_game_master: "assistant_game_masters:remove",
+  player: null,
+  world_member: null,
+} as const satisfies Record<WorldRole, WorldPermission | null>;
 
-/** Roles that can be assigned via join codes (not owner / class_member). */
-export type JoinCodeRole = Exclude<ClassRole, "owner" | "class_member">;
+export type WorldJoinCodeRole = "game_master" | "assistant_game_master";
 
-/** People-page lists (owners appear on the teachers page). */
-export type MemberListRole = JoinCodeRole;
+export type PartyJoinCodeRole = "leader" | "member";
 
-/** Authz roles included when listing a people page. */
+export type MemberListRole = WorldJoinCodeRole;
+
 export const MEMBER_LIST_AUTHZ_ROLES = {
-  teacher: ["owner", "teacher"],
-  assistant_teacher: ["assistant_teacher"],
-  student: ["student"],
-  guardian: ["guardian"],
-} as const satisfies Record<MemberListRole, ReadonlyArray<ClassRole>>;
+  game_master: ["owner", "game_master"],
+  assistant_game_master: ["assistant_game_master"],
+} as const satisfies Record<MemberListRole, ReadonlyArray<WorldRole>>;
 
-/** Which permission gates reading a people list. */
 export const MEMBER_LIST_READ_PERMISSION_BY_ROLE = {
-  teacher: "teachers:read",
-  assistant_teacher: "assistantTeachers:read",
-  student: "students:read",
-  guardian: "guardians:read",
-} as const satisfies Record<MemberListRole, ClassPermission>;
+  game_master: "game_masters:read",
+  assistant_game_master: "assistant_game_masters:read",
+} as const satisfies Record<MemberListRole, WorldPermission>;
 
-export const JOIN_CODE_ROLES = [
-  "teacher",
-  "assistant_teacher",
-  "student",
-  "guardian",
-] as const satisfies ReadonlyArray<JoinCodeRole>;
+export const WORLD_JOIN_CODE_ROLES = [
+  "game_master",
+  "assistant_game_master",
+] as const satisfies ReadonlyArray<WorldJoinCodeRole>;
 
-/** Which permission gates creating a join code for a given role. */
-export const JOIN_CODE_INVITE_PERMISSION_BY_ROLE = {
-  teacher: "teachers:invite",
-  assistant_teacher: "assistantTeachers:invite",
-  student: "students:add",
-  guardian: "guardians:invite",
-} as const satisfies Record<JoinCodeRole, ClassPermission>;
+export const PARTY_JOIN_CODE_ROLES = [
+  "leader",
+  "member",
+] as const satisfies ReadonlyArray<PartyJoinCodeRole>;
 
-export function isJoinCodeRole(value: string): value is JoinCodeRole {
-  return (JOIN_CODE_ROLES as ReadonlyArray<string>).includes(value);
+export const JOIN_CODE_INVITE_PERMISSION_BY_WORLD_ROLE = {
+  game_master: "game_masters:invite",
+  assistant_game_master: "assistant_game_masters:invite",
+} as const satisfies Record<WorldJoinCodeRole, WorldPermission>;
+
+export function isWorldJoinCodeRole(value: string): value is WorldJoinCodeRole {
+  return (WORLD_JOIN_CODE_ROLES as ReadonlyArray<string>).includes(value);
 }
 
-/** Owners and teachers may reassign roles for members strictly below them. */
-export function canManageClassRoles(actorRole: ClassRole | null | undefined): boolean {
-  return actorRole === "owner" || actorRole === "teacher";
+export function isPartyJoinCodeRole(value: string): value is PartyJoinCodeRole {
+  return (PARTY_JOIN_CODE_ROLES as ReadonlyArray<string>).includes(value);
 }
 
-/** True when `otherRole` ranks strictly below `actorRole`. */
-export function isStrictlyBelow(actorRole: ClassRole, otherRole: ClassRole): boolean {
-  return CLASS_ROLE_RANK[otherRole] < CLASS_ROLE_RANK[actorRole];
+export function canManageWorldRoles(actorRole: WorldRole | null | undefined): boolean {
+  return actorRole === "owner" || actorRole === "game_master";
 }
 
-/**
- * Join-code roles the actor may assign (strictly below their own rank).
- * Owners can assign teacher; teachers cannot.
- */
-export function assignableRolesFor(actorRole: ClassRole): Array<JoinCodeRole> {
-  if (!canManageClassRoles(actorRole)) return [];
-  return JOIN_CODE_ROLES.filter((role) => isStrictlyBelow(actorRole, role));
+export function isStrictlyBelow(actorRole: WorldRole, otherRole: WorldRole): boolean {
+  return WORLD_ROLE_RANK[otherRole] < WORLD_ROLE_RANK[actorRole];
 }
 
-/** Whether the actor may change this member's current role. */
+export function assignableWorldRolesFor(actorRole: WorldRole): Array<WorldJoinCodeRole> {
+  if (!canManageWorldRoles(actorRole)) return [];
+  return WORLD_JOIN_CODE_ROLES.filter((role) => isStrictlyBelow(actorRole, role));
+}
+
 export function canChangeMemberRole(
-  actorRole: ClassRole | null | undefined,
-  memberRole: ClassRole,
+  actorRole: WorldRole | null | undefined,
+  memberRole: WorldRole,
 ): boolean {
-  if (!actorRole || !canManageClassRoles(actorRole)) return false;
+  if (!actorRole || !canManageWorldRoles(actorRole)) return false;
   return isStrictlyBelow(actorRole, memberRole);
 }
+
+/** Permissions party-derived players receive on granted worlds. */
+export const PARTY_DERIVED_PLAYER_PERMISSIONS: ReadonlyArray<WorldPermission> = [
+  "world:read",
+  "files:read",
+];

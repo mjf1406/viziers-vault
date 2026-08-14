@@ -42,7 +42,7 @@ function locationHasCodeParam(searchStr: string): boolean {
 export const Route = createFileRoute("/_authenticated/_app/join")({
   validateSearch: joinSearchSchema,
   component: function JoinPage() {
-    const { t } = useTranslation("classes");
+    const { t } = useTranslation("worlds");
     const { t: tCommon } = useTranslation("common");
     const { t: tBilling } = useTranslation("billing");
     const navigate = useNavigate();
@@ -139,10 +139,21 @@ export const Route = createFileRoute("/_authenticated/_app/join")({
 
       try {
         const result = await redeemMutation.mutateAsync({ code: parsed.data });
-        await navigate({
-          to: "/class/$classId",
-          params: { classId: result.classId },
-        });
+        if (result.targetKind === "party" && result.partyId) {
+          await navigate({
+            to: "/party/$partyId",
+            params: { partyId: result.partyId },
+          });
+          return;
+        }
+        if (result.worldId) {
+          await navigate({
+            to: "/world/$worldId",
+            params: { worldId: result.worldId },
+          });
+          return;
+        }
+        throw new Error("Invalid redeem result");
       } catch (submitError) {
         const code = codeFromError(submitError);
         if (isSubscriptionRequiredError(submitError)) {
@@ -151,8 +162,8 @@ export const Route = createFileRoute("/_authenticated/_app/join")({
           setError(t("joinAlreadyMember"));
         } else if (code === "INVALID_JOIN_CODE") {
           setError(t("joinInvalidCode"));
-        } else if (code === "CLASS_ARCHIVED") {
-          setError(t("joinClassArchived"));
+        } else if (code === "WORLD_ARCHIVED") {
+          setError(t("joinWorldArchived"));
         } else {
           setError(messageFromError(submitError, t("joinFailed"), tCommon("rateLimited")));
         }

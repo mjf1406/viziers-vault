@@ -1,62 +1,76 @@
 import type { Id } from "../../../convex/_generated/dataModel";
-import type { ClassRole, JoinCodeRole, MemberListRole } from "@/lib/permissions/classPermissions";
+import type {
+  MemberListRole,
+  WorldJoinCodeRole,
+  WorldPermission,
+} from "@/lib/permissions/worldPermissions";
 import {
-  assignableRolesFor,
+  assignableWorldRolesFor,
   canChangeMemberRole,
   REMOVE_PERMISSION_BY_ROLE,
-} from "@/lib/permissions/classPermissions";
+} from "@/lib/permissions/worldPermissions";
 
-export type LinkedStudentPublic = {
-  userId: Id<"users">;
-  name?: string;
-  email?: string;
-};
-
-export type ClassMemberPublic = {
+export type WorldStaffMemberPublic = {
   userId: Id<"users">;
   name?: string;
   image?: string;
   email?: string;
-  role: Extract<ClassRole, "owner" | "teacher" | "assistant_teacher" | "student" | "guardian">;
-  linkedStudents?: LinkedStudentPublic[];
+  role: "owner" | "game_master" | "assistant_game_master";
 };
 
-export type ClassMemberCounts = {
-  teacher: number | null;
-  assistant_teacher: number | null;
-  student: number | null;
-  guardian: number | null;
+export type WorldPlayerPublic = {
+  userId: Id<"users">;
+  name?: string;
+  image?: string;
+  email?: string;
+  partyId: Id<"parties">;
+  partyName: string;
 };
 
-export type { JoinCodeRole, MemberListRole };
+export type PartyMemberPublic = {
+  userId: Id<"users">;
+  name?: string;
+  image?: string;
+  email?: string;
+  role: "leader" | "member";
+};
 
-export function removePermissionForMember(
-  role: ClassMemberPublic["role"],
-): (typeof REMOVE_PERMISSION_BY_ROLE)[ClassMemberPublic["role"]] {
+export type WorldMemberCounts = {
+  game_master: number | null;
+  assistant_game_master: number | null;
+  players: number | null;
+};
+
+export type { WorldJoinCodeRole, MemberListRole };
+
+export function removePermissionForStaff(
+  role: WorldStaffMemberPublic["role"],
+): WorldPermission | null {
   return REMOVE_PERMISSION_BY_ROLE[role];
 }
 
-/** People-page list that includes this membership role (owners appear under teachers). */
-export function memberListRoleFor(role: ClassMemberPublic["role"]): MemberListRole {
-  if (role === "owner" || role === "teacher") return "teacher";
-  return role;
+export function memberListRoleFor(role: WorldStaffMemberPublic["role"]): MemberListRole {
+  if (role === "owner" || role === "game_master") return "game_master";
+  return "assistant_game_master";
 }
 
-export { assignableRolesFor, canChangeMemberRole };
+export { assignableWorldRolesFor as assignableRolesFor, canChangeMemberRole };
 
 export function roleLabelKey(
-  role: ClassMemberPublic["role"] | JoinCodeRole,
-): "roleOwner" | "roleTeacher" | "roleAssistantTeacher" | "roleStudent" | "roleGuardian" {
+  role: WorldStaffMemberPublic["role"] | WorldJoinCodeRole | "leader" | "member",
+): string {
   switch (role) {
     case "owner":
       return "roleOwner";
-    case "teacher":
-      return "roleTeacher";
-    case "assistant_teacher":
-      return "roleAssistantTeacher";
-    case "student":
-      return "roleStudent";
-    case "guardian":
-      return "roleGuardian";
+    case "game_master":
+      return "roleGameMaster";
+    case "assistant_game_master":
+      return "roleAssistantGameMaster";
+    case "leader":
+      return "roleLeader";
+    case "member":
+      return "roleMember";
+    default:
+      return "roleMember";
   }
 }

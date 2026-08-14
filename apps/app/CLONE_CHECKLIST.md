@@ -155,7 +155,7 @@ Optional password UI (cloud/dev): set `VITE_AUTH_PASSWORD_ENABLED=true` in `.env
 
 Subscriptions use `@convex-dev/polar`. Trial length is app-managed via `APP_CONFIG.trial` (not a Polar-native trial). Empty Polar credentials throw — set sandbox env for local/dev.
 
-**Create-only entitlement:** paid gate is for creating classes (`entitledMutation`); membership and day-to-day class ops use `class*` / `authed*` wrappers (no entitlement lockout for existing members).
+**Create-only entitlement:** paid gate is for creating worlds and parties (`entitledMutation`); membership and day-to-day world/party ops use `world*` / `party*` / `authed*` wrappers (no entitlement lockout for existing members).
 
 1. Create a [Polar](https://polar.sh) org (**sandbox** while developing).
 2. Create two subscription products (example UI copy: **USD 3**/mo, **USD 30**/yr). If prices differ, update `billing.monthlyPrice` / `billing.yearlyPrice` in **every** locale under `src/i18n/resources/`.
@@ -224,7 +224,7 @@ bunx --bun shadcn@latest apply <preset-code> --only theme,font
 
 Do this **after** auth + branding smoke-test. ClassClarus-style clones can keep most of this and only retarget brand/URLs/prices.
 
-See `convex/lib/authzModel.ts`, `convex/schema.ts`, routes under `src/routes/_authenticated/_class/`, and feature folders under `src/components/classes|members|invitations`.
+See `convex/lib/authzModel.ts`, `convex/schema.ts`, routes under `src/routes/_authenticated/_world/` and `_party/`, legacy `/class/*` redirects, and feature folders under `src/components/worlds|parties|members|invitations`.
 
 After changing the role/permission catalog, sync rematerialized roles:
 

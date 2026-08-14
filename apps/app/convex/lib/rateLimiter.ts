@@ -3,6 +3,20 @@ import { DAY, HOUR, MINUTE, RateLimiter, WEEK } from "@convex-dev/rate-limiter";
 import { components } from "../_generated/api.js";
 
 const rateLimits = {
+  worldCreate: { kind: "token bucket" as const, rate: 10, period: HOUR, capacity: 3 },
+  worldCreateGlobal: { kind: "token bucket" as const, rate: 60, period: MINUTE, capacity: 20 },
+  worldUpdate: { kind: "token bucket" as const, rate: 30, period: MINUTE, capacity: 5 },
+  worldArchive: { kind: "token bucket" as const, rate: 20, period: MINUTE, capacity: 5 },
+  worldDelete: { kind: "token bucket" as const, rate: 10, period: HOUR, capacity: 2 },
+  worldTransferOwnership: { kind: "token bucket" as const, rate: 10, period: HOUR, capacity: 2 },
+  partyCreate: { kind: "token bucket" as const, rate: 10, period: HOUR, capacity: 3 },
+  partyCreateGlobal: { kind: "token bucket" as const, rate: 60, period: MINUTE, capacity: 20 },
+  partyUpdate: { kind: "token bucket" as const, rate: 30, period: MINUTE, capacity: 5 },
+  partyArchive: { kind: "token bucket" as const, rate: 20, period: MINUTE, capacity: 5 },
+  partyDelete: { kind: "token bucket" as const, rate: 10, period: HOUR, capacity: 2 },
+  partyMemberRemove: { kind: "token bucket" as const, rate: 60, period: HOUR, capacity: 10 },
+  partyMemberSetRole: { kind: "token bucket" as const, rate: 60, period: HOUR, capacity: 10 },
+  worldPartyGrant: { kind: "token bucket" as const, rate: 60, period: HOUR, capacity: 20 },
   classCreate: { kind: "token bucket" as const, rate: 10, period: HOUR, capacity: 3 },
   classCreateGlobal: { kind: "token bucket" as const, rate: 60, period: MINUTE, capacity: 20 },
   classUpdate: { kind: "token bucket" as const, rate: 30, period: MINUTE, capacity: 5 },

@@ -1,8 +1,10 @@
 import { describe, expect, test } from "vite-plus/test";
 
 import {
-  assignableJoinCodeRoles,
-  createJoinCodeFormSchema,
+  assignablePartyJoinCodeRoles,
+  assignableWorldJoinCodeRoles,
+  createPartyJoinCodeFormSchema,
+  createWorldJoinCodeFormSchema,
   isCompleteJoinCode,
   JOIN_CODE_LENGTH,
   MAX_JOIN_CODE_USES,
@@ -25,17 +27,17 @@ describe("joinCodeFormSchema", () => {
     expect(ttlMsForOption("15m")).toBe(15 * 60 * 1000);
     expect(ttlMsForOption("1d")).toBe(24 * 60 * 60 * 1000);
 
-    const valid = createJoinCodeFormSchema.parse({
-      role: "student",
+    const valid = createWorldJoinCodeFormSchema.parse({
+      role: "game_master",
       ttlOption: "1h",
       usesMode: "preset",
       usesPreset: "5",
       usesCustom: "",
     });
-    expect(valid).toEqual({ role: "student", ttlMs: 60 * 60 * 1000, maxUses: 5 });
+    expect(valid).toEqual({ role: "game_master", ttlMs: 60 * 60 * 1000, maxUses: 5 });
 
-    const custom = createJoinCodeFormSchema.parse({
-      role: "guardian",
+    const custom = createPartyJoinCodeFormSchema.parse({
+      role: "member",
       ttlOption: "6h",
       usesMode: "custom",
       usesPreset: "1",
@@ -44,8 +46,8 @@ describe("joinCodeFormSchema", () => {
     expect(custom.maxUses).toBe(42);
 
     expect(() =>
-      createJoinCodeFormSchema.parse({
-        role: "student",
+      createWorldJoinCodeFormSchema.parse({
+        role: "game_master",
         ttlOption: "1h",
         usesMode: "custom",
         usesPreset: "1",
@@ -53,8 +55,8 @@ describe("joinCodeFormSchema", () => {
       }),
     ).toThrow();
     expect(() =>
-      createJoinCodeFormSchema.parse({
-        role: "student",
+      createPartyJoinCodeFormSchema.parse({
+        role: "member",
         ttlOption: "1h",
         usesMode: "custom",
         usesPreset: "1",
@@ -64,9 +66,13 @@ describe("joinCodeFormSchema", () => {
   });
 
   test("filters assignable roles by invite permissions", () => {
-    const can = (permission: string) =>
-      permission === "students:add" || permission === "guardians:invite";
-    expect(assignableJoinCodeRoles(can)).toEqual(["student", "guardian"]);
+    const canWorld = (permission: string) =>
+      permission === "game_masters:invite" || permission === "assistant_game_masters:invite";
+    expect(assignableWorldJoinCodeRoles(canWorld)).toEqual([
+      "game_master",
+      "assistant_game_master",
+    ]);
+    expect(assignablePartyJoinCodeRoles()).toEqual(["leader", "member"]);
     expect(JOIN_CODE_LENGTH).toBe(6);
   });
 });

@@ -12,7 +12,8 @@ import {
 import { rateLimiter } from "./lib/rateLimiter.js";
 
 const deletionBlockerValidator = v.union(
-  v.literal("owns_classes"),
+  v.literal("owns_worlds"),
+  v.literal("owns_parties"),
   v.literal("active_subscription"),
 );
 

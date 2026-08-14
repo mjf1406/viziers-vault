@@ -53,3 +53,57 @@ export async function deleteFilesForClass(ctx: MutationCtx, classId: Id<"classes
     await ctx.db.delete("files", file._id);
   }
 }
+
+export async function clearWorldImageIfReferencesFile(
+  ctx: MutationCtx,
+  fileId: Id<"files">,
+  worldId: Id<"worlds"> | undefined,
+): Promise<void> {
+  if (worldId === undefined) {
+    return;
+  }
+  const world = await ctx.db.get("worlds", worldId);
+  if (!world || world.imageFileId !== fileId) {
+    return;
+  }
+  await ctx.db.patch("worlds", worldId, { imageFileId: undefined });
+}
+
+export async function clearPartyImageIfReferencesFile(
+  ctx: MutationCtx,
+  fileId: Id<"files">,
+  partyId: Id<"parties"> | undefined,
+): Promise<void> {
+  if (partyId === undefined) {
+    return;
+  }
+  const party = await ctx.db.get("parties", partyId);
+  if (!party || party.imageFileId !== fileId) {
+    return;
+  }
+  await ctx.db.patch("parties", partyId, { imageFileId: undefined });
+}
+
+export async function deleteFilesForWorld(ctx: MutationCtx, worldId: Id<"worlds">): Promise<void> {
+  // eslint-disable-next-line @convex-dev/no-collect-in-query -- world libraries bounded
+  const files = await ctx.db
+    .query("files")
+    .withIndex("by_worldId", (q) => q.eq("worldId", worldId))
+    .collect();
+  for (const file of files) {
+    await ctx.storage.delete(file.storageId);
+    await ctx.db.delete("files", file._id);
+  }
+}
+
+export async function deleteFilesForParty(ctx: MutationCtx, partyId: Id<"parties">): Promise<void> {
+  // eslint-disable-next-line @convex-dev/no-collect-in-query -- party libraries bounded
+  const files = await ctx.db
+    .query("files")
+    .withIndex("by_partyId", (q) => q.eq("partyId", partyId))
+    .collect();
+  for (const file of files) {
+    await ctx.storage.delete(file.storageId);
+    await ctx.db.delete("files", file._id);
+  }
+}

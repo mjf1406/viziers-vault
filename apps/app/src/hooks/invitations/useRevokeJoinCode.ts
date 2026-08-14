@@ -4,27 +4,41 @@ import { useTranslation } from "react-i18next";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { toast } from "@/components/ui/toast-manager";
-import { joinCodesListQueryKey } from "@/hooks/invitations/useJoinCodes";
+import { partyJoinCodesListQueryKey } from "@/hooks/invitations/usePartyJoinCodes";
+import { worldJoinCodesListQueryKey } from "@/hooks/invitations/useWorldJoinCodes";
 import { useOptimisticMutation } from "@/hooks/useOptimisticMutation";
 import type { JoinCodePublic } from "@/lib/invitations/joinCodes";
 import { messageFromError } from "@/lib/errors/convexError";
 import { removeById } from "@/lib/optimistic";
 
+type RevokeJoinCodeListKey =
+  | { kind: "world"; worldId: Id<"worlds">; now: number }
+  | { kind: "party"; partyId: Id<"parties">; now: number };
+
 type RevokeJoinCodeArgs = {
-  classId: Id<"classes">;
   joinCodeId: Id<"joinCodes">;
+  listKey: RevokeJoinCodeListKey;
 };
 
-export function useRevokeJoinCode(listNow: number) {
-  const { t } = useTranslation("classes");
+function queryKeyForList(listKey: RevokeJoinCodeListKey) {
+  switch (listKey.kind) {
+    case "world":
+      return worldJoinCodesListQueryKey(listKey.worldId, listKey.now);
+    case "party":
+      return partyJoinCodesListQueryKey(listKey.partyId, listKey.now);
+  }
+}
+
+export function useRevokeJoinCode(namespace: "worlds" | "parties" = "worlds") {
+  const { t } = useTranslation(namespace);
   const { t: tCommon } = useTranslation("common");
   const mutationFn = useConvexMutation(api.joinCodes.revoke);
 
   return useOptimisticMutation({
-    mutationFn: (args: RevokeJoinCodeArgs) => mutationFn(args),
-    queryKeys: (args) => [joinCodesListQueryKey(args.classId, listNow)],
+    mutationFn: (args: RevokeJoinCodeArgs) => mutationFn({ joinCodeId: args.joinCodeId }),
+    queryKeys: (args) => [queryKeyForList(args.listKey)],
     applyOptimisticUpdate: (queryClient, args) => {
-      const queryKey = joinCodesListQueryKey(args.classId, listNow);
+      const queryKey = queryKeyForList(args.listKey);
       queryClient.setQueryData<JoinCodePublic[]>(queryKey, (old) =>
         old ? removeById(old, args.joinCodeId) : old,
       );
@@ -37,3 +51,5 @@ export function useRevokeJoinCode(listNow: number) {
     },
   });
 }
+
+export type { RevokeJoinCodeListKey };

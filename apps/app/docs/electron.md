@@ -1,8 +1,8 @@
-# Electron classroom app
+# Electron desktop app
 
-Downloadable desktop build for teachers. It runs the **same self-host mode** as [SELF_HOSTING.md](./SELF_HOSTING.md) (password auth, Polar off, local Convex), without Docker. Class **online presence** (who is viewing a class) is on by default in Electron; Docker self-host can disable it with `CLASS_PRESENCE_ENABLED=false`. The installer / Task Manager name comes from [`APP_CONFIG.name`](../convex/appConfig.ts).
+Downloadable desktop build for table hosts / GMs. It runs the **same self-host mode** as [SELF_HOSTING.md](./SELF_HOSTING.md) (password auth, Polar off, local Convex), without Docker. **Online presence** (who is viewing a world) is on by default in Electron; Docker self-host can disable it with `CLASS_PRESENCE_ENABLED=false`. The installer / Task Manager name comes from [`APP_CONFIG.name`](../convex/appConfig.ts).
 
-Students join from a normal browser on the **same Wi‑Fi**. They do not install Electron.
+Players join from a normal browser on the **same Wi‑Fi**. They do not install Electron.
 
 `post-clone` rewrites `APP_CONFIG` (artifact names, GitHub URLs, userData paths). This file does not need a separate rewrite.
 

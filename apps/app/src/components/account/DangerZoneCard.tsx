@@ -3,14 +3,17 @@ import { useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { DeleteAccountCredenza } from "@/components/account/DeleteAccountCredenza";
-import { DeleteClassCredenza } from "@/components/classes/DeleteClassCredenza";
-import { TransferOwnershipCredenza } from "@/components/classes/TransferOwnershipCredenza";
+import { DeletePartyCredenza } from "@/components/parties/DeletePartyCredenza";
+import { DeleteWorldCredenza } from "@/components/worlds/DeleteWorldCredenza";
+import { WorldTransferOwnershipCredenza } from "@/components/worlds/WorldTransferOwnershipCredenza";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Skeleton } from "@/components/ui/skeleton";
-import { useDeleteClass } from "@/hooks/classes/useDeleteClass";
-import { useOwnedClasses } from "@/hooks/classes/useOwnedClasses";
-import { useTransferOwnership } from "@/hooks/classes/useTransferOwnership";
+import { useDeleteParty } from "@/hooks/parties/useDeleteParty";
+import { useOwnedParties } from "@/hooks/parties/useOwnedParties";
+import { useDeleteWorld } from "@/hooks/worlds/useDeleteWorld";
+import { useOwnedWorlds } from "@/hooks/worlds/useOwnedWorlds";
+import { useTransferWorldOwnership } from "@/hooks/worlds/useTransferOwnership";
 import { useAccountDeletionBlockers } from "@/hooks/user/useAccountDeletionBlockers";
 import { useDeleteAccount } from "@/hooks/user/useDeleteAccount";
 import type { Id } from "../../../convex/_generated/dataModel";
@@ -19,29 +22,39 @@ type DangerZoneCardProps = {
   email: string | null | undefined;
 };
 
-type OwnedClassAction = {
-  classId: Id<"classes">;
+type OwnedWorldAction = {
+  worldId: Id<"worlds">;
   name: string;
   mode: "transfer" | "delete";
 };
 
+type OwnedPartyAction = {
+  partyId: Id<"parties">;
+  name: string;
+};
+
 export function DangerZoneCard({ email }: DangerZoneCardProps) {
   const { t } = useTranslation("account");
-  const { t: tClasses } = useTranslation("classes");
+  const { t: tWorlds } = useTranslation("worlds");
+  const { t: tParties } = useTranslation("parties");
   const [open, setOpen] = useState(false);
-  const [classAction, setClassAction] = useState<OwnedClassAction | null>(null);
+  const [worldAction, setWorldAction] = useState<OwnedWorldAction | null>(null);
+  const [partyAction, setPartyAction] = useState<OwnedPartyAction | null>(null);
   const deleteAccount = useDeleteAccount();
-  const deleteClass = useDeleteClass();
-  const transferOwnership = useTransferOwnership();
+  const deleteWorld = useDeleteWorld();
+  const deleteParty = useDeleteParty();
+  const transferWorldOwnership = useTransferWorldOwnership();
   const {
     data: blockers,
     isPending: blockersPending,
     isError: blockersError,
   } = useAccountDeletionBlockers();
-  const { data: ownedClasses = [] } = useOwnedClasses();
+  const { data: ownedWorlds = [] } = useOwnedWorlds();
+  const { data: ownedParties = [] } = useOwnedParties();
 
   const blocked = (blockers?.length ?? 0) > 0;
-  const ownsClasses = blockers?.includes("owns_classes") ?? false;
+  const ownsWorlds = blockers?.includes("owns_worlds") ?? false;
+  const ownsParties = blockers?.includes("owns_parties") ?? false;
   const hasSubscription = blockers?.includes("active_subscription") ?? false;
 
   return (
@@ -59,30 +72,30 @@ export function DangerZoneCard({ email }: DangerZoneCardProps) {
           ) : blocked ? (
             <div className="flex flex-col gap-3 text-sm text-muted-foreground">
               <p className="font-medium text-foreground">{t("deleteBlockedTitle")}</p>
-              {ownsClasses ? (
+              {ownsWorlds ? (
                 <div className="flex flex-col gap-2">
                   <p>
-                    {ownedClasses.length > 0
-                      ? t("deleteBlockedOwnsClassesCount", { count: ownedClasses.length })
-                      : t("deleteBlockedOwnsClasses")}
+                    {ownedWorlds.length > 0
+                      ? t("deleteBlockedOwnsWorldsCount", { count: ownedWorlds.length })
+                      : t("deleteBlockedOwnsWorlds")}
                   </p>
-                  {ownedClasses.length > 0 ? (
+                  {ownedWorlds.length > 0 ? (
                     <ul className="flex flex-col gap-2">
-                      {ownedClasses.map((classDoc) => (
+                      {ownedWorlds.map((world) => (
                         <li
-                          key={classDoc._id}
+                          key={world._id}
                           className="flex flex-col gap-2 rounded-md border border-border p-3 sm:flex-row sm:items-center sm:justify-between"
                         >
-                          <span className="font-medium text-foreground">{classDoc.name}</span>
+                          <span className="font-medium text-foreground">{world.name}</span>
                           <div className="flex flex-wrap gap-2">
                             <Button
                               type="button"
                               size="sm"
                               variant="outline"
                               onClick={() =>
-                                setClassAction({
-                                  classId: classDoc._id,
-                                  name: classDoc.name,
+                                setWorldAction({
+                                  worldId: world._id,
+                                  name: world.name,
                                   mode: "transfer",
                                 })
                               }
@@ -95,14 +108,14 @@ export function DangerZoneCard({ email }: DangerZoneCardProps) {
                               variant="destructive"
                               className="bg-destructive text-white hover:bg-destructive/90 dark:bg-destructive dark:hover:bg-destructive/90"
                               onClick={() =>
-                                setClassAction({
-                                  classId: classDoc._id,
-                                  name: classDoc.name,
+                                setWorldAction({
+                                  worldId: world._id,
+                                  name: world.name,
                                   mode: "delete",
                                 })
                               }
                             >
-                              {tClasses("deleteAction")}
+                              {tWorlds("deleteAction")}
                             </Button>
                           </div>
                         </li>
@@ -110,7 +123,46 @@ export function DangerZoneCard({ email }: DangerZoneCardProps) {
                     </ul>
                   ) : (
                     <Link to="/" className="underline underline-offset-2">
-                      {t("deleteBlockedManageClasses")}
+                      {t("deleteBlockedManageWorlds")}
+                    </Link>
+                  )}
+                </div>
+              ) : null}
+              {ownsParties ? (
+                <div className="flex flex-col gap-2">
+                  <p>
+                    {ownedParties.length > 0
+                      ? t("deleteBlockedOwnsPartiesCount", { count: ownedParties.length })
+                      : t("deleteBlockedOwnsParties")}
+                  </p>
+                  {ownedParties.length > 0 ? (
+                    <ul className="flex flex-col gap-2">
+                      {ownedParties.map((party) => (
+                        <li
+                          key={party._id}
+                          className="flex flex-col gap-2 rounded-md border border-border p-3 sm:flex-row sm:items-center sm:justify-between"
+                        >
+                          <span className="font-medium text-foreground">{party.name}</span>
+                          <Button
+                            type="button"
+                            size="sm"
+                            variant="destructive"
+                            className="bg-destructive text-white hover:bg-destructive/90 dark:bg-destructive dark:hover:bg-destructive/90"
+                            onClick={() =>
+                              setPartyAction({
+                                partyId: party._id,
+                                name: party.name,
+                              })
+                            }
+                          >
+                            {tParties("deleteAction")}
+                          </Button>
+                        </li>
+                      ))}
+                    </ul>
+                  ) : (
+                    <Link to="/" className="underline underline-offset-2">
+                      {t("deleteBlockedManageParties")}
                     </Link>
                   )}
                 </div>
@@ -149,37 +201,54 @@ export function DangerZoneCard({ email }: DangerZoneCardProps) {
         }}
       />
 
-      {classAction?.mode === "delete" ? (
-        <DeleteClassCredenza
+      {worldAction?.mode === "delete" ? (
+        <DeleteWorldCredenza
           open
           onOpenChange={(next) => {
-            if (!next) setClassAction(null);
+            if (!next) setWorldAction(null);
           }}
-          className={classAction.name}
+          entityName={worldAction.name}
           onConfirm={async (confirmation) => {
-            await deleteClass.mutateAsync({
-              classId: classAction.classId,
+            await deleteWorld.mutateAsync({
+              worldId: worldAction.worldId,
               confirmation,
             });
-            setClassAction(null);
+            setWorldAction(null);
           }}
         />
       ) : null}
 
-      {classAction?.mode === "transfer" ? (
-        <TransferOwnershipCredenza
+      {worldAction?.mode === "transfer" ? (
+        <WorldTransferOwnershipCredenza
           open
           onOpenChange={(next) => {
-            if (!next) setClassAction(null);
+            if (!next) setWorldAction(null);
           }}
-          classId={classAction.classId}
-          className={classAction.name}
+          worldId={worldAction.worldId}
+          worldName={worldAction.name}
           onConfirm={async (toUserId) => {
-            await transferOwnership.mutateAsync({
-              classId: classAction.classId,
+            await transferWorldOwnership.mutateAsync({
+              worldId: worldAction.worldId,
               toUserId,
             });
-            setClassAction(null);
+            setWorldAction(null);
+          }}
+        />
+      ) : null}
+
+      {partyAction ? (
+        <DeletePartyCredenza
+          open
+          onOpenChange={(next) => {
+            if (!next) setPartyAction(null);
+          }}
+          entityName={partyAction.name}
+          onConfirm={async (confirmation) => {
+            await deleteParty.mutateAsync({
+              partyId: partyAction.partyId,
+              confirmation,
+            });
+            setPartyAction(null);
           }}
         />
       ) : null}

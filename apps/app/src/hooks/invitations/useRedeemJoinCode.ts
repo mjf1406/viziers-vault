@@ -8,29 +8,49 @@ type RedeemJoinCodeArgs = {
   code: string;
 };
 
+export type RedeemJoinCodeResult = {
+  targetKind: "world" | "party";
+  worldId?: Id<"worlds">;
+  partyId?: Id<"parties">;
+  role: string;
+};
+
 export function useRedeemJoinCode() {
   const queryClient = useQueryClient();
   const mutationFn = useConvexMutation(api.joinCodes.redeem);
 
   return useMutation({
     mutationFn: (args: RedeemJoinCodeArgs) => mutationFn(args),
-    onSuccess: async (result) => {
-      await Promise.all([
+    onSuccess: async (result: RedeemJoinCodeResult) => {
+      const invalidations: Promise<void>[] = [
         queryClient.invalidateQueries({
-          queryKey: convexQuery(api.classes.listMine, {}).queryKey,
+          queryKey: convexQuery(api.worlds.listMine, {}).queryKey,
         }),
         queryClient.invalidateQueries({
-          queryKey: convexQuery(api.classes.get, { classId: result.classId }).queryKey,
+          queryKey: convexQuery(api.parties.listMine, {}).queryKey,
         }),
-        queryClient.invalidateQueries({
-          queryKey: convexQuery(api.permissions.forClass, { classId: result.classId }).queryKey,
-        }),
-      ]);
+      ];
+
+      if (result.targetKind === "world" && result.worldId) {
+        invalidations.push(
+          queryClient.invalidateQueries({
+            queryKey: convexQuery(api.worlds.get, { worldId: result.worldId }).queryKey,
+          }),
+          queryClient.invalidateQueries({
+            queryKey: convexQuery(api.permissions.forWorld, { worldId: result.worldId }).queryKey,
+          }),
+        );
+      }
+
+      if (result.targetKind === "party" && result.partyId) {
+        invalidations.push(
+          queryClient.invalidateQueries({
+            queryKey: convexQuery(api.parties.get, { partyId: result.partyId }).queryKey,
+          }),
+        );
+      }
+
+      await Promise.all(invalidations);
     },
   });
 }
-
-export type RedeemJoinCodeResult = {
-  classId: Id<"classes">;
-  role: string;
-};

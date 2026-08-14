@@ -3,8 +3,12 @@ import { ConvexError, v } from "convex/values";
 import { api, internal } from "./_generated/api.js";
 import type { Doc, Id } from "./_generated/dataModel.js";
 import { action } from "./_generated/server.js";
-import { authedMutation, classQuery } from "./lib/customFunctions.js";
-import { clearAvatarIfReferencesFile, clearBannerIfReferencesFile } from "./lib/filesCleanup.js";
+import { authedMutation, partyQuery, worldQuery } from "./lib/customFunctions.js";
+import {
+  clearAvatarIfReferencesFile,
+  clearPartyImageIfReferencesFile,
+  clearWorldImageIfReferencesFile,
+} from "./lib/filesCleanup.js";
 import { requireFileOwner } from "./lib/fileAccess.js";
 import { ORPHAN_AGE_MS } from "./filesInternal.js";
 import { rateLimiter } from "./lib/rateLimiter.js";
@@ -22,10 +26,11 @@ const uploadPresetKeyValidator = v.union(
   v.literal("audio"),
 );
 
-const classFilePublicValidator = v.object({
+const scopedFilePublicValidator = v.object({
   _id: v.id("files"),
   userId: v.id("users"),
-  classId: v.id("classes"),
+  worldId: v.optional(v.id("worlds")),
+  partyId: v.optional(v.id("parties")),
   name: v.string(),
   contentType: v.string(),
   size: v.number(),
@@ -33,8 +38,8 @@ const classFilePublicValidator = v.object({
   createdAt: v.number(),
 });
 
-/** Classroom-sized library cap for a single list response. */
-const CLASS_FILES_LIST_LIMIT = 200;
+/** Bounded library cap for a single list response. */
+const SCOPED_FILES_LIST_LIMIT = 200;
 
 /**
  * Create a short-lived upload URL for Convex storage.
@@ -76,13 +81,16 @@ export const watchPendingUpload = authedMutation({
 /**
  * Validate (magic bytes + size + quota) and register an uploaded blob.
  * Runs as an action so it can read blob bytes for content sniffing.
- * Optional `classId` attaches the file to a class library (`files:create` required).
+ * Optional `worldId` / `partyId` attach the file to a scoped library.
  */
 export const finalizeUpload = action({
   args: {
     storageId: v.id("_storage"),
     name: v.string(),
     preset: uploadPresetKeyValidator,
+    worldId: v.optional(v.id("worlds")),
+    partyId: v.optional(v.id("parties")),
+    /** @deprecated legacy class library attachment */
     classId: v.optional(v.id("classes")),
   },
   returns: v.id("files"),
@@ -129,9 +137,6 @@ export const finalizeUpload = action({
       });
     }
 
-    // Avoid blob.slice(): Convex storage blobs throw RangeError on slice+arrayBuffer
-    // when size > slice length (get-convex/convex-backend#507).
-    // Full buffer required for DOCX OOXML central-directory checks (presets ≤5 MiB).
     const bytes = new Uint8Array(await blob.arrayBuffer());
     const detected = detectContentType(bytes);
     if (validateDetectedContentType(args.preset, detected) !== null || !detected) {
@@ -148,13 +153,15 @@ export const finalizeUpload = action({
       preset: args.preset,
       contentType: detected,
       size,
+      worldId: args.worldId,
+      partyId: args.partyId,
       classId: args.classId,
     });
   },
 });
 
 /**
- * Return file bytes for a file the caller may access (owner or class `files:read`).
+ * Return file bytes for a file the caller may access (owner or scoped read).
  * Access is re-checked on every call via `getAccessibleFile`.
  */
 export const getFileBytes = action({
@@ -208,24 +215,51 @@ export const getFileBytes = action({
 });
 
 /**
- * List metadata for files in a class library (no bytes).
- * Requires `files:read`. Classroom-sized lists are intentionally bounded.
+ * List metadata for files in a world library (no bytes).
+ * Requires `files:read`. Lists are intentionally bounded.
  */
-export const listClassFiles = classQuery({
+export const listWorldFiles = worldQuery({
   args: {},
-  returns: v.array(classFilePublicValidator),
+  returns: v.array(scopedFilePublicValidator),
   handler: async (ctx) => {
     await ctx.require("files:read");
-    const classId = ctx.classDoc._id;
+    const worldId = ctx.worldDoc._id;
     const files = await ctx.db
       .query("files")
-      .withIndex("by_classId", (q) => q.eq("classId", classId))
+      .withIndex("by_worldId", (q) => q.eq("worldId", worldId))
       .order("desc")
-      .take(CLASS_FILES_LIST_LIMIT);
+      .take(SCOPED_FILES_LIST_LIMIT);
     return files.map((file) => ({
       _id: file._id,
       userId: file.userId,
-      classId,
+      worldId,
+      name: file.name,
+      contentType: file.contentType,
+      size: file.size,
+      preset: file.preset,
+      createdAt: file.createdAt,
+    }));
+  },
+});
+
+/**
+ * List metadata for files in a party library (no bytes).
+ * Requires party read access. Lists are intentionally bounded.
+ */
+export const listPartyFiles = partyQuery({
+  args: {},
+  returns: v.array(scopedFilePublicValidator),
+  handler: async (ctx) => {
+    const partyId = ctx.partyDoc._id;
+    const files = await ctx.db
+      .query("files")
+      .withIndex("by_partyId", (q) => q.eq("partyId", partyId))
+      .order("desc")
+      .take(SCOPED_FILES_LIST_LIMIT);
+    return files.map((file) => ({
+      _id: file._id,
+      userId: file.userId,
+      partyId,
       name: file.name,
       contentType: file.contentType,
       size: file.size,
@@ -267,7 +301,8 @@ export const deleteFile = authedMutation({
   handler: async (ctx, args) => {
     await rateLimiter.limit(ctx, "fileDelete", { key: ctx.userId, throws: true });
     const file = await requireFileOwner(ctx, args.fileId, ctx.userId);
-    await clearBannerIfReferencesFile(ctx, args.fileId, file.classId);
+    await clearWorldImageIfReferencesFile(ctx, args.fileId, file.worldId);
+    await clearPartyImageIfReferencesFile(ctx, args.fileId, file.partyId);
     await clearAvatarIfReferencesFile(ctx, args.fileId, ctx.userId);
     await ctx.storage.delete(file.storageId);
     await ctx.db.delete("files", args.fileId);

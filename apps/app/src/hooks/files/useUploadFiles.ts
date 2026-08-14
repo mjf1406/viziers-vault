@@ -5,7 +5,7 @@ import { useAction } from "convex/react";
 
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
-import { classFilesListQueryKey } from "@/hooks/files/useClassFiles";
+import { worldFilesListQueryKey } from "@/hooks/files/useWorldFiles";
 import type { UploadPresetKey, UploadPreset } from "@/lib/upload/acceptPresets";
 import { getUploadPreset } from "@/lib/upload/acceptPresets";
 import { codeFromError } from "@/lib/errors/convexError";
@@ -37,6 +37,11 @@ type UploadOneResult = {
   storageId: Id<"_storage">;
 };
 
+type UploadScope = {
+  worldId?: Id<"worlds">;
+  partyId?: Id<"parties">;
+};
+
 function createUploadId() {
   return randomClientId();
 }
@@ -57,9 +62,6 @@ function finalizeErrorCode(error: unknown): UploadErrorCode {
   if (code === "INVALID_UPLOAD_CONTENT") return "invalid_content";
   if (code === "QUOTA_EXCEEDED") return "quota_exceeded";
   if (code === "INVALID_UPLOAD" || code === "UPLOAD_NOT_FOUND" || code === "UPLOAD_FORBIDDEN") {
-    return "finalize_failed";
-  }
-  if (code === "CLASS_UNAVAILABLE") {
     return "finalize_failed";
   }
   return "finalize_failed";
@@ -114,7 +116,6 @@ async function uploadViaXhr(opts: {
     };
 
     xhr.onabort = () => {
-      // Treat abort as a distinct error so the UI can offer retry.
       reject(new Error("aborted"));
     };
 
@@ -126,17 +127,12 @@ async function uploadViaXhr(opts: {
   });
 }
 
-export function useUploadFiles(
-  presetKey: UploadPresetKey = "images",
-  options?: { classId?: Id<"classes"> },
-) {
+export function useUploadFiles(presetKey: UploadPresetKey = "images", options?: UploadScope) {
   const preset = useMemo<UploadPreset>(() => getUploadPreset(presetKey), [presetKey]);
-  const classId = options?.classId;
+  const worldId = options?.worldId;
+  const partyId = options?.partyId;
 
   const [items, setItems] = useState<UploadFileItem[]>([]);
-  // Source of truth for the drain loop. Updated synchronously in setItemsSync
-  // (not inside the setState updater) so processQueue never races a deferred
-  // React updater and misses the first queued file.
   const itemsRef = useRef<UploadFileItem[]>([]);
 
   const setItemsSync = useCallback((updater: (prev: UploadFileItem[]) => UploadFileItem[]) => {
@@ -153,17 +149,16 @@ export function useUploadFiles(
   const xhrByIdRef = useRef<Map<string, () => void>>(new Map());
   const processingRef = useRef(false);
 
-  // Convex hook identities change often; keep the drain closure stable via refs.
   const generateUploadUrlRef = useRef(generateUploadUrlMutation);
   const watchPendingUploadRef = useRef(watchPendingUploadMutation);
   const finalizeUploadRef = useRef(finalizeUploadAction);
-  const classIdRef = useRef(classId);
+  const scopeRef = useRef<UploadScope>({ worldId, partyId });
   const presetKeyRef = useRef(presetKey);
   const queryClientRef = useRef(queryClient);
   generateUploadUrlRef.current = generateUploadUrlMutation;
   watchPendingUploadRef.current = watchPendingUploadMutation;
   finalizeUploadRef.current = finalizeUploadAction;
-  classIdRef.current = classId;
+  scopeRef.current = { worldId, partyId };
   presetKeyRef.current = presetKey;
   queryClientRef.current = queryClient;
 
@@ -198,17 +193,18 @@ export function useUploadFiles(
 
         await watchPendingUploadRef.current({ storageId: result.storageId });
 
-        const activeClassId = classIdRef.current;
+        const { worldId: activeWorldId, partyId: activePartyId } = scopeRef.current;
         const fileId = await finalizeUploadRef.current({
           storageId: result.storageId,
           name: item.file.name,
           preset: presetKeyRef.current,
-          ...(activeClassId !== undefined ? { classId: activeClassId } : {}),
+          ...(activeWorldId !== undefined ? { worldId: activeWorldId } : {}),
+          ...(activePartyId !== undefined ? { partyId: activePartyId } : {}),
         });
 
-        if (activeClassId !== undefined) {
+        if (activeWorldId !== undefined) {
           void queryClientRef.current.invalidateQueries({
-            queryKey: classFilesListQueryKey(activeClassId),
+            queryKey: worldFilesListQueryKey(activeWorldId),
           });
         }
 
@@ -272,9 +268,6 @@ export function useUploadFiles(
     } finally {
       processingRef.current = false;
     }
-    // Enqueues that arrived while processingRef was true early-returned.
-    // Re-check only after releasing the lock so the first file never stalls
-    // until a second enqueue "kicks" the drain.
     if (getNextQueuedItem()) {
       void processQueue();
     }

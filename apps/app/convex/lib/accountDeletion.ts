@@ -10,7 +10,7 @@ import { isSelfHosted } from "./selfHosted.js";
 
 const ACTIVE_SUBSCRIPTION_STATUSES = new Set(["active", "trialing"]);
 
-export type AccountDeletionBlocker = "owns_classes" | "active_subscription";
+export type AccountDeletionBlocker = "owns_worlds" | "owns_parties" | "active_subscription";
 
 export function accountDeleteConfirmationPhrase(email: string | undefined | null): string {
   const trimmed = email?.trim();
@@ -44,12 +44,20 @@ export async function getAccountDeletionBlockers(
 ): Promise<Array<AccountDeletionBlocker>> {
   const blockers: Array<AccountDeletionBlocker> = [];
 
-  const ownedClass = await ctx.db
-    .query("classes")
+  const ownedWorld = await ctx.db
+    .query("worlds")
     .withIndex("by_owner", (q) => q.eq("ownerId", userId))
     .first();
-  if (ownedClass) {
-    blockers.push("owns_classes");
+  if (ownedWorld) {
+    blockers.push("owns_worlds");
+  }
+
+  const ownedParty = await ctx.db
+    .query("parties")
+    .withIndex("by_owner", (q) => q.eq("ownerId", userId))
+    .first();
+  if (ownedParty) {
+    blockers.push("owns_parties");
   }
 
   if (!isSelfHosted()) {
@@ -153,10 +161,10 @@ async function clearTrialGrantUserId(ctx: MutationCtx, userId: Id<"users">): Pro
  */
 export async function deleteAccountData(ctx: MutationCtx, userId: Id<"users">): Promise<void> {
   const blockers = await getAccountDeletionBlockers(ctx, userId);
-  if (blockers.includes("owns_classes")) {
+  if (blockers.includes("owns_worlds") || blockers.includes("owns_parties")) {
     throw new ConvexError({
-      code: "OWNS_CLASSES",
-      message: "Transfer or delete your classes before deleting your account.",
+      code: "OWNS_WORLDS_OR_PARTIES",
+      message: "Transfer or delete your worlds and parties before deleting your account.",
     });
   }
   if (blockers.includes("active_subscription")) {

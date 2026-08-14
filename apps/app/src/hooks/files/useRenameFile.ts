@@ -5,17 +5,17 @@ import { api } from "../../../convex/_generated/api";
 import type { FunctionReturnType } from "convex/server";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { toast } from "@/components/ui/toast-manager";
-import { classFilesListQueryKey } from "@/hooks/files/useClassFiles";
+import { worldFilesListQueryKey } from "@/hooks/files/useWorldFiles";
 import { useOptimisticMutation } from "@/hooks/useOptimisticMutation";
 import { messageFromError } from "@/lib/errors/convexError";
 
-type ClassFilePublic = FunctionReturnType<typeof api.files.listClassFiles>[number];
+type WorldFilePublic = FunctionReturnType<typeof api.files.listWorldFiles>[number];
 
 type RenameFileArgs = {
   fileId: Id<"files">;
   name: string;
-  /** When set, optimistically renames the file in the class library list. */
-  classId?: Id<"classes">;
+  /** When set, optimistically renames the file in the world library list. */
+  worldId?: Id<"worlds">;
 };
 
 export function useRenameFile() {
@@ -26,18 +26,18 @@ export function useRenameFile() {
   return useOptimisticMutation({
     mutationFn: (args: RenameFileArgs) => mutationFn({ fileId: args.fileId, name: args.name }),
     queryKeys: (args) => {
-      if (args.classId !== undefined) {
-        return [classFilesListQueryKey(args.classId)];
+      if (args.worldId !== undefined) {
+        return [worldFilesListQueryKey(args.worldId)];
       }
       return [];
     },
     applyOptimisticUpdate: (queryClient, args) => {
-      if (args.classId === undefined) {
+      if (args.worldId === undefined) {
         return;
       }
-      const listKey = classFilesListQueryKey(args.classId);
+      const listKey = worldFilesListQueryKey(args.worldId);
       const name = args.name.trim().slice(0, 255) || "file";
-      queryClient.setQueryData<ClassFilePublic[]>(listKey, (old) => {
+      queryClient.setQueryData<WorldFilePublic[]>(listKey, (old) => {
         if (!old) return old;
         return old.map((file) => (file._id === args.fileId ? { ...file, name } : file));
       });

@@ -1,26 +1,20 @@
 import { v } from "convex/values";
 
-import { classQuery } from "./lib/customFunctions.js";
+import { worldQuery } from "./lib/customFunctions.js";
 import { permissionSnapshotForScope } from "./lib/permissionSnapshot.js";
 
-const classRoleValidator = v.union(
+const worldRoleValidator = v.union(
   v.literal("owner"),
-  v.literal("teacher"),
-  v.literal("assistant_teacher"),
-  v.literal("student"),
-  v.literal("guardian"),
-  v.literal("class_member"),
+  v.literal("game_master"),
+  v.literal("assistant_game_master"),
+  v.literal("player"),
+  v.literal("world_member"),
 );
 
-/**
- * Effective permission snapshot for the current user in a class.
- * Used by UI gating (sidebar, action menus, page guards).
- * Requires class:read via classQuery (uniform CLASS_UNAVAILABLE deny).
- */
-export const forClass = classQuery({
-  args: { classId: v.id("classes") },
+export const forWorld = worldQuery({
+  args: {},
   returns: v.object({
-    role: v.union(classRoleValidator, v.null()),
+    role: v.union(worldRoleValidator, v.null()),
     permissions: v.array(v.string()),
   }),
   handler: async (ctx) => {

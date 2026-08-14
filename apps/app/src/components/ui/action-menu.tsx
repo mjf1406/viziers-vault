@@ -10,15 +10,14 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useOptionalClassPermissionsContext } from "@/components/permissions/classPermissionsContext";
-import type { ClassPermission } from "@/lib/permissions/classPermissions";
+import { useOptionalWorldPermissionsContext } from "@/components/permissions/worldPermissionsContext";
 
 export type ActionMenuItem = {
   id: string;
   label: string;
   icon?: ReactNode;
   /** When set, the item is hidden unless the viewer has this permission. */
-  permission?: ClassPermission;
+  permission?: string;
   variant?: "default" | "destructive";
   /** Consecutive items with the same group share a DropdownMenuGroup; changes insert separators. */
   group?: string;
@@ -37,7 +36,7 @@ type ActionMenuProps = {
  * Renders nothing when no items remain after filtering.
  */
 export function ActionMenu({ items, label, align = "end", className }: ActionMenuProps) {
-  const permissions = useOptionalClassPermissionsContext();
+  const permissions = useOptionalWorldPermissionsContext();
   const isPending = permissions?.isPending ?? false;
 
   const visibleItems = useMemo(() => {

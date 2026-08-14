@@ -38,3 +38,31 @@ export async function deleteJoinCodesForClass(
     await ctx.db.delete("joinCodes", code._id);
   }
 }
+
+export async function deleteJoinCodesForWorld(
+  ctx: MutationCtx,
+  worldId: Id<"worlds">,
+): Promise<void> {
+  // eslint-disable-next-line @convex-dev/no-collect-in-query -- bounded invite codes per world
+  const codes = await ctx.db
+    .query("joinCodes")
+    .withIndex("by_world", (q) => q.eq("worldId", worldId))
+    .collect();
+  for (const code of codes) {
+    await deleteJoinCodeById(ctx, code._id);
+  }
+}
+
+export async function deleteJoinCodesForParty(
+  ctx: MutationCtx,
+  partyId: Id<"parties">,
+): Promise<void> {
+  // eslint-disable-next-line @convex-dev/no-collect-in-query -- bounded invite codes per party
+  const codes = await ctx.db
+    .query("joinCodes")
+    .withIndex("by_party", (q) => q.eq("partyId", partyId))
+    .collect();
+  for (const code of codes) {
+    await deleteJoinCodeById(ctx, code._id);
+  }
+}

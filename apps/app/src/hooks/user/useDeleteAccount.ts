@@ -19,7 +19,7 @@ type CurrentUser = Doc<"users"> & {
 };
 
 const ACCOUNT_ERROR_KEYS = {
-  OWNS_CLASSES: "errorOwnsClasses",
+  OWNS_WORLDS_OR_PARTIES: "errorOwnsWorlds",
   ACTIVE_SUBSCRIPTION: "errorActiveSubscription",
   CONFIRMATION_MISMATCH: "errorConfirmationMismatch",
 } as const;

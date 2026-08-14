@@ -80,7 +80,7 @@ Deleting unused images frees **disk** and forces a clean rebuild — do that aft
 
 ## Uninstall / wipe data
 
-Wiping removes all classroom data (users, classes, uploads). A later deploy starts a fresh empty instance. Stopping without `-v` (or without deleting the volume) keeps data.
+Wiping removes all app data (users, worlds, parties, uploads). A later deploy starts a fresh empty instance. Stopping without `-v` (or without deleting the volume) keeps data.
 
 ### Clone and run
 

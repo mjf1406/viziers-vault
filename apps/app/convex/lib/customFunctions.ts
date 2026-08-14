@@ -4,66 +4,89 @@ import { customMutation, customQuery } from "convex-helpers/server/customFunctio
 import type { Doc, Id } from "../_generated/dataModel.js";
 import type { MutationCtx, QueryCtx } from "../_generated/server.js";
 import { mutation, query } from "../_generated/server.js";
-import { authz } from "../authz.js";
-import type { ClassPermission } from "./authzModel.js";
-import { classScope } from "./authzModel.js";
+import type { WorldPermission } from "./authzModel.js";
+import { worldScope } from "./authzModel.js";
 import { requireAuthUserId } from "./auth.js";
 import { assertEntitled } from "./entitlement.js";
+import { canReadParty } from "./partyMembership.js";
+import { canOnWorld } from "./worldAccess.js";
 
 type AuthedCtx = (QueryCtx | MutationCtx) & { userId: Id<"users"> };
 
-/**
- * Load a class and inject scope + can/require helpers.
- * Requires `class:read` so non-members get the same CLASS_UNAVAILABLE denial
- * for both real and fabricated class IDs (no existence oracle).
- */
-async function loadClassContext(ctx: AuthedCtx, classId: Id<"classes">) {
-  const classDoc = await ctx.db.get("classes", classId);
-  if (!classDoc) {
+async function loadWorldContext(ctx: AuthedCtx, worldId: Id<"worlds">) {
+  const worldDoc = await ctx.db.get("worlds", worldId);
+  if (!worldDoc) {
     throw new ConvexError({
-      code: "CLASS_UNAVAILABLE",
-      message: "Class not found or access denied",
+      code: "WORLD_UNAVAILABLE",
+      message: "World not found or access denied",
     });
   }
-  const scope = classScope(classId);
+  const scope = worldScope(worldId);
 
-  const requirePermission = async (permission: ClassPermission) => {
+  const requirePermission = async (permission: WorldPermission) => {
     try {
-      await authz.require(ctx, ctx.userId, permission, scope);
+      const allowed = await canOnWorld(ctx, ctx.userId, worldId, permission);
+      if (!allowed) {
+        throw new Error("denied");
+      }
     } catch {
-      // Skip logging for the uniform class:read gate — fabricated IDs would flood logs.
-      if (permission !== "class:read") {
-        console.error("Class permission denied", {
-          classId,
+      if (permission !== "world:read") {
+        console.error("World permission denied", {
+          worldId,
           userId: ctx.userId,
           permission,
         });
       }
       throw new ConvexError({
-        code: "CLASS_UNAVAILABLE",
-        message: "Class not found or access denied",
+        code: "WORLD_UNAVAILABLE",
+        message: "World not found or access denied",
       });
     }
   };
 
-  // Uniform deny for non-members — closes the existence oracle on class-scoped queries.
-  await requirePermission("class:read");
+  await requirePermission("world:read");
 
   return {
-    classDoc: classDoc as Doc<"classes">,
+    worldDoc: worldDoc as Doc<"worlds">,
     scope,
-    can: (permission: ClassPermission) => authz.can(ctx, ctx.userId, permission, scope),
+    can: (permission: WorldPermission) => canOnWorld(ctx, ctx.userId, worldId, permission),
     require: requirePermission,
   };
 }
 
-/**
- * Mutation wrapper that requires authentication.
- * Soft-auth queries (empty/null when logged out) should keep using plain `query`.
- *
- * Note: wrappers are built from base `mutation`/`query` (not nested custom builders).
- * Nesting `customMutation(authedMutation, …)` loses CustomCtx typing in convex-helpers.
- */
+async function loadPartyContext(ctx: AuthedCtx, partyId: Id<"parties">) {
+  const partyDoc = await ctx.db.get("parties", partyId);
+  if (!partyDoc) {
+    throw new ConvexError({
+      code: "PARTY_UNAVAILABLE",
+      message: "Party not found or access denied",
+    });
+  }
+  const canRead = await canReadParty(ctx, partyId, ctx.userId);
+  if (!canRead) {
+    throw new ConvexError({
+      code: "PARTY_UNAVAILABLE",
+      message: "Party not found or access denied",
+    });
+  }
+  const isOwner = partyDoc.ownerId === ctx.userId;
+
+  const requireOwner = () => {
+    if (!isOwner) {
+      throw new ConvexError({
+        code: "PARTY_UNAVAILABLE",
+        message: "Party not found or access denied",
+      });
+    }
+  };
+
+  return {
+    partyDoc: partyDoc as Doc<"parties">,
+    isOwner,
+    requireOwner,
+  };
+}
+
 export const authedMutation = customMutation(mutation, {
   args: {},
   input: async (ctx) => {
@@ -72,11 +95,6 @@ export const authedMutation = customMutation(mutation, {
   },
 });
 
-/**
- * Mutation wrapper that requires authentication + an active trial or subscription.
- * Reserved for pay-to-create paths (e.g. `classes.create`). Class membership
- * and day-to-day class ops use `authedMutation` / `classMutation` instead.
- */
 export const entitledMutation = customMutation(mutation, {
   args: {},
   input: async (ctx) => {
@@ -86,12 +104,6 @@ export const entitledMutation = customMutation(mutation, {
   },
 });
 
-/**
- * Query wrapper that requires authentication.
- *
- * This should be used for queries that should never run while logged out.
- * Client-side, use `useAuthedQuery` to avoid calling the query with "skip".
- */
 export const authedQuery = customQuery(query, {
   args: {},
   input: async (ctx) => {
@@ -100,10 +112,6 @@ export const authedQuery = customQuery(query, {
   },
 });
 
-/**
- * Query wrapper that requires authentication + an active trial or subscription.
- * Prefer `authedQuery` for membership reads; keep this for rare paid-only reads.
- */
 export const entitledQuery = customQuery(query, {
   args: {},
   input: async (ctx) => {
@@ -113,79 +121,146 @@ export const entitledQuery = customQuery(query, {
   },
 });
 
-/**
- * Class-scoped mutation: loads the class, injects scope + can/require helpers.
- * Callers still enforce the specific permission they need via `ctx.require(...)`.
- * Does not require entitlement (exit paths: delete, transfer ownership).
- */
-export const classMutation = customMutation(mutation, {
-  args: { classId: v.id("classes") },
+export const worldMutation = customMutation(mutation, {
+  args: { worldId: v.id("worlds") },
   input: async (ctx, args) => {
     const userId = await requireAuthUserId(ctx);
-    const classCtx = await loadClassContext({ ...ctx, userId }, args.classId);
+    const worldCtx = await loadWorldContext({ ...ctx, userId }, args.worldId);
     return {
       ctx: {
         userId,
-        ...classCtx,
+        ...worldCtx,
       },
       args: {},
     };
   },
 });
 
-/**
- * Class-scoped mutation that also requires an active trial or subscription.
- * Prefer `classMutation` for membership writes; keep for rare paid-only class writes.
- */
-export const entitledClassMutation = customMutation(mutation, {
-  args: { classId: v.id("classes") },
+export const entitledWorldMutation = customMutation(mutation, {
+  args: { worldId: v.id("worlds") },
   input: async (ctx, args) => {
     const userId = await requireAuthUserId(ctx);
     await assertEntitled(ctx, userId);
-    const classCtx = await loadClassContext({ ...ctx, userId }, args.classId);
+    const worldCtx = await loadWorldContext({ ...ctx, userId }, args.worldId);
     return {
       ctx: {
         userId,
-        ...classCtx,
+        ...worldCtx,
       },
       args: {},
     };
   },
 });
 
-/**
- * Class-scoped query: loads the class, injects scope + can/require helpers.
- * Does not require entitlement (membership reads and class interaction).
- */
+export const worldQuery = customQuery(query, {
+  args: { worldId: v.id("worlds") },
+  input: async (ctx, args) => {
+    const userId = await requireAuthUserId(ctx);
+    const worldCtx = await loadWorldContext({ ...ctx, userId }, args.worldId);
+    return {
+      ctx: {
+        userId,
+        ...worldCtx,
+      },
+      args: {},
+    };
+  },
+});
+
+export const partyMutation = customMutation(mutation, {
+  args: { partyId: v.id("parties") },
+  input: async (ctx, args) => {
+    const userId = await requireAuthUserId(ctx);
+    const partyCtx = await loadPartyContext({ ...ctx, userId }, args.partyId);
+    return {
+      ctx: {
+        userId,
+        ...partyCtx,
+      },
+      args: {},
+    };
+  },
+});
+
+export const entitledPartyMutation = customMutation(mutation, {
+  args: { partyId: v.id("parties") },
+  input: async (ctx, args) => {
+    const userId = await requireAuthUserId(ctx);
+    await assertEntitled(ctx, userId);
+    const partyCtx = await loadPartyContext({ ...ctx, userId }, args.partyId);
+    return {
+      ctx: {
+        userId,
+        ...partyCtx,
+      },
+      args: {},
+    };
+  },
+});
+
+export const partyQuery = customQuery(query, {
+  args: { partyId: v.id("parties") },
+  input: async (ctx, args) => {
+    const userId = await requireAuthUserId(ctx);
+    const partyCtx = await loadPartyContext({ ...ctx, userId }, args.partyId);
+    return {
+      ctx: {
+        userId,
+        ...partyCtx,
+      },
+      args: {},
+    };
+  },
+});
+
+/** @deprecated Legacy class scope — redirects and migration only. */
+async function loadClassContext(ctx: AuthedCtx, classId: Id<"classes">) {
+  const classDoc = await ctx.db.get("classes", classId);
+  if (!classDoc) {
+    throw new ConvexError({
+      code: "CLASS_UNAVAILABLE",
+      message: "Class not found or access denied",
+    });
+  }
+  const world = await ctx.db
+    .query("worlds")
+    .withIndex("by_legacyClassId", (q) => q.eq("legacyClassId", classId))
+    .unique();
+  if (world) {
+    return await loadWorldContext(ctx, world._id);
+  }
+  throw new ConvexError({
+    code: "CLASS_UNAVAILABLE",
+    message: "Class not found or access denied",
+  });
+}
+
 export const classQuery = customQuery(query, {
   args: { classId: v.id("classes") },
   input: async (ctx, args) => {
     const userId = await requireAuthUserId(ctx);
-    const classCtx = await loadClassContext({ ...ctx, userId }, args.classId);
+    const worldCtx = await loadClassContext({ ...ctx, userId }, args.classId);
     return {
       ctx: {
         userId,
-        ...classCtx,
+        classDoc: await ctx.db.get("classes", args.classId),
+        ...worldCtx,
       },
       args: {},
     };
   },
 });
 
-/**
- * Class-scoped query that also requires an active trial or subscription.
- * Prefer `classQuery` for membership reads; keep for rare paid-only class reads.
- */
-export const entitledClassQuery = customQuery(query, {
+export const classMutation = customMutation(mutation, {
   args: { classId: v.id("classes") },
   input: async (ctx, args) => {
     const userId = await requireAuthUserId(ctx);
-    await assertEntitled(ctx, userId);
-    const classCtx = await loadClassContext({ ...ctx, userId }, args.classId);
+    const worldCtx = await loadClassContext({ ...ctx, userId }, args.classId);
     return {
       ctx: {
         userId,
-        ...classCtx,
+        classDoc: await ctx.db.get("classes", args.classId),
+        ...worldCtx,
       },
       args: {},
     };
