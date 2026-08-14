@@ -1,6 +1,0 @@
-# Cloudflare Pages (connect the repo):
-#   Build command: bun run --filter @vv/web build
-#   Output directory: apps/web/dist
-name = "viziers-vault-web"
-compatibility_date = "2026-08-14"
-pages_build_output_dir = "apps/web/dist"
