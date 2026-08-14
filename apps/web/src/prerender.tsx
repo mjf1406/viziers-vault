@@ -1,5 +1,8 @@
 import { RouterProvider } from "@tanstack/react-router";
-import { renderToString } from "react-dom/server";
+// Vite executes the client bundle in Node/Bun; react-dom/server resolves to the
+// browser build and leaves handles open after renderToString (React 19 hang).
+// See https://github.com/preactjs/vite-prerender-plugin/issues/3
+import { renderToString } from "react-dom/server.edge";
 
 import { getPageMeta, ogElements, SITE } from "./lib/site";
 import { createAppRouter } from "./router";
