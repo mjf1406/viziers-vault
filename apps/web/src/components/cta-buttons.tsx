@@ -45,6 +45,45 @@ export function SelfHostButton({
   );
 }
 
+export function GetStartedButton({
+  className,
+  variant = "secondary",
+}: {
+  className?: string;
+  variant?: ButtonVariant;
+}) {
+  return (
+    <Button
+      variant={variant}
+      className={`group/arrow font-bold ${className ?? ""}`}
+      nativeButton={false}
+      render={<a href={SITE.appUrl} />}
+    >
+      Get Started
+      <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
+    </Button>
+  );
+}
+
+export function LearnMoreButton({
+  className,
+  variant = "outline",
+}: {
+  className?: string;
+  variant?: ButtonVariant;
+}) {
+  return (
+    <Button
+      variant={variant}
+      className={className}
+      nativeButton={false}
+      render={<a href="#features" />}
+    >
+      Learn more
+    </Button>
+  );
+}
+
 export function SubscribeNowButton({
   className,
   variant = "ghost",

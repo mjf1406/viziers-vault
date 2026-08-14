@@ -1,7 +1,7 @@
 import type { ComponentType, ReactNode } from "react";
 
 import { Discord } from "../brand/discord";
-import { LogoTextOnly } from "../brand/logo";
+import { Logo, LogoAboveText } from "../brand/logo";
 import { Separator } from "../ui/separator";
 
 export interface FooterLinkComponentProps {
@@ -37,8 +37,15 @@ export function Footer({
     <footer id="footer" className="mx-auto w-full px-4 pt-24 pb-8 sm:pt-32 xl:px-10">
       <div className="rounded-2xl border border-secondary bg-card p-10">
         <div className="grid grid-cols-2 gap-x-12 gap-y-8 md:grid-cols-4 xl:grid-cols-5">
-          <div className="col-span-full xl:col-span-1">
-            <LogoTextOnly />
+          <div className="@container/footer-brand col-span-full xl:col-span-1">
+            <LinkComponent href="/" className="inline-flex">
+              <span className="hidden @[16rem]/footer-brand:block">
+                <Logo />
+              </span>
+              <span className="@[16rem]/footer-brand:hidden">
+                <LogoAboveText />
+              </span>
+            </LinkComponent>
             <p className="mt-2 text-muted-foreground">
               A semi-OSS procedural hex world and battle map generator for TTRPGs.
             </p>

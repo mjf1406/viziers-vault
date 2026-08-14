@@ -12,7 +12,7 @@ export {
   SheetTitle,
   SheetDescription,
 } from "./components/ui/sheet";
-export { LogoTextOnly } from "./components/brand/logo";
+export { Logo, LogoAboveText } from "./components/brand/logo";
 export { Discord, DiscordIcon } from "./components/brand/discord";
 export { Navbar } from "./components/layout/navbar";
 export type {

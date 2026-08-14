@@ -4,11 +4,14 @@
 @import "@fontsource-variable/inter";
 @import "@vv/ui/styles";
 
-@source "../../../../packages/ui/src";
+@source "../../../packages/ui/src";
 
 @theme inline {
   --font-heading: var(--font-sans);
   --font-sans: "Inter Variable", sans-serif;
+  --radius-2xl: calc(var(--radius) * 1.8);
+  --radius-3xl: calc(var(--radius) * 2.2);
+  --radius-4xl: calc(var(--radius) * 2.6);
 }
 
 @layer base {

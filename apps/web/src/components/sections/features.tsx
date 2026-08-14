@@ -1,4 +1,3 @@
-import { Badge } from "@/components/ui/badge";
 import { Card, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { features } from "@/lib/features";
 
@@ -28,14 +27,11 @@ export function FeaturesSection() {
 
       <div className="mx-auto grid w-full gap-4 sm:grid-cols-2 lg:w-[60%] lg:grid-cols-2">
         {cards.map((f) => (
-          <Card key={f.id} className="relative h-full bg-muted/60 dark:bg-card">
+          <Card key={f.id} className="h-full bg-muted/60 dark:bg-card">
             <CardHeader>
               <CardTitle>{f.title}</CardTitle>
               <CardDescription>{f.description}</CardDescription>
             </CardHeader>
-            <Badge variant="secondary" className="absolute -top-2 -right-3">
-              {f.minTier.toUpperCase()}
-            </Badge>
           </Card>
         ))}
       </div>

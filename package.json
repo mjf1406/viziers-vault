@@ -15,7 +15,8 @@
   "type": "module",
   "scripts": {
     "dev": "vp dev",
-    "dev:web": "vp --filter @vv/web dev",
+    "ds": "vp run -w ds:servers",
+    "dev:web": "bun run --filter @vv/web dev",
     "build:web": "bun run --filter @vv/web build",
     "build": "vp run -r build",
     "check": "vp check --fix && bun run lint:fix && bun run typecheck",

@@ -1,8 +1,8 @@
 import { useState, type ComponentType, type ReactNode, type SVGProps } from "react";
-import { ChevronsDown, Menu } from "lucide-react";
+import { Menu } from "lucide-react";
 
 import { DiscordIcon } from "../brand/discord";
-import { LogoTextOnly } from "../brand/logo";
+import { Logo } from "../brand/logo";
 import { Button } from "../ui/button";
 import { Separator } from "../ui/separator";
 import {
@@ -65,7 +65,9 @@ export function Navbar({
   return (
     <header className="sticky top-5 z-40 w-full border-b border-secondary bg-card bg-opacity-15 shadow-inner">
       <div className="mx-auto flex max-w-7xl items-center justify-between p-2 px-4">
-        <LogoTextOnly href={logoHref} />
+        <LinkComponent href={logoHref} className="flex items-center">
+          <Logo className="h-10 w-auto object-contain" />
+        </LinkComponent>
         <div className="flex items-center md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger render={<Button variant="ghost" size="icon" className="lg:hidden" />}>
@@ -80,8 +82,7 @@ export function Navbar({
                 <SheetHeader className="mb-4 ml-4">
                   <SheetTitle className="flex items-center">
                     <LinkComponent href={logoHref} className="flex items-center">
-                      <ChevronsDown className="mr-2 h-9 w-9 rounded-lg border border-secondary bg-gradient-to-tr from-primary via-primary/70 to-primary text-white" />
-                      Vizier's Vault
+                      <Logo className="h-10 w-auto object-contain" />
                     </LinkComponent>
                   </SheetTitle>
                 </SheetHeader>

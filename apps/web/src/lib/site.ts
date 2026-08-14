@@ -11,6 +11,17 @@ export const SITE = {
   discordUrl: "https://discord.gg/",
 } as const;
 
+function latestDownloadUrl(artifact: string): string {
+  return `${SITE.githubUrl}/releases/latest/download/${artifact}`;
+}
+
+/** Direct GitHub “latest release” asset URLs for the marketing download menu. */
+export const DESKTOP_DOWNLOADS = {
+  windows: latestDownloadUrl(`${SITE.name}-Setup-Windows.exe`),
+  mac: latestDownloadUrl(`${SITE.name}-macOS.dmg`),
+  ubuntu: latestDownloadUrl(`${SITE.name}-Linux.AppImage`),
+} as const;
+
 export const DEFAULT_TITLE = `${SITE.name} - D&D 5e Tools`;
 
 export type PageMeta = {

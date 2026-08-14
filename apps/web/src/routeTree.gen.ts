@@ -8,230 +8,230 @@
 // You should NOT make any changes in this file as it will be overwritten.
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
-import { Route as rootRouteImport } from "./routes/__root";
-import { Route as IndexRouteImport } from "./routes/index";
-import { Route as R404RouteImport } from "./routes/404";
-import { Route as AboutRouteImport } from "./routes/about";
-import { Route as ContactRouteImport } from "./routes/contact";
-import { Route as CookiePolicyRouteImport } from "./routes/cookie-policy";
-import { Route as FaqRouteImport } from "./routes/faq";
-import { Route as PricingRouteImport } from "./routes/pricing";
-import { Route as PrivacyPolicyRouteImport } from "./routes/privacy-policy";
-import { Route as TeamRouteImport } from "./routes/team";
-import { Route as TermsOfServiceRouteImport } from "./routes/terms-of-service";
+import { Route as rootRouteImport } from './routes/__root'
+import { Route as IndexRouteImport } from './routes/index'
+import { Route as R404RouteImport } from './routes/404'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as ContactRouteImport } from './routes/contact'
+import { Route as CookiePolicyRouteImport } from './routes/cookie-policy'
+import { Route as FaqRouteImport } from './routes/faq'
+import { Route as PricingRouteImport } from './routes/pricing'
+import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
+import { Route as TeamRouteImport } from './routes/team'
+import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 
 const IndexRoute = IndexRouteImport.update({
-  id: "/",
-  path: "/",
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const R404Route = R404RouteImport.update({
-  id: "/404",
-  path: "/404",
+  id: '/404',
+  path: '/404',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const AboutRoute = AboutRouteImport.update({
-  id: "/about",
-  path: "/about",
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const ContactRoute = ContactRouteImport.update({
-  id: "/contact",
-  path: "/contact",
+  id: '/contact',
+  path: '/contact',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const CookiePolicyRoute = CookiePolicyRouteImport.update({
-  id: "/cookie-policy",
-  path: "/cookie-policy",
+  id: '/cookie-policy',
+  path: '/cookie-policy',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const FaqRoute = FaqRouteImport.update({
-  id: "/faq",
-  path: "/faq",
+  id: '/faq',
+  path: '/faq',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const PricingRoute = PricingRouteImport.update({
-  id: "/pricing",
-  path: "/pricing",
+  id: '/pricing',
+  path: '/pricing',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
-  id: "/privacy-policy",
-  path: "/privacy-policy",
+  id: '/privacy-policy',
+  path: '/privacy-policy',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const TeamRoute = TeamRouteImport.update({
-  id: "/team",
-  path: "/team",
+  id: '/team',
+  path: '/team',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
-  id: "/terms-of-service",
-  path: "/terms-of-service",
+  id: '/terms-of-service',
+  path: '/terms-of-service',
   getParentRoute: () => rootRouteImport,
-} as any);
+} as any)
 
 export interface FileRoutesByFullPath {
-  "/": typeof IndexRoute;
-  "/404": typeof R404Route;
-  "/about": typeof AboutRoute;
-  "/contact": typeof ContactRoute;
-  "/cookie-policy": typeof CookiePolicyRoute;
-  "/faq": typeof FaqRoute;
-  "/pricing": typeof PricingRoute;
-  "/privacy-policy": typeof PrivacyPolicyRoute;
-  "/team": typeof TeamRoute;
-  "/terms-of-service": typeof TermsOfServiceRoute;
+  '/': typeof IndexRoute
+  '/404': typeof R404Route
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/cookie-policy': typeof CookiePolicyRoute
+  '/faq': typeof FaqRoute
+  '/pricing': typeof PricingRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/team': typeof TeamRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
 }
 export interface FileRoutesByTo {
-  "/": typeof IndexRoute;
-  "/404": typeof R404Route;
-  "/about": typeof AboutRoute;
-  "/contact": typeof ContactRoute;
-  "/cookie-policy": typeof CookiePolicyRoute;
-  "/faq": typeof FaqRoute;
-  "/pricing": typeof PricingRoute;
-  "/privacy-policy": typeof PrivacyPolicyRoute;
-  "/team": typeof TeamRoute;
-  "/terms-of-service": typeof TermsOfServiceRoute;
+  '/': typeof IndexRoute
+  '/404': typeof R404Route
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/cookie-policy': typeof CookiePolicyRoute
+  '/faq': typeof FaqRoute
+  '/pricing': typeof PricingRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/team': typeof TeamRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
 }
 export interface FileRoutesById {
-  __root__: typeof rootRouteImport;
-  "/": typeof IndexRoute;
-  "/404": typeof R404Route;
-  "/about": typeof AboutRoute;
-  "/contact": typeof ContactRoute;
-  "/cookie-policy": typeof CookiePolicyRoute;
-  "/faq": typeof FaqRoute;
-  "/pricing": typeof PricingRoute;
-  "/privacy-policy": typeof PrivacyPolicyRoute;
-  "/team": typeof TeamRoute;
-  "/terms-of-service": typeof TermsOfServiceRoute;
+  __root__: typeof rootRouteImport
+  '/': typeof IndexRoute
+  '/404': typeof R404Route
+  '/about': typeof AboutRoute
+  '/contact': typeof ContactRoute
+  '/cookie-policy': typeof CookiePolicyRoute
+  '/faq': typeof FaqRoute
+  '/pricing': typeof PricingRoute
+  '/privacy-policy': typeof PrivacyPolicyRoute
+  '/team': typeof TeamRoute
+  '/terms-of-service': typeof TermsOfServiceRoute
 }
 export interface FileRouteTypes {
-  fileRoutesByFullPath: FileRoutesByFullPath;
+  fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
-    | "/"
-    | "/404"
-    | "/about"
-    | "/contact"
-    | "/cookie-policy"
-    | "/faq"
-    | "/pricing"
-    | "/privacy-policy"
-    | "/team"
-    | "/terms-of-service";
-  fileRoutesByTo: FileRoutesByTo;
+    | '/'
+    | '/404'
+    | '/about'
+    | '/contact'
+    | '/cookie-policy'
+    | '/faq'
+    | '/pricing'
+    | '/privacy-policy'
+    | '/team'
+    | '/terms-of-service'
+  fileRoutesByTo: FileRoutesByTo
   to:
-    | "/"
-    | "/404"
-    | "/about"
-    | "/contact"
-    | "/cookie-policy"
-    | "/faq"
-    | "/pricing"
-    | "/privacy-policy"
-    | "/team"
-    | "/terms-of-service";
+    | '/'
+    | '/404'
+    | '/about'
+    | '/contact'
+    | '/cookie-policy'
+    | '/faq'
+    | '/pricing'
+    | '/privacy-policy'
+    | '/team'
+    | '/terms-of-service'
   id:
-    | "__root__"
-    | "/"
-    | "/404"
-    | "/about"
-    | "/contact"
-    | "/cookie-policy"
-    | "/faq"
-    | "/pricing"
-    | "/privacy-policy"
-    | "/team"
-    | "/terms-of-service";
-  fileRoutesById: FileRoutesById;
+    | '__root__'
+    | '/'
+    | '/404'
+    | '/about'
+    | '/contact'
+    | '/cookie-policy'
+    | '/faq'
+    | '/pricing'
+    | '/privacy-policy'
+    | '/team'
+    | '/terms-of-service'
+  fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
-  IndexRoute: typeof IndexRoute;
-  R404Route: typeof R404Route;
-  AboutRoute: typeof AboutRoute;
-  ContactRoute: typeof ContactRoute;
-  CookiePolicyRoute: typeof CookiePolicyRoute;
-  FaqRoute: typeof FaqRoute;
-  PricingRoute: typeof PricingRoute;
-  PrivacyPolicyRoute: typeof PrivacyPolicyRoute;
-  TeamRoute: typeof TeamRoute;
-  TermsOfServiceRoute: typeof TermsOfServiceRoute;
+  IndexRoute: typeof IndexRoute
+  R404Route: typeof R404Route
+  AboutRoute: typeof AboutRoute
+  ContactRoute: typeof ContactRoute
+  CookiePolicyRoute: typeof CookiePolicyRoute
+  FaqRoute: typeof FaqRoute
+  PricingRoute: typeof PricingRoute
+  PrivacyPolicyRoute: typeof PrivacyPolicyRoute
+  TeamRoute: typeof TeamRoute
+  TermsOfServiceRoute: typeof TermsOfServiceRoute
 }
 
-declare module "@tanstack/react-router" {
+declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    "/": {
-      id: "/";
-      path: "/";
-      fullPath: "/";
-      preLoaderRoute: typeof IndexRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/404": {
-      id: "/404";
-      path: "/404";
-      fullPath: "/404";
-      preLoaderRoute: typeof R404RouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/about": {
-      id: "/about";
-      path: "/about";
-      fullPath: "/about";
-      preLoaderRoute: typeof AboutRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/contact": {
-      id: "/contact";
-      path: "/contact";
-      fullPath: "/contact";
-      preLoaderRoute: typeof ContactRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/cookie-policy": {
-      id: "/cookie-policy";
-      path: "/cookie-policy";
-      fullPath: "/cookie-policy";
-      preLoaderRoute: typeof CookiePolicyRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/faq": {
-      id: "/faq";
-      path: "/faq";
-      fullPath: "/faq";
-      preLoaderRoute: typeof FaqRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/pricing": {
-      id: "/pricing";
-      path: "/pricing";
-      fullPath: "/pricing";
-      preLoaderRoute: typeof PricingRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/privacy-policy": {
-      id: "/privacy-policy";
-      path: "/privacy-policy";
-      fullPath: "/privacy-policy";
-      preLoaderRoute: typeof PrivacyPolicyRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/team": {
-      id: "/team";
-      path: "/team";
-      fullPath: "/team";
-      preLoaderRoute: typeof TeamRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
-    "/terms-of-service": {
-      id: "/terms-of-service";
-      path: "/terms-of-service";
-      fullPath: "/terms-of-service";
-      preLoaderRoute: typeof TermsOfServiceRouteImport;
-      parentRoute: typeof rootRouteImport;
-    };
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/404': {
+      id: '/404'
+      path: '/404'
+      fullPath: '/404'
+      preLoaderRoute: typeof R404RouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/contact': {
+      id: '/contact'
+      path: '/contact'
+      fullPath: '/contact'
+      preLoaderRoute: typeof ContactRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/cookie-policy': {
+      id: '/cookie-policy'
+      path: '/cookie-policy'
+      fullPath: '/cookie-policy'
+      preLoaderRoute: typeof CookiePolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/faq': {
+      id: '/faq'
+      path: '/faq'
+      fullPath: '/faq'
+      preLoaderRoute: typeof FaqRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/pricing': {
+      id: '/pricing'
+      path: '/pricing'
+      fullPath: '/pricing'
+      preLoaderRoute: typeof PricingRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy-policy': {
+      id: '/privacy-policy'
+      path: '/privacy-policy'
+      fullPath: '/privacy-policy'
+      preLoaderRoute: typeof PrivacyPolicyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/team': {
+      id: '/team'
+      path: '/team'
+      fullPath: '/team'
+      preLoaderRoute: typeof TeamRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/terms-of-service': {
+      id: '/terms-of-service'
+      path: '/terms-of-service'
+      fullPath: '/terms-of-service'
+      preLoaderRoute: typeof TermsOfServiceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
@@ -246,7 +246,7 @@ const rootRouteChildren: RootRouteChildren = {
   PrivacyPolicyRoute: PrivacyPolicyRoute,
   TeamRoute: TeamRoute,
   TermsOfServiceRoute: TermsOfServiceRoute,
-};
+}
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
-  ._addFileTypes<FileRouteTypes>();
+  ._addFileTypes<FileRouteTypes>()
