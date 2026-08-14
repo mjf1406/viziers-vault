@@ -1,8 +1,7 @@
-import { useEffect, useState, type ReactNode } from "react";
+import { useEffect, useLayoutEffect, useState, type ReactNode } from "react";
 
 import { ThemeProviderContext, type Theme } from "@/components/theme/theme-context";
-
-const STORAGE_KEY = "viziers-vault-web-ui-theme";
+import { applyResolvedTheme, isTheme, THEME_STORAGE_KEY } from "@/components/theme/theme-storage";
 
 type ThemeProviderProps = {
   children: ReactNode;
@@ -13,28 +12,26 @@ type ThemeProviderProps = {
 export function ThemeProvider({
   children,
   defaultTheme = "system",
-  storageKey = STORAGE_KEY,
+  storageKey = THEME_STORAGE_KEY,
 }: ThemeProviderProps) {
   const [theme, setTheme] = useState<Theme>(defaultTheme);
 
-  useEffect(() => {
-    const stored = window.localStorage.getItem(storageKey) as Theme | null;
-    if (stored) setTheme(stored);
-  }, [storageKey]);
-
-  useEffect(() => {
-    const root = window.document.documentElement;
-    root.classList.remove("light", "dark");
-
-    if (theme === "system") {
-      const systemTheme = window.matchMedia("(prefers-color-scheme: dark)").matches
-        ? "dark"
-        : "light";
-      root.classList.add(systemTheme);
+  useLayoutEffect(() => {
+    const stored = window.localStorage.getItem(storageKey);
+    if (isTheme(stored) && stored !== theme) {
+      setTheme(stored);
+      applyResolvedTheme(stored);
       return;
     }
+    applyResolvedTheme(theme);
+  }, [storageKey, theme]);
 
-    root.classList.add(theme);
+  useEffect(() => {
+    if (theme !== "system") return;
+    const media = window.matchMedia("(prefers-color-scheme: dark)");
+    const onChange = () => applyResolvedTheme("system");
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
   }, [theme]);
 
   return (

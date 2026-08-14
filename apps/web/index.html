@@ -2,9 +2,45 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/webp" href="/brand/logo/icon-86.webp" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="theme-color" content="#ffffff" />
+    <script>
+      (function () {
+        try {
+          var key = "viziers-vault-web-ui-theme";
+          var theme = localStorage.getItem(key) || "system";
+          var resolved =
+            theme === "system"
+              ? window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light"
+              : theme;
+          document.documentElement.classList.add(resolved);
+          document.documentElement.style.colorScheme = resolved;
+          var themeColor = document.querySelector('meta[name="theme-color"]');
+          if (themeColor) {
+            themeColor.setAttribute("content", resolved === "dark" ? "#121212" : "#ffffff");
+          }
+        } catch (_) {}
+      })();
+    </script>
+    <style>
+      html {
+        background-color: #ffffff;
+        color-scheme: light;
+      }
+      html.dark {
+        background-color: #121212;
+        color-scheme: dark;
+      }
+      @media (prefers-color-scheme: dark) {
+        html:not(.light) {
+          background-color: #121212;
+          color-scheme: dark;
+        }
+      }
+    </style>
+    <link rel="icon" type="image/webp" href="/brand/logo/icon-86.webp" />
     <meta
       name="description"
       content="Generate magic shops, encounters, spellbooks, battle maps, and worlds for D&amp;D 5e 2024"
