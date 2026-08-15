@@ -6,6 +6,7 @@ const it = {
     openNavMenu: "Apri il menu",
     toggleTheme: "Cambia tema",
     comingSoon: "Prossimamente",
+    new: "Nuovo",
     soon: "presto",
     copyright: "© {{year}} {{appName}}.",
     underConstruction: "🚧IN COSTRUZIONE🚧",
@@ -264,6 +265,11 @@ const it = {
       "Genera incontri bilanciati in base alla composizione del gruppo, al bioma e alle condizioni di viaggio.",
     encounterPhilosophy:
       "Una campagna D&D in stile roguelite non è completa senza incontri casuali.",
+    worldManagementTitle: "Gestione dei mondi",
+    worldManagementDescription:
+      "Crea e organizza mondi, città e ambientazioni di campagna che alimentano i generatori.",
+    worldManagementPhilosophy:
+      "Prima di generare qualsiasi cosa, mi serviva un posto per tenere i mondi e le città a cui si agganciano gli altri strumenti.",
     partyTitle: "Gestione dei gruppi",
     partyDescription:
       "Gestisci composizione del gruppo, bilanciamento e tracciamento dei progressi.",

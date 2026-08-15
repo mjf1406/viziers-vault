@@ -6,6 +6,7 @@ const ru = {
     openNavMenu: "Открыть меню",
     toggleTheme: "Переключить тему",
     comingSoon: "Скоро",
+    new: "Новое",
     soon: "скоро",
     copyright: "© {{year}} {{appName}}.",
     underConstruction: "🚧ВЕДУТСЯ РАБОТЫ🚧",
@@ -259,6 +260,11 @@ const ru = {
     encounterDescription:
       "Генерируйте сбалансированные столкновения по составу отряда, биому и условиям путешествия.",
     encounterPhilosophy: "Кампания D&D в стиле roguelite неполна без случайных столкновений.",
+    worldManagementTitle: "Управление мирами",
+    worldManagementDescription:
+      "Создавайте и организуйте миры, города и настройки кампании для ваших генераторов.",
+    worldManagementPhilosophy:
+      "Прежде чем что-то генерировать, мне нужно было место для миров и городов, на которых держатся остальные инструменты.",
     partyTitle: "Управление отрядами",
     partyDescription: "Управляйте составом отряда, балансом и отслеживанием прогресса.",
     partyPhilosophy:

@@ -6,6 +6,7 @@ const nl = {
     openNavMenu: "Menu openen",
     toggleTheme: "Thema wisselen",
     comingSoon: "Binnenkort",
+    new: "Nieuw",
     soon: "binnenkort",
     copyright: "© {{year}} {{appName}}.",
     underConstruction: "🚧IN AANBOUW🚧",
@@ -259,6 +260,11 @@ const nl = {
       "Genereer gebalanceerde ontmoetingen op basis van groepsamenstelling, bioom en reisomstandigheden.",
     encounterPhilosophy:
       "Een roguelite D&D-campagne is niet compleet zonder willekeurige ontmoetingen.",
+    worldManagementTitle: "Wereldbeheer",
+    worldManagementDescription:
+      "Maak en organiseer campagnewerelden, steden en instellingen die je generators voeden.",
+    worldManagementPhilosophy:
+      "Voordat ik iets genereerde, had ik een plek nodig om de werelden en steden bij te houden waar de andere tools van afhangen.",
     partyTitle: "Groepsbeheer",
     partyDescription: "Beheer groepsamenstelling, balans en voortgangsregistratie.",
     partyPhilosophy:

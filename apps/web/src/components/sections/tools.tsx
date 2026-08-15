@@ -11,6 +11,7 @@ import {
   TOOL_STATUS_KEYS,
   TOOL_TITLE_KEYS,
 } from "@/lib/tools";
+import { cn } from "@/lib/utils";
 
 export function ToolsSection() {
   const { t } = useTranslation("home");
@@ -29,10 +30,18 @@ export function ToolsSection() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         {tools.map((tool) => {
           const available = isToolAvailable(tool);
+          const isNew = tool.released === "new";
+          const comingSoon = !available && !isNew;
           const titleKey = TOOL_TITLE_KEYS[tool.id];
           const descriptionKey = TOOL_DESCRIPTION_KEYS[tool.id];
           return (
-            <Card key={tool.id} className="h-full border-0 shadow-none">
+            <Card
+              key={tool.id}
+              className={cn(
+                "h-full shadow-none",
+                isNew ? "border border-primary ring-0" : "border-0",
+              )}
+            >
               <CardHeader className="flex items-center justify-center">
                 <div className="mb-4 rounded-full bg-primary/20 p-2 ring-8 ring-primary/10">
                   <Icon
@@ -45,7 +54,11 @@ export function ToolsSection() {
                 <div className="flex-1 text-center">
                   <CardTitle className="flex items-center justify-center gap-2">
                     {titleKey ? tTools(titleKey) : tool.title}
-                    {!available ? <Badge variant="secondary">{tCommon("comingSoon")}</Badge> : null}
+                    {isNew ? (
+                      <Badge>{tCommon("new")}</Badge>
+                    ) : comingSoon ? (
+                      <Badge variant="secondary">{tCommon("comingSoon")}</Badge>
+                    ) : null}
                   </CardTitle>
                   <div className="text-sm font-medium text-primary">
                     {tTools(TOOL_STATUS_KEYS[tool.status])}

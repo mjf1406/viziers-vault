@@ -10,6 +10,7 @@ import {
   TOOL_PHILOSOPHY_KEYS,
   TOOL_TITLE_KEYS,
 } from "@/lib/tools";
+import { cn } from "@/lib/utils";
 
 export function PhilosophySection() {
   const { t } = useTranslation("about");
@@ -31,11 +32,13 @@ export function PhilosophySection() {
 
       <div className="mx-auto grid max-w-6xl gap-8 lg:grid-cols-2">
         {getToolsInOrder().map((tool) => {
+          const isNew = tool.released === "new";
+          const comingSoon = !isToolAvailable(tool) && !isNew;
           const titleKey = TOOL_TITLE_KEYS[tool.id];
           const descriptionKey = TOOL_DESCRIPTION_KEYS[tool.id];
           const philosophyKey = TOOL_PHILOSOPHY_KEYS[tool.id];
           return (
-            <Card key={tool.id} className="h-full">
+            <Card key={tool.id} className={cn("h-full", isNew && "border border-primary ring-0")}>
               <CardHeader>
                 <div className="mb-2 flex items-center gap-3">
                   <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary/10">
@@ -48,7 +51,9 @@ export function PhilosophySection() {
                   </div>
                   <CardTitle className="flex items-center gap-2 text-xl">
                     {titleKey ? tTools(titleKey) : tool.title}
-                    {!isToolAvailable(tool) ? (
+                    {isNew ? (
+                      <Badge>{tCommon("new")}</Badge>
+                    ) : comingSoon ? (
                       <Badge variant="secondary">{tCommon("comingSoon")}</Badge>
                     ) : null}
                   </CardTitle>

@@ -6,6 +6,7 @@ const en = {
     openNavMenu: "Open menu",
     toggleTheme: "Toggle theme",
     comingSoon: "Coming soon",
+    new: "New",
     soon: "soon",
     copyright: "© {{year}} {{appName}}.",
     underConstruction: "🚧UNDER CONSTRUCTION🚧",
@@ -71,13 +72,12 @@ const en = {
     heroTitleAfter: "for all of your hex-crawling needs",
     heroSubtitle: "Create hex-worlds on which to crawl. Your players can join, too.",
     toolsEyebrow: "Tools",
-    toolsTitle: "D&D 5e Content Generators",
-    toolsDescription:
-      "Tools for game masters to generate various things in their D&D 5e 2024 campaigns and then to share with their players.",
+    toolsTitle: "Hexcrawl Tools",
+    toolsDescription: "Tools for game masters to create, generate, and automate hex-crawls",
     featuresEyebrow: "Features",
     featuresTitle: "{{appName}} Capabilities",
     featuresDescription:
-      "Features designed to streamline your D&D campaign preparation and management.",
+      "Features that make it easy to customize and manage all your hex-crawl campaigns and worlds.",
     benefitsEyebrow: "Benefits",
     benefitsTitle: "Streamline Your D&D Campaign",
     benefitsDescription:
@@ -258,6 +258,11 @@ const en = {
     encounterDescription:
       "Generate balanced encounters based on party composition, biome, and travel conditions.",
     encounterPhilosophy: "A roguelite D&D campaign is not complete without random encounters.",
+    worldManagementTitle: "World Management",
+    worldManagementDescription:
+      "Create and organize campaign worlds, cities, and settings that power your generators.",
+    worldManagementPhilosophy:
+      "Before generating anything, I needed a place to keep the worlds and cities my other tools hang off of.",
     partyTitle: "Party Management",
     partyDescription: "Manage party composition, balance, and progress tracking.",
     partyPhilosophy:

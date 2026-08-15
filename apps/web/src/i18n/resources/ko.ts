@@ -6,6 +6,7 @@ const ko = {
     openNavMenu: "메뉴 열기",
     toggleTheme: "테마 전환",
     comingSoon: "곧 제공",
+    new: "신규",
     soon: "곧",
     copyright: "© {{year}} {{appName}}.",
     underConstruction: "🚧공사 중🚧",
@@ -252,6 +253,10 @@ const ko = {
     encounterTitle: "조우 생성기",
     encounterDescription: "파티 구성, 바이옴, 이동 조건에 따라 균형 잡힌 조우를 생성합니다.",
     encounterPhilosophy: "로그라이트풍 D&D 캠페인은 무작위 조우 없이는 완성되지 않습니다.",
+    worldManagementTitle: "월드 관리",
+    worldManagementDescription: "생성기를 구동하는 캠페인 월드, 도시, 설정을 만들고 정리합니다.",
+    worldManagementPhilosophy:
+      "무언가를 생성하기 전에, 다른 도구가 매달릴 월드와 도시를 둘 곳이 필요했습니다.",
     partyTitle: "파티 관리",
     partyDescription: "파티 구성, 균형, 진행 추적을 관리합니다.",
     partyPhilosophy:

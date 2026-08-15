@@ -6,6 +6,7 @@ const ja = {
     openNavMenu: "メニューを開く",
     toggleTheme: "テーマを切り替え",
     comingSoon: "近日公開",
+    new: "新着",
     soon: "まもなく",
     copyright: "© {{year}} {{appName}}.",
     underConstruction: "🚧工事中🚧",
@@ -254,6 +255,11 @@ const ja = {
     encounterDescription:
       "パーティ構成、バイオーム、移動条件に基づいてバランスの取れた遭遇を生成します。",
     encounterPhilosophy: "ローグライト風 D&D キャンペーンにランダム遭遇は欠かせません。",
+    worldManagementTitle: "ワールド管理",
+    worldManagementDescription:
+      "ジェネレーターを支えるキャンペーン用ワールド、都市、設定を作成・整理します。",
+    worldManagementPhilosophy:
+      "何かを生成する前に、他のツールが頼るワールドと都市を置いておく場所が必要でした。",
     partyTitle: "パーティ管理",
     partyDescription: "パーティ構成、バランス、進行の追跡を管理します。",
     partyPhilosophy:

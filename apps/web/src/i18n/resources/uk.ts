@@ -6,6 +6,7 @@ const uk = {
     openNavMenu: "Відкрити меню",
     toggleTheme: "Перемкнути тему",
     comingSoon: "Незабаром",
+    new: "Нове",
     soon: "незабаром",
     copyright: "© {{year}} {{appName}}.",
     underConstruction: "🚧НА РЕКОНСТРУКЦІЇ🚧",
@@ -259,6 +260,11 @@ const uk = {
     encounterDescription:
       "Генеруйте збалансовані сутички за складом загону, біомом і умовами подорожі.",
     encounterPhilosophy: "Кампанія D&D у стилі roguelite неповна без випадкових сутичок.",
+    worldManagementTitle: "Керування світами",
+    worldManagementDescription:
+      "Створюйте й упорядковуйте світи, міста та налаштування кампанії для ваших генераторів.",
+    worldManagementPhilosophy:
+      "Перш ніж щось генерувати, мені потрібне було місце для світів і міст, на яких тримаються інші інструменти.",
     partyTitle: "Керування загонами",
     partyDescription: "Керуйте складом загону, балансом і відстеженням прогресу.",
     partyPhilosophy:

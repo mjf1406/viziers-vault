@@ -6,6 +6,7 @@ const de = {
     openNavMenu: "Menü öffnen",
     toggleTheme: "Design umschalten",
     comingSoon: "Demnächst",
+    new: "Neu",
     soon: "bald",
     copyright: "© {{year}} {{appName}}.",
     underConstruction: "🚧IM AUFBAU🚧",
@@ -264,6 +265,11 @@ const de = {
       "Erzeuge ausgewogene Begegnungen anhand von Gruppenzusammensetzung, Biom und Reisebedingungen.",
     encounterPhilosophy:
       "Eine Roguelite-D&D-Kampagne ist ohne Zufallsbegegnungen nicht vollständig.",
+    worldManagementTitle: "Weltverwaltung",
+    worldManagementDescription:
+      "Erstelle und organisiere Kampagnenwelten, Städte und Einstellungen für deine Generatoren.",
+    worldManagementPhilosophy:
+      "Bevor ich irgendetwas generiere, brauchte ich einen Ort für die Welten und Städte, an denen die anderen Tools hängen.",
     partyTitle: "Gruppenverwaltung",
     partyDescription: "Verwalte Gruppenzusammensetzung, Balance und Fortschrittsverfolgung.",
     partyPhilosophy:

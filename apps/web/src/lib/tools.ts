@@ -29,79 +29,39 @@ export interface Tool {
 
 export const tools: Tool[] = [
   {
-    id: "magic-shop-generator",
-    title: "Magic Shop Generator",
-    header: "My Magic Shops",
-    description: "Generate magic shops based on city population, wealth, and magicness.",
-    status: "Alpha 1",
-    icon: "Store",
-    released: "new",
-    philosophy: "I love to run roguelite D&D campaigns, where everything is randomly generated.",
-    features: [
-      "Population-based inventory",
-      "Wealth and magicness scaling",
-      "Custom world and city creation",
-      "CSV export",
-      "Permalink generation (Premium)",
-      "Data persistence (Premium)",
-    ],
-    integrations: ["world-generator"],
-    category: "Generator",
-    order: 1,
-    url: "/app/magic-shop-generator",
-  },
-  {
-    id: "spellbook-generator",
-    title: "Spellbook Generator",
-    header: "My Spellbooks",
+    id: "world-management",
+    title: "World Management",
+    header: "My Worlds",
     description:
-      "Create wizard spellbooks by selecting level, schools of magic, and probability settings.",
+      "Create and organize campaign worlds, cities, and settings that power your generators.",
     status: "Alpha 1",
-    icon: "BookOpen",
+    icon: "Earth",
     released: "new",
     philosophy:
-      "One of my players was playing a wizard and was always asking about any spellbooks that they find when looting.",
+      "Before generating anything, I needed a place to keep the worlds and cities my other tools hang off of.",
     features: [
-      "Level-based spell selection",
-      "School of magic filtering",
-      "Probability-based extra spells",
-      "Wizard progression examples",
-      "Educational tool for new players",
+      "Custom world and city creation",
+      "Campaign setting organization",
+      "Shared data across generators",
+      "Premade world library",
+      "Data persistence (Premium)",
     ],
-    integrations: [],
-    category: "Generator",
-    order: 2,
-    url: "/app/spellbook-generator",
-  },
-  {
-    id: "encounter-generator",
-    title: "Encounter Generator",
-    header: "My Encounters",
-    description:
-      "Generate balanced encounters based on party composition, biome, and travel conditions.",
-    status: "Alpha 2",
-    icon: "Swords",
-    released: "new",
-    philosophy: "A roguelite D&D campaign is not complete without random encounters.",
-    features: [
-      "Party composition balancing",
-      "Biome-specific encounters",
-      "Travel condition integration",
-      "Season and time of day effects",
-      "Multiple encounter generation",
-      "Environmental storytelling",
+    integrations: [
+      "world-generator",
+      "party-management",
+      "magic-shop-generator",
+      "encounter-generator",
     ],
-    integrations: ["party-management", "battle-map-generator"],
-    category: "Generator",
-    order: 3,
-    url: "/app/encounter-generator",
+    category: "Management",
+    order: 1,
+    url: "/app/worlds",
   },
   {
     id: "party-management",
     title: "Party Management",
     header: "My Parties",
     description: "Manage party composition, balance, and progress tracking.",
-    status: "Alpha 2",
+    status: "Alpha 1",
     icon: "Users",
     released: "new",
     philosophy:
@@ -114,10 +74,41 @@ export const tools: Tool[] = [
       "World view integration",
       "Encounter balancing",
     ],
-    integrations: [],
+    integrations: ["world-management", "encounter-generator"],
     category: "Management",
-    order: 4,
+    order: 2,
     url: "/app/parties",
+  },
+  {
+    id: "world-generator",
+    title: "World Generator",
+    header: "My World Maps",
+    description:
+      "Generate complete hex worlds with up to 24-mile hexes, weather simulation, fog of war, and party tracking.",
+    status: "Alpha 2",
+    icon: "Globe",
+    philosophy:
+      "When I started brainstorming for this after creating the above generators, I discovered HexRoll, which is an AMAZING tool.",
+    features: [
+      "Up to 24-mile hex-based world exploration",
+      "Zoom into specific continents and regions to view those specific map scales",
+      "Weather simulation",
+      "Fog of war system",
+      "Party tracking",
+      "2D and 3D world views",
+      "Automatic encounter generation",
+    ],
+    integrations: [
+      "world-management",
+      "continent-generator",
+      "region-generator",
+      "battle-map-generator",
+      "encounter-generator",
+      "party-management",
+    ],
+    category: "Generator",
+    order: 3,
+    url: "/app/world-generator",
   },
   {
     id: "battle-map-generator",
@@ -125,7 +116,7 @@ export const tools: Tool[] = [
     header: "My Battle Maps",
     description:
       "Create battle maps with geographical features, weather, and customizable grid settings.",
-    status: "Alpha 4",
+    status: "Alpha 3",
     icon: "Map",
     philosophy: "I really enjoy making battle maps for bosses or mini-bosses.",
     features: [
@@ -137,9 +128,9 @@ export const tools: Tool[] = [
       "VTT export compatibility",
       "Automatic encounter mapping",
     ],
-    integrations: [],
+    integrations: ["encounter-generator", "region-generator"],
     category: "Generator",
-    order: 6,
+    order: 4,
     url: "/app/battle-map-generator",
   },
   {
@@ -148,7 +139,7 @@ export const tools: Tool[] = [
     header: "My Regions",
     description:
       "Generate smaller hexcrawl regions with 1-mile hexes, like islands, peninsulas, bays, inland areas, and coastal regions.",
-    status: "Alpha 3",
+    status: "Alpha 4",
     icon: "MapPinned",
     philosophy:
       "I wanted a focused tool for compact hexcrawls that sit between a single encounter map and a full world hexmap.",
@@ -161,7 +152,12 @@ export const tools: Tool[] = [
       "VTT export and CSV of hex data",
       "Adjustable density and scale",
     ],
-    integrations: ["battle-map-generator", "encounter-generator", "party-management"],
+    integrations: [
+      "world-generator",
+      "battle-map-generator",
+      "encounter-generator",
+      "party-management",
+    ],
     category: "Generator",
     order: 5,
     url: "/app/region-generator",
@@ -187,6 +183,7 @@ export const tools: Tool[] = [
       "VTT export and CSV of hex data",
     ],
     integrations: [
+      "world-generator",
       "region-generator",
       "battle-map-generator",
       "encounter-generator",
@@ -197,42 +194,76 @@ export const tools: Tool[] = [
     url: "/app/continent-generator",
   },
   {
-    id: "world-generator",
-    title: "World Generator",
-    header: "My Worlds",
+    id: "encounter-generator",
+    title: "Encounter Generator",
+    header: "My Encounters",
     description:
-      "Generate complete hex worlds with up to 24-mile hexes, weather simulation, fog of war, and party tracking.",
+      "Generate balanced encounters based on party composition, biome, and travel conditions.",
     status: "Alpha 5",
-    icon: "Globe",
-    philosophy:
-      "When I started brainstorming for this after creating the above generators, I discovered HexRoll, which is an AMAZING tool.",
+    icon: "Swords",
+    philosophy: "A roguelite D&D campaign is not complete without random encounters.",
     features: [
-      "Up to 24-mile hex-based world exploration",
-      "Zoom into specific continents and regions to view those specific map scales",
-      "Weather simulation",
-      "Fog of war system",
-      "Party tracking",
-      "2D and 3D world views",
-      "Automatic encounter generation",
+      "Party composition balancing",
+      "Biome-specific encounters",
+      "Travel condition integration",
+      "Season and time of day effects",
+      "Multiple encounter generation",
+      "Environmental storytelling",
     ],
-    integrations: [
-      "continent-generator",
-      "region-generator",
-      "battle-map-generator",
-      "encounter-generator",
-      "magic-shop-generator",
-      "party-management",
-    ],
+    integrations: ["party-management", "battle-map-generator", "world-management"],
     category: "Generator",
     order: 7,
-    url: "/app/world-generator",
+    url: "/app/encounter-generator",
+  },
+  {
+    id: "magic-shop-generator",
+    title: "Magic Shop Generator",
+    header: "My Magic Shops",
+    description: "Generate magic shops based on city population, wealth, and magicness.",
+    status: "Alpha 6",
+    icon: "Store",
+    philosophy: "I love to run roguelite D&D campaigns, where everything is randomly generated.",
+    features: [
+      "Population-based inventory",
+      "Wealth and magicness scaling",
+      "Custom world and city creation",
+      "CSV export",
+      "Permalink generation (Premium)",
+      "Data persistence (Premium)",
+    ],
+    integrations: ["world-management", "world-generator"],
+    category: "Generator",
+    order: 8,
+    url: "/app/magic-shop-generator",
+  },
+  {
+    id: "spellbook-generator",
+    title: "Spellbook Generator",
+    header: "My Spellbooks",
+    description:
+      "Create wizard spellbooks by selecting level, schools of magic, and probability settings.",
+    status: "Alpha 6",
+    icon: "BookOpen",
+    philosophy:
+      "One of my players was playing a wizard and was always asking about any spellbooks that they find when looting.",
+    features: [
+      "Level-based spell selection",
+      "School of magic filtering",
+      "Probability-based extra spells",
+      "Wizard progression examples",
+      "Educational tool for new players",
+    ],
+    integrations: [],
+    category: "Generator",
+    order: 9,
+    url: "/app/spellbook-generator",
   },
   {
     id: "star-system-generator",
     title: "Star System Generator",
     header: "My Star Systems",
     description: "Create star systems with multiple worlds, planets, and celestial bodies.",
-    status: "Alpha 6",
+    status: "Alpha 7",
     icon: "Star",
     philosophy:
       "I haven't really thought much of this one other than it'd be super cool for those Spelljammer and sci-fi campaigns.",
@@ -242,9 +273,9 @@ export const tools: Tool[] = [
       "Orbital mechanics",
       "System-wide exploration",
     ],
-    integrations: ["world-generator"],
+    integrations: ["world-generator", "galaxy-generator"],
     category: "Generator",
-    order: 7,
+    order: 10,
     url: "/app/star-system-generator",
   },
   {
@@ -252,7 +283,7 @@ export const tools: Tool[] = [
     title: "Galaxy Generator",
     header: "My Galaxies",
     description: "Generate entire galaxies with multiple star systems and cosmic structures.",
-    status: "Alpha 7",
+    status: "TBD - A wild dream",
     icon: "Orbit",
     philosophy:
       "I just think it'd be super cool to make this with an awesome map that has a sort of super zoom from the galaxy to the star system to the planet to the continent to the region to the battle map / city / town / etc.",
@@ -264,7 +295,7 @@ export const tools: Tool[] = [
     ],
     integrations: ["star-system-generator"],
     category: "Generator",
-    order: 8,
+    order: 11,
     url: "/app/galaxy-generator",
   },
 ];
@@ -285,6 +316,7 @@ export const getAvailableTools = (): Tool[] =>
 export const getToolsInOrder = (): Tool[] => [...tools].sort((a, b) => a.order - b.order);
 
 type ToolTitleKey =
+  | "worldManagementTitle"
   | "magicShopTitle"
   | "spellbookTitle"
   | "encounterTitle"
@@ -297,6 +329,7 @@ type ToolTitleKey =
   | "galaxyTitle";
 
 type ToolDescriptionKey =
+  | "worldManagementDescription"
   | "magicShopDescription"
   | "spellbookDescription"
   | "encounterDescription"
@@ -309,6 +342,7 @@ type ToolDescriptionKey =
   | "galaxyDescription";
 
 type ToolPhilosophyKey =
+  | "worldManagementPhilosophy"
   | "magicShopPhilosophy"
   | "spellbookPhilosophy"
   | "encounterPhilosophy"
@@ -321,6 +355,7 @@ type ToolPhilosophyKey =
   | "galaxyPhilosophy";
 
 export const TOOL_TITLE_KEYS: Record<string, ToolTitleKey> = {
+  "world-management": "worldManagementTitle",
   "magic-shop-generator": "magicShopTitle",
   "spellbook-generator": "spellbookTitle",
   "encounter-generator": "encounterTitle",
@@ -334,6 +369,7 @@ export const TOOL_TITLE_KEYS: Record<string, ToolTitleKey> = {
 };
 
 export const TOOL_DESCRIPTION_KEYS: Record<string, ToolDescriptionKey> = {
+  "world-management": "worldManagementDescription",
   "magic-shop-generator": "magicShopDescription",
   "spellbook-generator": "spellbookDescription",
   "encounter-generator": "encounterDescription",
@@ -347,6 +383,7 @@ export const TOOL_DESCRIPTION_KEYS: Record<string, ToolDescriptionKey> = {
 };
 
 export const TOOL_PHILOSOPHY_KEYS: Record<string, ToolPhilosophyKey> = {
+  "world-management": "worldManagementPhilosophy",
   "magic-shop-generator": "magicShopPhilosophy",
   "spellbook-generator": "spellbookPhilosophy",
   "encounter-generator": "encounterPhilosophy",

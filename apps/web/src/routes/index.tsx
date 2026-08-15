@@ -1,6 +1,6 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { BenefitsSection } from "@/components/sections/benefits";
+// import { BenefitsSection } from "@/components/sections/benefits";
 import { FeaturesSection } from "@/components/sections/features";
 import { HeroSection } from "@/components/sections/hero";
 import { ToolsSection } from "@/components/sections/tools";
@@ -17,7 +17,7 @@ function HomePage() {
       <HeroSection />
       <ToolsSection />
       <FeaturesSection />
-      <BenefitsSection />
+      {/* <BenefitsSection /> */}
     </>
   );
 }
