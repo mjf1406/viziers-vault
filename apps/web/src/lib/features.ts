@@ -78,3 +78,43 @@ export const features: Feature[] = [
     service: false,
   },
 ];
+
+export const FEATURE_TITLE_KEYS: Record<
+  string,
+  | "customizableSettingsTitle"
+  | "dataPersistenceTitle"
+  | "permalinksTitle"
+  | "imageExportTitle"
+  | "csvExportTitle"
+  | "vttExportTitle"
+  | "communitySupportTitle"
+  | "customWorldsTitle"
+> = {
+  "customizable-settings": "customizableSettingsTitle",
+  "data-persistence": "dataPersistenceTitle",
+  permalinks: "permalinksTitle",
+  "image-export": "imageExportTitle",
+  "csv-export": "csvExportTitle",
+  "vtt-export": "vttExportTitle",
+  "community-support": "communitySupportTitle",
+  "custom-worlds-and-cities": "customWorldsTitle",
+};
+
+export const FEATURE_DESCRIPTION_KEYS: Record<
+  string,
+  | "customizableSettingsDescription"
+  | "dataPersistenceDescription"
+  | "permalinksDescription"
+  | "imageExportDescription"
+  | "csvExportDescription"
+  | "vttExportDescription"
+  | "customWorldsDescription"
+> = {
+  "customizable-settings": "customizableSettingsDescription",
+  "data-persistence": "dataPersistenceDescription",
+  permalinks: "permalinksDescription",
+  "image-export": "imageExportDescription",
+  "csv-export": "csvExportDescription",
+  "vtt-export": "vttExportDescription",
+  "custom-worlds-and-cities": "customWorldsDescription",
+};

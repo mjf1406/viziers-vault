@@ -6,6 +6,7 @@ import pluginQuery from "@tanstack/eslint-plugin-query";
 import convexPlugin from "@convex-dev/eslint-plugin";
 import reactHooks from "eslint-plugin-react-hooks";
 import reactRefresh from "eslint-plugin-react-refresh";
+import typegpu from "eslint-plugin-typegpu";
 import { fileURLToPath } from "node:url";
 
 const tsconfigRootDir = fileURLToPath(new URL(".", import.meta.url));
@@ -105,6 +106,12 @@ export default [
         },
       ],
     },
+  },
+
+  // TypeGPU 'use gpu' pitfalls (AST-only; safe without type info).
+  {
+    ...typegpu.configs.recommended,
+    files: ["apps/app/**/*.{js,mjs,ts,jsx,tsx}"],
   },
 
   // TanStack Query rules (AST-only; safe without type info).

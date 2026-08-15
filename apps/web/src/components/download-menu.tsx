@@ -1,5 +1,6 @@
 import { Apple, ChevronDown } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { DESKTOP_DOWNLOADS } from "@/lib/site";
@@ -33,6 +34,7 @@ export function DownloadMenu({
 }: DownloadMenuProps) {
   const [open, setOpen] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
+  const { t } = useTranslation("cta");
 
   useEffect(() => {
     if (!open) return;
@@ -55,7 +57,7 @@ export function DownloadMenu({
         className={className}
         onClick={() => setOpen((value) => !value)}
       >
-        Download free
+        {t("downloadFree")}
         <ChevronDown className="ml-2 size-4" />
       </Button>
       {open ? (
@@ -68,7 +70,7 @@ export function DownloadMenu({
             onClick={() => setOpen(false)}
           >
             <WindowsIcon />
-            Windows
+            {t("windows")}
           </a>
           <a
             href={DESKTOP_DOWNLOADS.mac}
@@ -78,7 +80,7 @@ export function DownloadMenu({
             onClick={() => setOpen(false)}
           >
             <Apple className="size-4" />
-            Mac
+            {t("mac")}
           </a>
           <a
             href={DESKTOP_DOWNLOADS.ubuntu}
@@ -88,7 +90,7 @@ export function DownloadMenu({
             onClick={() => setOpen(false)}
           >
             <UbuntuIcon />
-            Ubuntu
+            {t("ubuntu")}
           </a>
         </div>
       ) : null}

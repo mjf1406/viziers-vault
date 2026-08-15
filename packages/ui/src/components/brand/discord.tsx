@@ -10,7 +10,13 @@ function DiscordMark({ className }: { className?: string }) {
   );
 }
 
-export function DiscordIcon({ href = DEFAULT_DISCORD_URL }: { href?: string }) {
+export function DiscordIcon({
+  href = DEFAULT_DISCORD_URL,
+  label = "Discord",
+}: {
+  href?: string;
+  label?: string;
+}) {
   return (
     <Button
       variant="ghost"
@@ -20,12 +26,18 @@ export function DiscordIcon({ href = DEFAULT_DISCORD_URL }: { href?: string }) {
       render={<a href={href} rel="noopener noreferrer" target="_blank" />}
     >
       <DiscordMark className="size-4" />
-      <span className="sr-only">Discord</span>
+      <span className="sr-only">{label}</span>
     </Button>
   );
 }
 
-export function Discord({ href = DEFAULT_DISCORD_URL }: { href?: string }) {
+export function Discord({
+  href = DEFAULT_DISCORD_URL,
+  label = "Join the Discord",
+}: {
+  href?: string;
+  label?: string;
+}) {
   return (
     <a
       href={href}
@@ -33,7 +45,7 @@ export function Discord({ href = DEFAULT_DISCORD_URL }: { href?: string }) {
       rel="noopener noreferrer"
       className="opacity-60 hover:opacity-100"
     >
-      Join the Discord
+      {label}
     </a>
   );
 }

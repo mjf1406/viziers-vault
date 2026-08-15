@@ -1,4 +1,5 @@
 import { ArrowRight, Monitor, Server } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { SITE } from "@/lib/site";
@@ -12,6 +13,8 @@ export function DesktopAppButton({
   className?: string;
   variant?: ButtonVariant;
 }) {
+  const { t } = useTranslation("cta");
+
   return (
     <Button
       variant={variant}
@@ -20,7 +23,7 @@ export function DesktopAppButton({
       render={<a href={SITE.downloadUrl} rel="noopener noreferrer" target="_blank" />}
     >
       <Monitor className="mr-2 size-5" />
-      Desktop App
+      {t("desktopApp")}
     </Button>
   );
 }
@@ -32,6 +35,8 @@ export function SelfHostButton({
   className?: string;
   variant?: ButtonVariant;
 }) {
+  const { t } = useTranslation("cta");
+
   return (
     <Button
       variant={variant}
@@ -40,7 +45,7 @@ export function SelfHostButton({
       render={<a href={SITE.selfHostUrl} rel="noopener noreferrer" target="_blank" />}
     >
       <Server className="mr-2 size-5" />
-      Self-host
+      {t("selfHost")}
     </Button>
   );
 }
@@ -52,6 +57,8 @@ export function GetStartedButton({
   className?: string;
   variant?: ButtonVariant;
 }) {
+  const { t } = useTranslation("cta");
+
   return (
     <Button
       variant={variant}
@@ -59,7 +66,7 @@ export function GetStartedButton({
       nativeButton={false}
       render={<a href={SITE.appUrl} />}
     >
-      Get Started
+      {t("getStarted")}
       <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
     </Button>
   );
@@ -72,6 +79,8 @@ export function LearnMoreButton({
   className?: string;
   variant?: ButtonVariant;
 }) {
+  const { t } = useTranslation("cta");
+
   return (
     <Button
       variant={variant}
@@ -79,7 +88,7 @@ export function LearnMoreButton({
       nativeButton={false}
       render={<a href="#features" />}
     >
-      Learn more
+      {t("learnMore")}
     </Button>
   );
 }
@@ -91,6 +100,8 @@ export function SubscribeNowButton({
   className?: string;
   variant?: ButtonVariant;
 }) {
+  const { t } = useTranslation("cta");
+
   return (
     <Button
       variant={variant}
@@ -98,7 +109,7 @@ export function SubscribeNowButton({
       nativeButton={false}
       render={<a href={`${SITE.appUrl}/account`} />}
     >
-      Subscribe Now
+      {t("subscribeNow")}
       <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
     </Button>
   );

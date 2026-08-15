@@ -3,6 +3,7 @@ import { createRoot, hydrateRoot } from "react-dom/client";
 import { RouterProvider } from "@tanstack/react-router";
 
 import { createAppRouter } from "./router";
+import "./i18n";
 
 const router = createAppRouter();
 

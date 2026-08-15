@@ -36,3 +36,13 @@ export const plans: Plan[] = [
     footnote: "No credit card required",
   },
 ];
+
+export const PLAN_TITLE_KEYS: Record<TierId, "freeTitle" | "basicTitle"> = {
+  free: "freeTitle",
+  basic: "basicTitle",
+};
+
+export const PLAN_DESCRIPTION_KEYS: Record<TierId, "freeDescription" | "basicDescription"> = {
+  free: "freeDescription",
+  basic: "basicDescription",
+};

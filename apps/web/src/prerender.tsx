@@ -6,6 +6,7 @@ import { renderToString } from "react-dom/server.edge";
 
 import { getPageMeta, ogElements, SITE } from "./lib/site";
 import { createAppRouter } from "./router";
+import "./i18n";
 
 const MARKETING_LINKS = new Set([
   "/about",

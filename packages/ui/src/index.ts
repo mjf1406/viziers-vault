@@ -19,6 +19,11 @@ export type {
   NavbarProps,
   NavbarRoute,
   NavbarLinkComponentProps,
+  NavbarLabels,
 } from "./components/layout/navbar";
 export { Footer } from "./components/layout/footer";
-export type { FooterProps, FooterLinkComponentProps } from "./components/layout/footer";
+export type {
+  FooterProps,
+  FooterLinkComponentProps,
+  FooterLabels,
+} from "./components/layout/footer";

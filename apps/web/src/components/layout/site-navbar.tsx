@@ -1,17 +1,10 @@
 import { Link } from "@tanstack/react-router";
 import { Navbar, type NavbarLinkComponentProps, type NavbarRoute } from "@vv/ui";
+import { useTranslation } from "react-i18next";
 
+import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { SITE } from "@/lib/site";
-
-const routes: NavbarRoute[] = [
-  { href: "/about", label: "About" },
-  { href: "/pricing", label: "Pricing" },
-  { href: "/faq", label: "FAQ" },
-  { href: "/team", label: "Team" },
-  { href: "/contact", label: "Contact" },
-  { href: SITE.appUrl, label: "Open App" },
-];
 
 function RouterLink({ href, className, onClick, children }: NavbarLinkComponentProps) {
   if (href.startsWith("http")) {
@@ -30,14 +23,32 @@ function RouterLink({ href, className, onClick, children }: NavbarLinkComponentP
 }
 
 export function SiteNavbar() {
+  const { t } = useTranslation("nav");
+  const { t: tCommon } = useTranslation("common");
+
+  const routes: NavbarRoute[] = [
+    { href: "/about", label: t("about") },
+    { href: "/pricing", label: t("pricing") },
+    { href: "/faq", label: t("faq") },
+    { href: "/team", label: t("team") },
+    { href: "/contact", label: t("contact") },
+    { href: SITE.appUrl, label: t("openApp") },
+  ];
+
   return (
     <Navbar
       routes={routes}
       LinkComponent={RouterLink}
+      languageSwitcher={<LanguageSwitcher />}
       themeToggle={<ThemeToggle />}
       logoHref="/"
       githubUrl={SITE.githubUrl}
       discordUrl={SITE.discordUrl}
+      labels={{
+        openMenu: tCommon("openNavMenu"),
+        github: tCommon("github"),
+        discord: tCommon("discord"),
+      }}
     />
   );
 }

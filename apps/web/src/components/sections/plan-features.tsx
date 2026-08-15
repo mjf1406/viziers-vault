@@ -1,8 +1,9 @@
 import { Check, X } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { features } from "@/lib/features";
-import { plans, type TierId } from "@/lib/plans";
+import { FEATURE_DESCRIPTION_KEYS, FEATURE_TITLE_KEYS, features } from "@/lib/features";
+import { PLAN_DESCRIPTION_KEYS, PLAN_TITLE_KEYS, plans, type TierId } from "@/lib/plans";
 
 const tierOrder: Record<TierId, number> = {
   free: 0,
@@ -10,48 +11,55 @@ const tierOrder: Record<TierId, number> = {
 };
 
 export function PlanFeaturesSection() {
+  const { t } = useTranslation("pricing");
+  const { t: tPlans } = useTranslation("plans");
+  const { t: tFeatures } = useTranslation("features");
+
   return (
     <section
       id="plan-details"
       className="mx-auto w-full max-w-7xl px-4 py-16 sm:px-6 sm:py-20 lg:px-8"
     >
       <div className="mb-8 text-center">
-        <h2 className="mb-2 text-lg tracking-wider text-primary">Details</h2>
-        <h3 className="text-2xl font-bold md:text-3xl">
-          A feature-by-feature breakdown of each plan
-        </h3>
-        <p className="mt-3 text-muted-foreground md:mx-auto md:w-1/2">
-          A thorough breakdown of every feature and which plan includes it.
-        </p>
+        <h2 className="mb-2 text-lg tracking-wider text-primary">{t("detailsEyebrow")}</h2>
+        <h3 className="text-2xl font-bold md:text-3xl">{t("detailsTitle")}</h3>
+        <p className="mt-3 text-muted-foreground md:mx-auto md:w-1/2">{t("detailsDescription")}</p>
       </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-2">
         {plans.map((plan) => (
           <Card key={plan.id} className="h-full">
             <CardHeader>
-              <CardTitle>{plan.title}</CardTitle>
-              <div className="mt-1 text-sm text-muted-foreground">{plan.description}</div>
+              <CardTitle>{tPlans(PLAN_TITLE_KEYS[plan.id])}</CardTitle>
+              <div className="mt-1 text-sm text-muted-foreground">
+                {tPlans(PLAN_DESCRIPTION_KEYS[plan.id])}
+              </div>
               <div className="mt-4">
                 {plan.id === "basic" && plan.priceYearly ? (
-                  <div className="space-y-1">
+                  <div className="flex flex-col gap-1">
                     <div className="flex items-baseline gap-1">
                       <div className="text-2xl font-semibold">${plan.priceYearly}</div>
-                      <div className="text-xs text-muted-foreground">/year</div>
+                      <div className="text-xs text-muted-foreground">{t("perYear")}</div>
                     </div>
-                    <div className="text-xs text-muted-foreground">${plan.priceMonthly}/month</div>
+                    <div className="text-xs text-muted-foreground">
+                      ${plan.priceMonthly}
+                      {t("perMonth")}
+                    </div>
                   </div>
                 ) : (
                   <div className="flex items-baseline gap-1">
                     <div className="text-2xl font-semibold">${plan.priceMonthly}</div>
-                    <div className="text-xs text-muted-foreground">/month</div>
+                    <div className="text-xs text-muted-foreground">{t("perMonth")}</div>
                   </div>
                 )}
               </div>
             </CardHeader>
-            <CardContent className="space-y-3">
-              <ul className="space-y-2">
+            <CardContent className="flex flex-col gap-3">
+              <ul className="flex flex-col gap-2">
                 {features.map((f) => {
                   const included = tierOrder[f.minTier] <= tierOrder[plan.id];
+                  const titleKey = FEATURE_TITLE_KEYS[f.id];
+                  const descriptionKey = FEATURE_DESCRIPTION_KEYS[f.id];
                   return (
                     <li key={f.id} className="flex items-start gap-3">
                       {included ? (
@@ -65,11 +73,11 @@ export function PlanFeaturesSection() {
                             included ? "text-sm font-medium" : "text-sm text-muted-foreground"
                           }
                         >
-                          {f.title}
+                          {titleKey ? tFeatures(titleKey) : f.title}
                         </div>
-                        {f.description ? (
+                        {descriptionKey ? (
                           <div className="max-w-md text-xs text-muted-foreground">
-                            {f.description}
+                            {tFeatures(descriptionKey)}
                           </div>
                         ) : null}
                       </div>

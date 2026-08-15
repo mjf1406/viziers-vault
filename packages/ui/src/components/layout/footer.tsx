@@ -10,11 +10,32 @@ export interface FooterLinkComponentProps {
   children: ReactNode;
 }
 
+export interface FooterLabels {
+  tagline: string;
+  resources: string;
+  home: string;
+  app: string;
+  support: string;
+  contactUs: string;
+  faq: string;
+  feedback: string;
+  community: string;
+  github: string;
+  joinDiscord: string;
+  legal: string;
+  privacyPolicy: string;
+  termsOfService: string;
+  cookiePolicy: string;
+  copyright: string;
+}
+
 export interface FooterProps {
   LinkComponent?: ComponentType<FooterLinkComponentProps>;
   appUrl: string;
   githubUrl?: string;
   discordUrl?: string;
+  languageSelect?: ReactNode;
+  labels: FooterLabels;
 }
 
 function DefaultLink({ href, className, children }: FooterLinkComponentProps) {
@@ -32,6 +53,8 @@ export function Footer({
   appUrl,
   githubUrl = "https://github.com/mjf1406/viziers-vault-app",
   discordUrl,
+  languageSelect,
+  labels,
 }: FooterProps) {
   return (
     <footer id="footer" className="mx-auto w-full px-4 pt-24 pb-8 sm:pt-32 xl:px-10">
@@ -46,74 +69,73 @@ export function Footer({
                 <LogoAboveText />
               </span>
             </LinkComponent>
-            <p className="mt-2 text-muted-foreground">
-              A semi-OSS procedural hex world and battle map generator for TTRPGs.
-            </p>
+            <p className="mt-2 text-muted-foreground">{labels.tagline}</p>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-bold">Resources</h3>
+            <h3 className="text-lg font-bold">{labels.resources}</h3>
             <div>
               <LinkComponent href="/" className={mutedLink}>
-                Home
+                {labels.home}
               </LinkComponent>
             </div>
             <div>
               <a href={appUrl} className={mutedLink}>
-                App
+                {labels.app}
               </a>
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-bold">Support</h3>
+            <h3 className="text-lg font-bold">{labels.support}</h3>
             <div>
               <LinkComponent href="/contact" className={mutedLink}>
-                Contact Us
+                {labels.contactUs}
               </LinkComponent>
             </div>
             <div>
               <LinkComponent href="/faq" className={mutedLink}>
-                FAQ
+                {labels.faq}
               </LinkComponent>
             </div>
             <div>
               <LinkComponent href="/contact" className={mutedLink}>
-                Feedback
+                {labels.feedback}
               </LinkComponent>
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-bold">Community</h3>
+            <h3 className="text-lg font-bold">{labels.community}</h3>
             <div>
               <a href={githubUrl} target="_blank" rel="noopener noreferrer" className={mutedLink}>
-                GitHub
+                {labels.github}
               </a>
             </div>
             <div>
-              <Discord href={discordUrl} />
+              <Discord href={discordUrl} label={labels.joinDiscord} />
             </div>
           </div>
           <div className="flex flex-col gap-2">
-            <h3 className="text-lg font-bold">Legal</h3>
+            <h3 className="text-lg font-bold">{labels.legal}</h3>
             <div>
               <LinkComponent href="/privacy-policy" className={mutedLink}>
-                Privacy Policy
+                {labels.privacyPolicy}
               </LinkComponent>
             </div>
             <div>
               <LinkComponent href="/terms-of-service" className={mutedLink}>
-                Terms of Service
+                {labels.termsOfService}
               </LinkComponent>
             </div>
             <div>
               <LinkComponent href="/cookie-policy" className={mutedLink}>
-                Cookie Policy
+                {labels.cookiePolicy}
               </LinkComponent>
             </div>
           </div>
         </div>
         <Separator className="my-8" />
         <div className="flex flex-col items-center justify-between gap-4 md:flex-row">
-          <p className="text-muted-foreground">© {new Date().getFullYear()} Vizier's Vault.</p>
+          <p className="text-muted-foreground">{labels.copyright}</p>
+          {languageSelect}
         </div>
       </div>
     </footer>

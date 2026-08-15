@@ -4,6 +4,7 @@ import { tanstackRouter } from "@tanstack/router-plugin/vite";
 import babel from "@rolldown/plugin-babel";
 import tailwindcss from "@tailwindcss/vite";
 import { VitePWA } from "vite-plugin-pwa";
+import typegpu from "unplugin-typegpu/vite";
 import path from "path";
 import type { Plugin, PluginOption } from "vite";
 
@@ -71,6 +72,7 @@ export default defineConfig({
   plugins: lazyPlugins(() => {
     const plugins: PluginOption[] = [
       injectAppThemeStorageKey(),
+      typegpu(),
       tanstackRouter({
         target: "react",
         autoCodeSplitting: true,

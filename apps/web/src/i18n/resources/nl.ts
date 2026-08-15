@@ -1,0 +1,276 @@
+const nl = {
+  common: {
+    chooseLanguage: "Kies taal",
+    github: "GitHub",
+    discord: "Discord",
+    openNavMenu: "Menu openen",
+    toggleTheme: "Thema wisselen",
+    comingSoon: "Binnenkort",
+    soon: "binnenkort",
+    copyright: "© {{year}} {{appName}}.",
+    underConstruction: "🚧IN AANBOUW🚧",
+    backHome: "Terug naar home",
+    notFoundTitle: "Pagina niet gevonden",
+    notFoundDescription: "Die pagina bestaat niet op {{appName}}.",
+  },
+  nav: {
+    about: "Over",
+    pricing: "Prijzen",
+    faq: "FAQ",
+    team: "Team",
+    contact: "Contact",
+    openApp: "App openen",
+  },
+  footer: {
+    tagline: "Een semi-OSS procedurele hex-wereld- en gevechtskaartgenerator voor TTRPG's.",
+    resources: "Bronnen",
+    home: "Home",
+    app: "App",
+    support: "Ondersteuning",
+    contactUs: "Neem contact op",
+    faq: "FAQ",
+    feedback: "Feedback",
+    community: "Community",
+    joinDiscord: "Word lid van Discord",
+    legal: "Juridisch",
+    privacyPolicy: "Privacybeleid",
+    termsOfService: "Servicevoorwaarden",
+    cookiePolicy: "Cookiebeleid",
+  },
+  cta: {
+    downloadFree: "Gratis downloaden",
+    windows: "Windows",
+    mac: "Mac",
+    ubuntu: "Ubuntu",
+    desktopApp: "Desktop-app",
+    selfHost: "Zelf hosten",
+    selfHostExperts: "Alleen voor experts",
+    getStarted: "Aan de slag",
+    learnMore: "Meer informatie",
+    subscribeNow: "Nu abonneren",
+    signUpNow: "Nu registreren",
+    goToApp: "Naar de app",
+  },
+  meta: {
+    homeTitle: "{{appName}} - D&D 5e-hulpmiddelen",
+    aboutTitle: "Over | {{appName}}",
+    pricingTitle: "Prijzen | {{appName}}",
+    faqTitle: "FAQ | {{appName}}",
+    teamTitle: "Team | {{appName}}",
+    contactTitle: "Contact | {{appName}}",
+    privacyTitle: "Privacybeleid | {{appName}}",
+    termsTitle: "Servicevoorwaarden | {{appName}}",
+    cookieTitle: "Cookiebeleid | {{appName}}",
+    notFoundTitle: "Niet gevonden | {{appName}}",
+  },
+  home: {
+    heroBadge: "Magische winkel- en spreukenboekgeneratoren beschikbaar",
+    heroTitleBefore: "Jouw",
+    heroTitleHighlight: "hex-wereldbeheerder",
+    heroTitleAfter: "voor al je hexcrawl-behoeften",
+    heroSubtitle: "Maak hex-werelden om te verkennen. Je spelers kunnen ook meedoen.",
+    toolsEyebrow: "Hulpmiddelen",
+    toolsTitle: "D&D 5e-inhoudsgeneratoren",
+    toolsDescription:
+      "Hulpmiddelen voor spelmeesters om van alles te genereren in hun D&D 5e 2024-campagnes en dat met hun spelers te delen.",
+    featuresEyebrow: "Functies",
+    featuresTitle: "{{appName}}-mogelijkheden",
+    featuresDescription:
+      "Functies die de voorbereiding en het beheer van je D&D-campagne vereenvoudigen.",
+    benefitsEyebrow: "Voordelen",
+    benefitsTitle: "Stroomlijn je D&D-campagne",
+    benefitsDescription:
+      "Focus op verhaalvertelling en spelersbetrokkenheid terwijl onze tools de mechanische kant van voorbereiding en spel afhandelen.",
+    benefitSavePrepTitle: "Bespaar uren voorbereiding",
+    benefitSavePrepDescription:
+      "Zet ontmoetingen, buit en kaarten in minuten op, zodat je meer tijd hebt voor verhaal en spel.",
+    benefitBalancedTitle: "Gebalanceerde, kant-en-klare inhoud",
+    benefitBalancedDescription:
+      "Automatisch afgestemde moeilijkheid en schaalbare aanbevelingen verminderen giswerk en houden sessies soepel.",
+    benefitSeamlessTitle: "Wrijvingsloze sessiestroom",
+    benefitSeamlessDescription:
+      "Een snelle, schone UI en slimme standaardwaarden minimaliseren klikken en contextwissels tijdens het spel.",
+    benefitShareTitle: "Eenvoudig delen en hergebruiken",
+    benefitShareDescription:
+      "Links met één klik en exports laten je inhoud aan spelers geven of hergebruiken in andere campagnes.",
+  },
+  about: {
+    nameEyebrow: "Over de naam",
+    nameTitle: 'Waarom "{{appName}}"?',
+    nameIntro:
+      "De naam is een bewuste verwijzing naar de Vizier-kaart uit het <deckLink>Deck of Many Things</deckLink>: een kaart die bij vragen één waarachtig antwoord en praktisch inzicht geeft.",
+    vizierTitle: "Vizier",
+    vizierDescription: "Een ode aan de Vizier-kaart: elke generatie is een antwoord.",
+    vizierPracticeTitle: "In de praktijk",
+    vizierPractice:
+      "De site biedt duidelijke, praktische informatie, gekoppeld aan context of begeleiding voor de uitvoering.",
+    vaultTitle: "Kluis",
+    vaultDescription:
+      "Bij elke vraag reik je in de kluis van tools om een antwoord te pakken en dat nu bekende antwoord weer veilig in de kluis te leggen.",
+    vaultPracticeTitle: "In de praktijk",
+    vaultPractice: "Elk antwoord wordt bewaard voor later hergebruik en/of naslag.",
+    philosophyEyebrow: "Filosofie",
+    philosophyTitle: "Ontwerpfilosofie",
+    philosophyDescription:
+      "Elke tool in {{appName}} is gemaakt om een specifiek probleem in D&D-campagnevoorbereiding op te lossen. Je kunt ze ook anders gebruiken, maar dit zijn de belangrijkste redenen dat elke tool bestaat en hoe ik ze voor ogen had.",
+    toolPhilosophyHeading: "Filosofie",
+    disclosureEyebrow: "Toelichting",
+    disclosureTitle: "Ontwikkelingsfilosofie",
+    disclosureDescription:
+      "Transparantie over hoe {{appName}} is gebouwd en onze toewijding aan menselijke creativiteit.",
+    disclosureUiTitle: "UI",
+    disclosureUiDescription: "AI is gebruikt om te helpen met de UI omdat ik UI-code haat.",
+    disclosureArtTitle: "Kunst",
+    disclosureArtDescription: "AI is niet en zal nooit worden gebruikt voor de kunst.",
+    disclosureAlgosTitle: "Algos",
+    disclosureAlgosDescription:
+      "AI is niet en zal nooit worden gebruikt voor de algoritmen omdat ik algoritmen programmeren geweldig vind. Algoritmen zijn mijn ding!",
+    disclosureAiAssisted: "AI-ondersteund",
+    disclosureHumanCreated: "Door mensen gemaakt",
+  },
+  pricing: {
+    eyebrow: "Prijzen",
+    title: "Eenvoudige, transparante prijzen",
+    description: "Kies het abonnement dat bij je D&D-campagne past.",
+    perYear: "/jaar",
+    perMonth: "/maand",
+    everythingIn: "Alles in {{plan}} en…",
+    detailsEyebrow: "Details",
+    detailsTitle: "Een functie-voor-functie-overzicht van elk abonnement",
+    detailsDescription: "Een grondige uitsplitsing van elke functie en welk abonnement die bevat.",
+  },
+  faq: {
+    eyebrow: "FAQ",
+    title: "Veelgestelde vragen",
+    q1: "Welke D&D-editie ondersteunt {{appName}}?",
+    a1: "{{appName}} is specifiek ontworpen voor D&D 5e 2024.",
+    q2: "Kan ik de gratis versie voor mijn campagnes gebruiken?",
+    a2: "Ja, de gratis versie bevat alle generatoren met kant-en-klare steden en werelden, maar geen gegevenspersistentie, dus als je de pagina verlaat is alles weg. Je kunt generaties wel exporteren als CSV-/afbeeldingsbestanden.",
+    q3: "Wat zit er in de Premium-abonnementen?",
+    a3: "Premium-abonnementen omvatten alle huidige en toekomstige generatoren, aangepaste wereld-/stadscreatie, groepscreatie, gegevenspersistentie, permalinks en generatie. Inloggen geeft je een gratis proefperiode. Meer lees je op de <pricingLink>prijspagina</pricingLink>.",
+    q4: "Kan ik gegenereerde inhoud naar mijn VTT exporteren?",
+    a4: "Ja, gevechtskaarten kunnen worden geëxporteerd in formaten die compatibel zijn met populaire virtual-tabletopplatforms. Andere gegenereerde inhoud kan als CSV-bestanden worden geëxporteerd voor eenvoudige integratie.",
+    q5: "Hoe nauwkeurig is de ontmoetingsbalans?",
+    a5: "Ontmoetingen worden gebalanceerd volgens de officiële D&D 5e 2024-richtlijnen, rekening houdend met het aantal PC's in de groep en hun niveaus.",
+    q6: "Kan ik aangepaste inhoud maken of de generatoren wijzigen?",
+    a6: "Momenteel gebruiken de generatoren officiële D&D 5e-gegevens. Aangepaste wereld- en stadscreatie is beschikbaar in alle Premium-abonnementen. Aangepaste spreuken, monsters en magische voorwerpen zijn gepland voor toekomstige updates. Je kunt de generatorinstellingen naar hartenlust aanpassen.",
+    q7: "En andere systemen?",
+    a7: "Ik wil andere systemen ondersteunen naarmate ik ze speel en leer, maar ik moet licentieovereenkomsten bekijken om te zien of ze het maken van digitale tools toestaan. Ik wil ook opensourcebijdragen van extra systemen makkelijk maken.",
+  },
+  team: {
+    eyebrow: "Team",
+    title: "Ontmoet de ontwikkelaar",
+    description: "Gebouwd door een fulltime leraar voor de TTRPG-community.",
+    role: "Oprichter en lead developer",
+    bio: "Leerkracht basisonderwijs, webontwikkelaar, programmeur, vertaler (Mandarijn → Engels), eeuwige D&D-DM, fietser, 3D-printer, 3D-modelleur.",
+    portfolio: "Portfolio",
+    linkedin: "LinkedIn",
+  },
+  contact: {
+    eyebrow: "Contact en ondersteuning",
+    title: "Hulp krijgen en feedback geven",
+    description: "Vragen over {{appName}} of suggesties voor nieuwe functies? We horen het graag.",
+    supportTitle: "Ondersteuning krijgen",
+    supportDescription:
+      "Ik ben één persoon, de enige ontwikkelaar, dus ik steun op de community als ik niet beschikbaar ben. Word lid van Discord voor ondersteuning.",
+    joinDiscord: "Word lid van Discord",
+    feedbackTitle: "Feedback",
+    feedbackDescription:
+      "Stel nieuwe functies of verbeteringen voor toekomstige releases voor via Discord.",
+    developmentTitle: "Ontwikkeling",
+    developmentDescription:
+      "Bekijk de broncode of draag bij aan het project. Let op: het project is gelicentieerd onder <licenseLink>CC BY-NC-SA 4.0</licenseLink>.",
+    viewGithub: "Bekijk op GitHub",
+  },
+  legal: {
+    privacyTitle: "Privacybeleid",
+    termsTitle: "Servicevoorwaarden",
+    cookieTitle: "Cookiebeleid",
+  },
+  plans: {
+    freeTitle: "Gratis",
+    freeDescription:
+      "Basis toegang tot de kerngeneratoren met beperkte functies en zonder gegevenspersistentie.",
+    basicTitle: "Basic",
+    basicDescription:
+      "Volledige toegang tot alle functies met gegevenspersistentie en geavanceerde mogelijkheden.",
+  },
+  features: {
+    customizableSettingsTitle: "Aanpasbare instellingen",
+    customizableSettingsDescription: "Pas bijna alles rond generatie aan in alle tools.",
+    dataPersistenceTitle: "Gegevenspersistentie",
+    dataPersistenceDescription: "Houd je gegevens veilig en exporteer ze wanneer je wilt.",
+    permalinksTitle: "Permalink-generatie",
+    permalinksDescription: "Maak deelbare links naar je gegenereerde inhoud.",
+    imageExportTitle: "Afbeeldingsexport",
+    imageExportDescription: "Exporteer gegenereerde kaarten als afbeeldingen.",
+    csvExportTitle: "CSV-export",
+    csvExportDescription: "Exporteer generaties als CSV-bestanden.",
+    vttExportTitle: "VTT-export",
+    vttExportDescription: "Exporteer gegenereerde kaarten waar mogelijk als VTT-bestanden.",
+    communitySupportTitle: "Community-ondersteuning op Discord",
+    customWorldsTitle: "Aangepaste werelden en steden",
+    customWorldsDescription:
+      "Maak en pas je eigen werelden en steden aan voor de Magische winkel-generator, de Wereldgenerator en de Ontmoetingsgenerator.",
+  },
+  tools: {
+    statusAlpha1: "Alpha 1",
+    statusAlpha2: "Alpha 2",
+    statusAlpha3: "Alpha 3",
+    statusAlpha4: "Alpha 4",
+    statusAlpha5: "Alpha 5",
+    statusAlpha6: "Alpha 6",
+    statusAlpha7: "Alpha 7",
+    statusPlanned: "Gepland",
+    statusDream: "Nader te bepalen — een wilde droom",
+    magicShopTitle: "Magische winkel-generator",
+    magicShopDescription:
+      "Genereer magische winkels op basis van stadsbevolking, rijkdom en magieniveau.",
+    magicShopPhilosophy:
+      "Ik hou ervan om roguelite D&D-campagnes te leiden, waarin alles willekeurig wordt gegenereerd.",
+    spellbookTitle: "Spreukenboekgenerator",
+    spellbookDescription:
+      "Maak tovenaars-spreukenboeken door niveau, magiescholen en kansinstellingen te kiezen.",
+    spellbookPhilosophy:
+      "Een van mijn spelers speelde een tovenaar en vroeg altijd naar spreukenboeken die ze bij het plunderen vonden.",
+    encounterTitle: "Ontmoetingsgenerator",
+    encounterDescription:
+      "Genereer gebalanceerde ontmoetingen op basis van groepsamenstelling, bioom en reisomstandigheden.",
+    encounterPhilosophy:
+      "Een roguelite D&D-campagne is niet compleet zonder willekeurige ontmoetingen.",
+    partyTitle: "Groepsbeheer",
+    partyDescription: "Beheer groepsamenstelling, balans en voortgangsregistratie.",
+    partyPhilosophy:
+      "Dit bestaat alleen omdat ik gebalanceerde ontmoetingen wilde genereren en meerdere groepen op dezelfde wereld wilde volgen.",
+    battleMapTitle: "Gevechtskaartgenerator",
+    battleMapDescription:
+      "Maak gevechtskaarten met geografische kenmerken, weer en aanpasbare rasterinstellingen.",
+    battleMapPhilosophy: "Ik maak graag gevechtskaarten voor bazen of minibossen.",
+    regionTitle: "Regiogenerator",
+    regionDescription:
+      "Genereer kleinere hexcrawl-regio's met 1-mijl-hexen, zoals eilanden, schiereilanden, baaien, binnenland en kustgebieden.",
+    regionPhilosophy:
+      "Ik wilde een gerichte tool voor compacte hexcrawls tussen een enkele ontmoetingskaart en een volledige wereld-hexkaart.",
+    continentTitle: "Continentgenerator",
+    continentDescription:
+      "Genereer hexcrawl-kaarten op continentale schaal met tot 3-mijl-hexen, met meerdere regio's, koninkrijken en grootschalig terrein.",
+    continentPhilosophy:
+      "Tussen het detail van regiokaarten en de grote schaal van wereldkaarten zijn continenten het perfecte midden.",
+    worldTitle: "Wereldgenerator",
+    worldDescription:
+      "Genereer complete hex-werelden met tot 24-mijl-hexen, weersimulatie, fog of war en groepsvolging.",
+    worldPhilosophy:
+      "Toen ik hierover begon te brainstormen na de generatoren hierboven, ontdekte ik HexRoll, een GEWELDIGE tool.",
+    starSystemTitle: "Zonnestelselgenerator",
+    starSystemDescription: "Maak zonnestelsels met meerdere werelden, planeten en hemellichamen.",
+    starSystemPhilosophy:
+      "Hierover heb ik nog niet veel nagedacht, behalve dat het supertof zou zijn voor Spelljammer- en sci-fi-campagnes.",
+    galaxyTitle: "Melkweggenerator",
+    galaxyDescription:
+      "Genereer hele sterrenstelsels met meerdere zonnestelsels en kosmische structuren.",
+    galaxyPhilosophy:
+      "Ik denk gewoon dat het supertof zou zijn om dit te maken met een geweldige kaart die superzoomt van de melkweg naar het zonnestelsel, de planeet, het continent, de regio tot de gevechtskaart / stad / dorp / enz.",
+  },
+} as const;
+
+export default nl;

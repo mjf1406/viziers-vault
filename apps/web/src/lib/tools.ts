@@ -45,7 +45,7 @@ export const tools: Tool[] = [
       "Permalink generation (Premium)",
       "Data persistence (Premium)",
     ],
-    integrations: ["World Generator"],
+    integrations: ["world-generator"],
     category: "Generator",
     order: 1,
     url: "/app/magic-shop-generator",
@@ -91,7 +91,7 @@ export const tools: Tool[] = [
       "Multiple encounter generation",
       "Environmental storytelling",
     ],
-    integrations: ["Party Management", "Battle Map Generator"],
+    integrations: ["party-management", "battle-map-generator"],
     category: "Generator",
     order: 3,
     url: "/app/encounter-generator",
@@ -161,7 +161,7 @@ export const tools: Tool[] = [
       "VTT export and CSV of hex data",
       "Adjustable density and scale",
     ],
-    integrations: ["Battle Map Generator", "Encounter Generator", "Party Management"],
+    integrations: ["battle-map-generator", "encounter-generator", "party-management"],
     category: "Generator",
     order: 5,
     url: "/app/region-generator",
@@ -187,10 +187,10 @@ export const tools: Tool[] = [
       "VTT export and CSV of hex data",
     ],
     integrations: [
-      "Region Generator",
-      "Battle Map Generator",
-      "Encounter Generator",
-      "Party Management",
+      "region-generator",
+      "battle-map-generator",
+      "encounter-generator",
+      "party-management",
     ],
     category: "Generator",
     order: 6,
@@ -216,12 +216,12 @@ export const tools: Tool[] = [
       "Automatic encounter generation",
     ],
     integrations: [
-      "Continent Generator",
-      "Region Generator",
-      "Battle Map Generator",
-      "Encounter Generator",
-      "Magic Shop Generator",
-      "Party Management",
+      "continent-generator",
+      "region-generator",
+      "battle-map-generator",
+      "encounter-generator",
+      "magic-shop-generator",
+      "party-management",
     ],
     category: "Generator",
     order: 7,
@@ -242,7 +242,7 @@ export const tools: Tool[] = [
       "Orbital mechanics",
       "System-wide exploration",
     ],
-    integrations: ["World Generator"],
+    integrations: ["world-generator"],
     category: "Generator",
     order: 7,
     url: "/app/star-system-generator",
@@ -262,7 +262,7 @@ export const tools: Tool[] = [
       "Galaxy-wide exploration",
       "Interstellar travel mechanics",
     ],
-    integrations: ["Star System Generator"],
+    integrations: ["star-system-generator"],
     category: "Generator",
     order: 8,
     url: "/app/galaxy-generator",
@@ -283,3 +283,101 @@ export const getAvailableTools = (): Tool[] =>
   tools.filter((tool) => tool.status !== "TBD - A wild dream");
 
 export const getToolsInOrder = (): Tool[] => [...tools].sort((a, b) => a.order - b.order);
+
+type ToolTitleKey =
+  | "magicShopTitle"
+  | "spellbookTitle"
+  | "encounterTitle"
+  | "partyTitle"
+  | "battleMapTitle"
+  | "regionTitle"
+  | "continentTitle"
+  | "worldTitle"
+  | "starSystemTitle"
+  | "galaxyTitle";
+
+type ToolDescriptionKey =
+  | "magicShopDescription"
+  | "spellbookDescription"
+  | "encounterDescription"
+  | "partyDescription"
+  | "battleMapDescription"
+  | "regionDescription"
+  | "continentDescription"
+  | "worldDescription"
+  | "starSystemDescription"
+  | "galaxyDescription";
+
+type ToolPhilosophyKey =
+  | "magicShopPhilosophy"
+  | "spellbookPhilosophy"
+  | "encounterPhilosophy"
+  | "partyPhilosophy"
+  | "battleMapPhilosophy"
+  | "regionPhilosophy"
+  | "continentPhilosophy"
+  | "worldPhilosophy"
+  | "starSystemPhilosophy"
+  | "galaxyPhilosophy";
+
+export const TOOL_TITLE_KEYS: Record<string, ToolTitleKey> = {
+  "magic-shop-generator": "magicShopTitle",
+  "spellbook-generator": "spellbookTitle",
+  "encounter-generator": "encounterTitle",
+  "party-management": "partyTitle",
+  "battle-map-generator": "battleMapTitle",
+  "region-generator": "regionTitle",
+  "continent-generator": "continentTitle",
+  "world-generator": "worldTitle",
+  "star-system-generator": "starSystemTitle",
+  "galaxy-generator": "galaxyTitle",
+};
+
+export const TOOL_DESCRIPTION_KEYS: Record<string, ToolDescriptionKey> = {
+  "magic-shop-generator": "magicShopDescription",
+  "spellbook-generator": "spellbookDescription",
+  "encounter-generator": "encounterDescription",
+  "party-management": "partyDescription",
+  "battle-map-generator": "battleMapDescription",
+  "region-generator": "regionDescription",
+  "continent-generator": "continentDescription",
+  "world-generator": "worldDescription",
+  "star-system-generator": "starSystemDescription",
+  "galaxy-generator": "galaxyDescription",
+};
+
+export const TOOL_PHILOSOPHY_KEYS: Record<string, ToolPhilosophyKey> = {
+  "magic-shop-generator": "magicShopPhilosophy",
+  "spellbook-generator": "spellbookPhilosophy",
+  "encounter-generator": "encounterPhilosophy",
+  "party-management": "partyPhilosophy",
+  "battle-map-generator": "battleMapPhilosophy",
+  "region-generator": "regionPhilosophy",
+  "continent-generator": "continentPhilosophy",
+  "world-generator": "worldPhilosophy",
+  "star-system-generator": "starSystemPhilosophy",
+  "galaxy-generator": "galaxyPhilosophy",
+};
+
+export const TOOL_STATUS_KEYS: Record<
+  Tool["status"],
+  | "statusAlpha1"
+  | "statusAlpha2"
+  | "statusAlpha3"
+  | "statusAlpha4"
+  | "statusAlpha5"
+  | "statusAlpha6"
+  | "statusAlpha7"
+  | "statusPlanned"
+  | "statusDream"
+> = {
+  "Alpha 1": "statusAlpha1",
+  "Alpha 2": "statusAlpha2",
+  "Alpha 3": "statusAlpha3",
+  "Alpha 4": "statusAlpha4",
+  "Alpha 5": "statusAlpha5",
+  "Alpha 6": "statusAlpha6",
+  "Alpha 7": "statusAlpha7",
+  Planned: "statusPlanned",
+  "TBD - A wild dream": "statusDream",
+};

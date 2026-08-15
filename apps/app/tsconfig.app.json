@@ -6,7 +6,7 @@
     "module": "esnext",
     // `node` is required because `convex/_generated/api` pulls Convex source into the
     // app program, and those modules read `process.env`.
-    "types": ["vite/client", "vite-plugin-pwa/react", "node"],
+    "types": ["vite/client", "vite-plugin-pwa/react", "node", "@webgpu/types"],
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
 

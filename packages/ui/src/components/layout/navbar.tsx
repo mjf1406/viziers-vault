@@ -27,13 +27,21 @@ export interface NavbarLinkComponentProps {
   children?: ReactNode;
 }
 
+export interface NavbarLabels {
+  openMenu: string;
+  github: string;
+  discord: string;
+}
+
 export interface NavbarProps {
   routes: NavbarRoute[];
   LinkComponent?: ComponentType<NavbarLinkComponentProps>;
   themeToggle?: ReactNode;
+  languageSwitcher?: ReactNode;
   logoHref?: string;
   githubUrl?: string;
   discordUrl?: string;
+  labels: NavbarLabels;
 }
 
 function DefaultLink({ href, className, children, ...props }: NavbarLinkComponentProps) {
@@ -56,9 +64,11 @@ export function Navbar({
   routes,
   LinkComponent = DefaultLink,
   themeToggle,
+  languageSwitcher,
   logoHref = "/",
   githubUrl = "https://github.com/mjf1406/viziers-vault-app",
   discordUrl,
+  labels,
 }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -72,7 +82,7 @@ export function Navbar({
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger render={<Button variant="ghost" size="icon" className="lg:hidden" />}>
               <Menu />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">{labels.openMenu}</span>
             </SheetTrigger>
             <SheetContent
               side="left"
@@ -118,9 +128,10 @@ export function Navbar({
                     render={<a href={githubUrl} rel="noopener noreferrer" target="_blank" />}
                   >
                     <GithubMark className="size-4" />
-                    <span className="sr-only">GitHub</span>
+                    <span className="sr-only">{labels.github}</span>
                   </Button>
-                  <DiscordIcon href={discordUrl} />
+                  <DiscordIcon href={discordUrl} label={labels.discord} />
+                  {languageSwitcher}
                   {themeToggle}
                 </div>
               </SheetFooter>
@@ -150,9 +161,10 @@ export function Navbar({
             render={<a href={githubUrl} rel="noopener noreferrer" target="_blank" />}
           >
             <GithubMark className="size-4" />
-            <span className="sr-only">GitHub</span>
+            <span className="sr-only">{labels.github}</span>
           </Button>
-          <DiscordIcon href={discordUrl} />
+          <DiscordIcon href={discordUrl} label={labels.discord} />
+          {languageSwitcher}
           {themeToggle}
         </div>
       </div>

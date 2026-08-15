@@ -1,3 +1,5 @@
+import { useTranslation } from "react-i18next";
+
 import { GetStartedButton, LearnMoreButton } from "@/components/cta-buttons";
 import { DownloadMenu } from "@/components/download-menu";
 import { Badge } from "@/components/ui/badge";
@@ -5,29 +7,33 @@ import { Button } from "@/components/ui/button";
 import { SITE } from "@/lib/site";
 
 export function HeroSection() {
+  const { t } = useTranslation("home");
+  const { t: tCta } = useTranslation("cta");
+  const { t: tTools } = useTranslation("tools");
+
   return (
     <section className="mx-auto w-full max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="mx-auto grid place-items-center gap-8 py-20 md:py-32 lg:max-w-7xl">
         <div className="space-y-8 text-center">
           <Badge variant="outline" className="py-2 text-sm">
             <span className="mr-2 text-primary">
-              <Badge>Alpha 1</Badge>
+              <Badge>{tTools("statusAlpha1")}</Badge>
             </span>
-            <span>Magic Shop &amp; Spellbook Generators Available</span>
+            <span>{t("heroBadge")}</span>
           </Badge>
 
           <div className="mx-auto max-w-3xl text-center text-4xl font-bold md:text-6xl">
             <h1>
-              Your{" "}
+              {t("heroTitleBefore")}{" "}
               <span className="bg-linear-to-r from-[#D247BF] to-primary bg-clip-text px-2 text-transparent">
-                hex-world manager{" "}
+                {t("heroTitleHighlight")}{" "}
               </span>
-              for all of your hex-crawling needs
+              {t("heroTitleAfter")}
             </h1>
           </div>
 
           <p className="mx-auto max-w-screen-sm text-xl text-muted-foreground">
-            Create hex-worlds on which to crawl. Your players can join, too.
+            {t("heroSubtitle")}
           </p>
 
           <div className="flex flex-wrap justify-center gap-4">
@@ -50,8 +56,10 @@ export function HeroSection() {
                 />
               }
             >
-              <span>Self-host</span>
-              <span className="text-xs font-normal text-muted-foreground">Experts only</span>
+              <span>{tCta("selfHost")}</span>
+              <span className="text-xs font-normal text-muted-foreground">
+                {tCta("selfHostExperts")}
+              </span>
             </Button>
           </div>
         </div>

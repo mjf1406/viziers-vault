@@ -1,0 +1,277 @@
+const pt = {
+  common: {
+    chooseLanguage: "Escolher idioma",
+    github: "GitHub",
+    discord: "Discord",
+    openNavMenu: "Abrir menu",
+    toggleTheme: "Alternar tema",
+    comingSoon: "Em breve",
+    soon: "em breve",
+    copyright: "© {{year}} {{appName}}.",
+    underConstruction: "🚧EM CONSTRUÇÃO🚧",
+    backHome: "Voltar ao início",
+    notFoundTitle: "Página não encontrada",
+    notFoundDescription: "Essa página não existe no {{appName}}.",
+  },
+  nav: {
+    about: "Sobre",
+    pricing: "Preços",
+    faq: "FAQ",
+    team: "Equipe",
+    contact: "Contato",
+    openApp: "Abrir o app",
+  },
+  footer: {
+    tagline: "Um gerador semi-OSS de mundos hexagonais e mapas de batalha procedurais para TTRPGs.",
+    resources: "Recursos",
+    home: "Início",
+    app: "App",
+    support: "Suporte",
+    contactUs: "Fale conosco",
+    faq: "FAQ",
+    feedback: "Feedback",
+    community: "Comunidade",
+    joinDiscord: "Entrar no Discord",
+    legal: "Legal",
+    privacyPolicy: "Política de Privacidade",
+    termsOfService: "Termos de Serviço",
+    cookiePolicy: "Política de Cookies",
+  },
+  cta: {
+    downloadFree: "Baixar grátis",
+    windows: "Windows",
+    mac: "Mac",
+    ubuntu: "Ubuntu",
+    desktopApp: "App para desktop",
+    selfHost: "Auto-hospedar",
+    selfHostExperts: "Somente para especialistas",
+    getStarted: "Começar",
+    learnMore: "Saiba mais",
+    subscribeNow: "Assinar agora",
+    signUpNow: "Cadastre-se agora",
+    goToApp: "Ir para o app",
+  },
+  meta: {
+    homeTitle: "{{appName}} - Ferramentas de D&D 5e",
+    aboutTitle: "Sobre | {{appName}}",
+    pricingTitle: "Preços | {{appName}}",
+    faqTitle: "FAQ | {{appName}}",
+    teamTitle: "Equipe | {{appName}}",
+    contactTitle: "Contato | {{appName}}",
+    privacyTitle: "Política de Privacidade | {{appName}}",
+    termsTitle: "Termos de Serviço | {{appName}}",
+    cookieTitle: "Política de Cookies | {{appName}}",
+    notFoundTitle: "Não encontrado | {{appName}}",
+  },
+  home: {
+    heroBadge: "Geradores de loja mágica e grimório disponíveis",
+    heroTitleBefore: "Seu",
+    heroTitleHighlight: "gerenciador de mundos hexagonais",
+    heroTitleAfter: "para todas as suas necessidades de hexcrawl",
+    heroSubtitle: "Crie mundos hexagonais para explorar. Seus jogadores também podem entrar.",
+    toolsEyebrow: "Ferramentas",
+    toolsTitle: "Geradores de conteúdo de D&D 5e",
+    toolsDescription:
+      "Ferramentas para mestres gerarem várias coisas em campanhas de D&D 5e 2024 e depois compartilharem com os jogadores.",
+    featuresEyebrow: "Recursos",
+    featuresTitle: "Recursos do {{appName}}",
+    featuresDescription:
+      "Recursos pensados para agilizar a preparação e a gestão da sua campanha de D&D.",
+    benefitsEyebrow: "Benefícios",
+    benefitsTitle: "Agilize sua campanha de D&D",
+    benefitsDescription:
+      "Foque na narrativa e no engajamento dos jogadores enquanto nossas ferramentas cuidam dos aspectos mecânicos da preparação e do jogo.",
+    benefitSavePrepTitle: "Economize horas de preparação",
+    benefitSavePrepDescription:
+      "Monte encontros, tesouros e mapas em minutos para gastar mais tempo na história e no jogo.",
+    benefitBalancedTitle: "Conteúdo equilibrado e pronto para jogar",
+    benefitBalancedDescription:
+      "Dificuldade autoajustada e recomendações escaláveis reduzem o chute e mantêm as sessões fluindo.",
+    benefitSeamlessTitle: "Fluxo de sessão sem atrito",
+    benefitSeamlessDescription:
+      "Interface rápida e limpa e padrões inteligentes minimizam cliques e troca de contexto durante o jogo.",
+    benefitShareTitle: "Compartilhe e reutilize com facilidade",
+    benefitShareDescription:
+      "Links de um clique e exportações permitem entregar conteúdo aos jogadores ou reutilizar em outras campanhas.",
+  },
+  about: {
+    nameEyebrow: "Sobre o nome",
+    nameTitle: 'Por que "{{appName}}"?',
+    nameIntro:
+      "O nome é uma referência intencional à carta do Vizir do <deckLink>Baralho das Maravilhas</deckLink>: uma carta que concede uma única resposta verdadeira e uma ideia prática quando consultada.",
+    vizierTitle: "Vizir",
+    vizierDescription: "Uma homenagem à carta do Vizir: cada geração é uma resposta.",
+    vizierPracticeTitle: "Na prática",
+    vizierPractice:
+      "O site oferece informações claras e práticas, acompanhadas de contexto ou orientação para aplicar.",
+    vaultTitle: "Cofre",
+    vaultDescription:
+      "A cada pergunta, você estende a mão ao cofre de ferramentas para pegar uma resposta e devolver essa resposta já conhecida ao cofre para guarda.",
+    vaultPracticeTitle: "Na prática",
+    vaultPractice: "Cada resposta é armazenada para reutilização e/ou consulta futura.",
+    philosophyEyebrow: "Filosofia",
+    philosophyTitle: "Filosofia de design",
+    philosophyDescription:
+      "Cada ferramenta do {{appName}} foi criada para resolver um problema específico da preparação de campanhas de D&D. Você pode usá-las para outros fins, mas estes são os principais motivos de cada uma e como eu imaginei que seriam usadas.",
+    toolPhilosophyHeading: "Filosofia",
+    disclosureEyebrow: "Divulgação",
+    disclosureTitle: "Filosofia de desenvolvimento",
+    disclosureDescription:
+      "Transparência sobre como o {{appName}} foi construído e nosso compromisso com a criatividade humana.",
+    disclosureUiTitle: "UI",
+    disclosureUiDescription:
+      "A IA foi usada para ajudar com a UI porque eu odeio programar interface.",
+    disclosureArtTitle: "Arte",
+    disclosureArtDescription: "A IA não foi e nunca será usada para a arte.",
+    disclosureAlgosTitle: "Algos",
+    disclosureAlgosDescription:
+      "A IA não foi e nunca será usada para os algoritmos porque eu amo programar algoritmos. Algoritmos são a minha praia!",
+    disclosureAiAssisted: "Assistido por IA",
+    disclosureHumanCreated: "Criado por humanos",
+  },
+  pricing: {
+    eyebrow: "Preços",
+    title: "Preços simples e transparentes",
+    description: "Escolha o plano que se encaixa nas necessidades da sua campanha de D&D.",
+    perYear: "/ano",
+    perMonth: "/mês",
+    everythingIn: "Tudo do {{plan}} e…",
+    detailsEyebrow: "Detalhes",
+    detailsTitle: "Um comparativo recurso a recurso de cada plano",
+    detailsDescription: "Um detalhamento completo de cada recurso e de qual plano o inclui.",
+  },
+  faq: {
+    eyebrow: "FAQ",
+    title: "Perguntas frequentes",
+    q1: "Qual edição de D&D o {{appName}} oferece suporte?",
+    a1: "O {{appName}} foi feito especificamente para D&D 5e 2024.",
+    q2: "Posso usar a versão gratuita nas minhas campanhas?",
+    a2: "Sim, a versão gratuita inclui todos os geradores com cidades e mundos prontos, mas sem persistência de dados, então ao sair da página tudo se perde. Você pode exportar as gerações como arquivos CSV/imagem, no entanto.",
+    q3: "O que está incluído nos planos de assinatura Premium?",
+    a3: "Os planos Premium incluem todos os geradores atuais e futuros, criação personalizada de mundos/cidades, criação de grupos, persistência de dados, permalink e geração. Ao entrar, você ganha um período de teste gratuito. Saiba mais na <pricingLink>página de preços</pricingLink>.",
+    q4: "Posso exportar o conteúdo gerado para o meu VTT?",
+    a4: "Sim, mapas de batalha podem ser exportados em formatos compatíveis com plataformas populares de mesa virtual. Outro conteúdo gerado pode ser exportado como arquivos CSV para integração fácil.",
+    q5: "Quão preciso é o equilíbrio de encontros?",
+    a5: "Os encontros são equilibrados com as diretrizes oficiais de D&D 5e 2024, considerando o número de PCs no grupo e seus níveis.",
+    q6: "Posso criar conteúdo personalizado ou modificar os geradores?",
+    a6: "No momento, os geradores usam dados oficiais de D&D 5e. A criação personalizada de mundos e cidades está disponível em todos os planos Premium. Criar magias, monstros e itens mágicos personalizados está previsto para atualizações futuras. Você pode personalizar as configurações do gerador à vontade.",
+    q7: "E outros sistemas?",
+    a7: "Quero dar suporte a outros sistemas conforme eu os jogo e aprendo, mas terei de analisar os contratos de licença para garantir que permitam a criação de ferramentas digitais. Também gostaria de facilitar contribuições de código aberto de sistemas adicionais.",
+  },
+  team: {
+    eyebrow: "Equipe",
+    title: "Conheça o desenvolvedor",
+    description: "Feito por um professor em tempo integral para a comunidade TTRPG.",
+    role: "Fundador e desenvolvedor principal",
+    bio: "Professor do ensino fundamental, desenvolvedor web, programador, tradutor (mandarim → inglês), mestre eterno de D&D, ciclista, impressora 3D, modelador 3D.",
+    portfolio: "Portfolio",
+    linkedin: "LinkedIn",
+  },
+  contact: {
+    eyebrow: "Contato e suporte",
+    title: "Obtenha ajuda e envie feedback",
+    description:
+      "Tem perguntas sobre o {{appName}} ou sugestões de novos recursos? Adoraríamos ouvir você.",
+    supportTitle: "Obter suporte",
+    supportDescription:
+      "Sou uma pessoa só, o único desenvolvedor, então conto com a comunidade para dar suporte quando eu não estiver disponível. Entre no Discord para receber ajuda.",
+    joinDiscord: "Entrar no Discord",
+    feedbackTitle: "Feedback",
+    feedbackDescription: "Sugira novos recursos ou melhorias para versões futuras pelo Discord.",
+    developmentTitle: "Desenvolvimento",
+    developmentDescription:
+      "Veja o código-fonte ou contribua com o projeto. Observe que o projeto está licenciado sob <licenseLink>CC BY-NC-SA 4.0</licenseLink>.",
+    viewGithub: "Ver no GitHub",
+  },
+  legal: {
+    privacyTitle: "Política de Privacidade",
+    termsTitle: "Termos de Serviço",
+    cookieTitle: "Política de Cookies",
+  },
+  plans: {
+    freeTitle: "Grátis",
+    freeDescription:
+      "Acesso básico aos geradores principais, com recursos limitados e sem persistência de dados.",
+    basicTitle: "Básico",
+    basicDescription:
+      "Acesso completo a todos os recursos, com persistência de dados e capacidades avançadas.",
+  },
+  features: {
+    customizableSettingsTitle: "Configurações personalizáveis",
+    customizableSettingsDescription:
+      "Ajuste quase tudo relacionado à geração em todas as ferramentas.",
+    dataPersistenceTitle: "Persistência de dados",
+    dataPersistenceDescription: "Mantenha seus dados seguros e exporte-os quando precisar.",
+    permalinksTitle: "Geração de permalinks",
+    permalinksDescription: "Crie links compartilháveis para o conteúdo gerado.",
+    imageExportTitle: "Exportação de imagens",
+    imageExportDescription: "Exporte mapas gerados como imagens.",
+    csvExportTitle: "Exportação CSV",
+    csvExportDescription: "Exporte gerações como arquivos CSV.",
+    vttExportTitle: "Exportação VTT",
+    vttExportDescription: "Exporte mapas gerados como arquivos VTT quando possível.",
+    communitySupportTitle: "Suporte da comunidade no Discord",
+    customWorldsTitle: "Mundos e cidades personalizados",
+    customWorldsDescription:
+      "Crie e personalize seus próprios mundos e cidades para usar no Gerador de loja mágica, no Gerador de mundos e no Gerador de encontros.",
+  },
+  tools: {
+    statusAlpha1: "Alfa 1",
+    statusAlpha2: "Alfa 2",
+    statusAlpha3: "Alfa 3",
+    statusAlpha4: "Alfa 4",
+    statusAlpha5: "Alfa 5",
+    statusAlpha6: "Alfa 6",
+    statusAlpha7: "Alfa 7",
+    statusPlanned: "Planejado",
+    statusDream: "A definir — um sonho ousado",
+    magicShopTitle: "Gerador de loja mágica",
+    magicShopDescription: "Gere lojas mágicas com base na população, riqueza e magia da cidade.",
+    magicShopPhilosophy:
+      "Adoro mestrar campanhas de D&D estilo roguelite, em que tudo é gerado aleatoriamente.",
+    spellbookTitle: "Gerador de grimórios",
+    spellbookDescription:
+      "Crie grimórios de mago escolhendo nível, escolas de magia e configurações de probabilidade.",
+    spellbookPhilosophy:
+      "Um dos meus jogadores era mago e sempre perguntava sobre grimórios encontrados ao saquear.",
+    encounterTitle: "Gerador de encontros",
+    encounterDescription:
+      "Gere encontros equilibrados com base na composição do grupo, no bioma e nas condições de viagem.",
+    encounterPhilosophy:
+      "Uma campanha de D&D estilo roguelite não fica completa sem encontros aleatórios.",
+    partyTitle: "Gestão de grupos",
+    partyDescription: "Gerencie composição do grupo, equilíbrio e acompanhamento de progresso.",
+    partyPhilosophy:
+      "Isso existe só porque eu queria gerar encontros equilibrados e acompanhar vários grupos no mesmo mundo.",
+    battleMapTitle: "Gerador de mapas de batalha",
+    battleMapDescription:
+      "Crie mapas de batalha com elementos geográficos, clima e configurações de grade personalizáveis.",
+    battleMapPhilosophy: "Gosto muito de fazer mapas de batalha para chefes ou minichefes.",
+    regionTitle: "Gerador de regiões",
+    regionDescription:
+      "Gere regiões menores de hexcrawl com hexágonos de 1 milha, como ilhas, penínsulas, baías, áreas interiores e regiões costeiras.",
+    regionPhilosophy:
+      "Eu queria uma ferramenta focada em hexcrawls compactos, entre um mapa de um único encontro e um hexmapa mundial completo.",
+    continentTitle: "Gerador de continentes",
+    continentDescription:
+      "Gere mapas de hexcrawl em escala continental com hexágonos de até 3 milhas, com várias regiões, reinos e relevos em grande escala.",
+    continentPhilosophy:
+      "Entre o detalhe dos mapas regionais e a grande escala dos mapas mundiais, os continentes são o meio-termo perfeito.",
+    worldTitle: "Gerador de mundos",
+    worldDescription:
+      "Gere mundos hexagonais completos com hexágonos de até 24 milhas, simulação climática, névoa de guerra e rastreamento de grupos.",
+    worldPhilosophy:
+      "Quando comecei a pensar nisso depois de criar os geradores acima, descobri o HexRoll, que é uma ferramenta INCRÍVEL.",
+    starSystemTitle: "Gerador de sistemas estelares",
+    starSystemDescription: "Crie sistemas estelares com vários mundos, planetas e corpos celestes.",
+    starSystemPhilosophy:
+      "Ainda não pensei muito nisso, além de que seria super legal para campanhas de Spelljammer e ficção científica.",
+    galaxyTitle: "Gerador de galáxias",
+    galaxyDescription:
+      "Gere galáxias inteiras com vários sistemas estelares e estruturas cósmicas.",
+    galaxyPhilosophy:
+      "Só acho que seria super legal fazer isso com um mapa incrível que dá um superzoom da galáxia ao sistema estelar, ao planeta, ao continente, à região e ao mapa de batalha / cidade / vila / etc.",
+  },
+} as const;
+
+export default pt;
