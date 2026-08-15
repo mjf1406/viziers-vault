@@ -29,7 +29,6 @@ export default defineConfig({
         "/about",
         "/pricing",
         "/faq",
-        "/team",
         "/contact",
         "/privacy-policy",
         "/terms-of-service",

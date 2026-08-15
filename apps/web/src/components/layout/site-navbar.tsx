@@ -2,6 +2,7 @@ import { Link } from "@tanstack/react-router";
 import { Navbar, type NavbarLinkComponentProps, type NavbarRoute } from "@vv/ui";
 import { useTranslation } from "react-i18next";
 
+import { GetStartedButton } from "@/components/cta-buttons";
 import { LanguageSwitcher } from "@/components/i18n/LanguageSwitcher";
 import { ThemeToggle } from "@/components/theme/theme-toggle";
 import { SITE } from "@/lib/site";
@@ -30,9 +31,7 @@ export function SiteNavbar() {
     { href: "/about", label: t("about") },
     { href: "/pricing", label: t("pricing") },
     { href: "/faq", label: t("faq") },
-    { href: "/team", label: t("team") },
     { href: "/contact", label: t("contact") },
-    { href: SITE.appUrl, label: t("openApp") },
   ];
 
   return (
@@ -44,6 +43,7 @@ export function SiteNavbar() {
       logoHref="/"
       githubUrl={SITE.githubUrl}
       discordUrl={SITE.discordUrl}
+      cta={<GetStartedButton size="sm" />}
       labels={{
         openMenu: tCommon("openNavMenu"),
         github: tCommon("github"),

@@ -12,7 +12,6 @@ const MARKETING_LINKS = new Set([
   "/about",
   "/pricing",
   "/faq",
-  "/team",
   "/contact",
   "/privacy-policy",
   "/terms-of-service",

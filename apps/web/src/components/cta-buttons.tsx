@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { SITE } from "@/lib/site";
 
 type ButtonVariant = "default" | "outline" | "secondary" | "ghost" | "link" | "destructive";
+type ButtonSize = "default" | "xs" | "sm" | "lg";
 
 export function DesktopAppButton({
   className,
@@ -53,21 +54,26 @@ export function SelfHostButton({
 export function GetStartedButton({
   className,
   variant = "secondary",
+  size = "default",
 }: {
   className?: string;
   variant?: ButtonVariant;
+  size?: ButtonSize;
 }) {
   const { t } = useTranslation("cta");
 
   return (
     <Button
       variant={variant}
+      size={size}
       className={`group/arrow font-bold ${className ?? ""}`}
       nativeButton={false}
       render={<a href={SITE.appUrl} />}
     >
       {t("getStarted")}
-      <ArrowRight className="ml-2 size-5 transition-transform group-hover/arrow:translate-x-1" />
+      <ArrowRight
+        className={`${size === "sm" || size === "xs" ? "size-4" : "size-5"} transition-transform group-hover/arrow:translate-x-1`}
+      />
     </Button>
   );
 }

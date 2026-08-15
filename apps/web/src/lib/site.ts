@@ -34,7 +34,6 @@ export const PAGE_META: Record<string, PageMeta> = {
   "/about": { title: `About | ${SITE.name}`, description: SITE.description },
   "/pricing": { title: `Pricing | ${SITE.name}`, description: SITE.description },
   "/faq": { title: `FAQ | ${SITE.name}`, description: SITE.description },
-  "/team": { title: `Team | ${SITE.name}`, description: SITE.description },
   "/contact": { title: `Contact | ${SITE.name}`, description: SITE.description },
   "/privacy-policy": { title: `Privacy Policy | ${SITE.name}`, description: SITE.description },
   "/terms-of-service": { title: `Terms of Service | ${SITE.name}`, description: SITE.description },

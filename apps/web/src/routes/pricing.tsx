@@ -1,6 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
 
-import { PlanFeaturesSection } from "@/components/sections/plan-features";
 import { PricingSection } from "@/components/sections/pricing";
 import { routeHead } from "@/lib/site";
 
@@ -10,10 +9,5 @@ export const Route = createFileRoute("/pricing")({
 });
 
 function PricingPage() {
-  return (
-    <>
-      <PricingSection />
-      <PlanFeaturesSection />
-    </>
-  );
+  return <PricingSection />;
 }

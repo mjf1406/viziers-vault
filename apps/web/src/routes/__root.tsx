@@ -14,7 +14,6 @@ const META_TITLE_KEYS: Record<string, string> = {
   "/about": "aboutTitle",
   "/pricing": "pricingTitle",
   "/faq": "faqTitle",
-  "/team": "teamTitle",
   "/contact": "contactTitle",
   "/privacy-policy": "privacyTitle",
   "/terms-of-service": "termsTitle",

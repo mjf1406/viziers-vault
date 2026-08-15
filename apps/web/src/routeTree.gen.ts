@@ -17,7 +17,6 @@ import { Route as CookiePolicyRouteImport } from './routes/cookie-policy'
 import { Route as FaqRouteImport } from './routes/faq'
 import { Route as PricingRouteImport } from './routes/pricing'
 import { Route as PrivacyPolicyRouteImport } from './routes/privacy-policy'
-import { Route as TeamRouteImport } from './routes/team'
 import { Route as TermsOfServiceRouteImport } from './routes/terms-of-service'
 
 const IndexRoute = IndexRouteImport.update({
@@ -60,11 +59,6 @@ const PrivacyPolicyRoute = PrivacyPolicyRouteImport.update({
   path: '/privacy-policy',
   getParentRoute: () => rootRouteImport,
 } as any)
-const TeamRoute = TeamRouteImport.update({
-  id: '/team',
-  path: '/team',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const TermsOfServiceRoute = TermsOfServiceRouteImport.update({
   id: '/terms-of-service',
   path: '/terms-of-service',
@@ -80,7 +74,6 @@ export interface FileRoutesByFullPath {
   '/faq': typeof FaqRoute
   '/pricing': typeof PricingRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
-  '/team': typeof TeamRoute
   '/terms-of-service': typeof TermsOfServiceRoute
 }
 export interface FileRoutesByTo {
@@ -92,7 +85,6 @@ export interface FileRoutesByTo {
   '/faq': typeof FaqRoute
   '/pricing': typeof PricingRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
-  '/team': typeof TeamRoute
   '/terms-of-service': typeof TermsOfServiceRoute
 }
 export interface FileRoutesById {
@@ -105,7 +97,6 @@ export interface FileRoutesById {
   '/faq': typeof FaqRoute
   '/pricing': typeof PricingRoute
   '/privacy-policy': typeof PrivacyPolicyRoute
-  '/team': typeof TeamRoute
   '/terms-of-service': typeof TermsOfServiceRoute
 }
 export interface FileRouteTypes {
@@ -119,7 +110,6 @@ export interface FileRouteTypes {
     | '/faq'
     | '/pricing'
     | '/privacy-policy'
-    | '/team'
     | '/terms-of-service'
   fileRoutesByTo: FileRoutesByTo
   to:
@@ -131,7 +121,6 @@ export interface FileRouteTypes {
     | '/faq'
     | '/pricing'
     | '/privacy-policy'
-    | '/team'
     | '/terms-of-service'
   id:
     | '__root__'
@@ -143,7 +132,6 @@ export interface FileRouteTypes {
     | '/faq'
     | '/pricing'
     | '/privacy-policy'
-    | '/team'
     | '/terms-of-service'
   fileRoutesById: FileRoutesById
 }
@@ -156,7 +144,6 @@ export interface RootRouteChildren {
   FaqRoute: typeof FaqRoute
   PricingRoute: typeof PricingRoute
   PrivacyPolicyRoute: typeof PrivacyPolicyRoute
-  TeamRoute: typeof TeamRoute
   TermsOfServiceRoute: typeof TermsOfServiceRoute
 }
 
@@ -218,13 +205,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof PrivacyPolicyRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/team': {
-      id: '/team'
-      path: '/team'
-      fullPath: '/team'
-      preLoaderRoute: typeof TeamRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/terms-of-service': {
       id: '/terms-of-service'
       path: '/terms-of-service'
@@ -244,7 +224,6 @@ const rootRouteChildren: RootRouteChildren = {
   FaqRoute: FaqRoute,
   PricingRoute: PricingRoute,
   PrivacyPolicyRoute: PrivacyPolicyRoute,
-  TeamRoute: TeamRoute,
   TermsOfServiceRoute: TermsOfServiceRoute,
 }
 export const routeTree = rootRouteImport

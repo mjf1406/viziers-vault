@@ -1,4 +1,12 @@
-import { useState, type ComponentType, type ReactNode, type SVGProps } from "react";
+import {
+  cloneElement,
+  isValidElement,
+  useState,
+  type ComponentType,
+  type ReactElement,
+  type ReactNode,
+  type SVGProps,
+} from "react";
 import { Menu } from "lucide-react";
 
 import { DiscordIcon } from "../brand/discord";
@@ -41,7 +49,12 @@ export interface NavbarProps {
   logoHref?: string;
   githubUrl?: string;
   discordUrl?: string;
+  cta?: ReactNode;
   labels: NavbarLabels;
+}
+
+function renderSlot(node: ReactNode) {
+  return isValidElement(node) ? cloneElement(node as ReactElement) : node;
 }
 
 function DefaultLink({ href, className, children, ...props }: NavbarLinkComponentProps) {
@@ -68,6 +81,7 @@ export function Navbar({
   logoHref = "/",
   githubUrl = "https://github.com/mjf1406/viziers-vault-app",
   discordUrl,
+  cta,
   labels,
 }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -120,6 +134,7 @@ export function Navbar({
               <SheetFooter className="flex-col items-start justify-start px-4 sm:flex-col">
                 <Separator className="mb-2 w-full" />
                 <div className="flex items-center gap-2">
+                  {renderSlot(cta)}
                   <Button
                     variant="ghost"
                     size="icon"
@@ -153,6 +168,7 @@ export function Navbar({
           </div>
         </nav>
         <div className="hidden items-center gap-2 md:flex">
+          {renderSlot(cta)}
           <Button
             variant="ghost"
             size="icon"
