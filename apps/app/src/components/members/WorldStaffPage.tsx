@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { WorldRoleBadge } from "@/components/badges/WorldRoleBadges";
+import { RemoveMemberConfirmDialog } from "@/components/members/RemoveMemberConfirmDialog";
 import { CanWorld } from "@/components/permissions/CanWorld";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
@@ -56,6 +57,7 @@ export function WorldStaffPage({ worldId, role, titleKey }: WorldStaffPageProps)
   const { data, isPending, isError, refetch, isAuthLoading } = useWorldStaffByRole(worldId, role);
   const removeMutation = useRemoveWorldMember(role);
   const [searchQuery, setSearchQuery] = useState("");
+  const [pendingRemove, setPendingRemove] = useState<WorldStaffMember | null>(null);
   const members = data ?? [];
   const query = searchQuery.trim().toLowerCase();
   const filtered = query
@@ -65,12 +67,21 @@ export function WorldStaffPage({ worldId, role, titleKey }: WorldStaffPageProps)
       })
     : members;
 
-  const handleRemove = useCallback(
-    async (member: WorldStaffMember) => {
-      await removeMutation.mutateAsync({ worldId, userId: member.userId });
-    },
-    [removeMutation, worldId],
-  );
+  const pendingRemoveName = pendingRemove
+    ? getDisplayName(
+        { _id: pendingRemove.userId, name: pendingRemove.name, email: pendingRemove.email },
+        t("unnamedMember"),
+      )
+    : "";
+
+  const handleRemoveConfirm = useCallback(() => {
+    if (!pendingRemove) return;
+    const member = pendingRemove;
+    setPendingRemove(null);
+    void removeMutation.mutateAsync({ worldId, userId: member.userId }).catch(() => {
+      setPendingRemove(member);
+    });
+  }, [pendingRemove, removeMutation, worldId]);
 
   const showSkeleton = (isPending || isAuthLoading) && data == null;
 
@@ -151,7 +162,7 @@ export function WorldStaffPage({ worldId, role, titleKey }: WorldStaffPageProps)
                         type="button"
                         variant="outline"
                         size="sm"
-                        onClick={() => void handleRemove(member)}
+                        onClick={() => setPendingRemove(member)}
                       >
                         <UserMinusIcon data-icon="inline-start" />
                         {t("removeMember")}
@@ -164,6 +175,16 @@ export function WorldStaffPage({ worldId, role, titleKey }: WorldStaffPageProps)
           })}
         </div>
       ) : null}
+
+      <RemoveMemberConfirmDialog
+        open={pendingRemove !== null}
+        memberName={pendingRemoveName}
+        namespace="worlds"
+        onOpenChange={(open) => {
+          if (!open) setPendingRemove(null);
+        }}
+        onConfirm={handleRemoveConfirm}
+      />
     </div>
   );
 }

@@ -3,7 +3,8 @@ import type { IconDefinition } from "@fortawesome/fontawesome-svg-core";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faInbox } from "@fortawesome/free-solid-svg-icons/faInbox";
 import { useTranslation } from "react-i18next";
-import { ClassRoleBadge } from "@/components/badges/ClassRoleBadges";
+import { PartyRoleBadge, PartyRoleIconBadge } from "@/components/badges/PartyRoleBadges";
+import { WorldRoleBadge, WorldRoleIconBadge } from "@/components/badges/WorldRoleBadges";
 import { SelfHostUpdateBannerView } from "@/components/classroom/SelfHostUpdateBanner";
 import { PwaReloadBannerView } from "@/components/pwa/PwaReloadBanner";
 import { LanguageSelect } from "@/components/i18n/LanguageSelect";
@@ -42,14 +43,8 @@ import { undoToast } from "@/components/ui/undo-toast";
 import { FileDropzone } from "@/components/upload/FileDropzone";
 import { useAppLanguage } from "@/i18n/language-context";
 
-const CLASS_ROLES = [
-  "owner",
-  "teacher",
-  "assistant_teacher",
-  "student",
-  "guardian",
-  "unknown_role",
-] as const;
+const WORLD_ROLES = ["owner", "game_master", "assistant_game_master", "player"] as const;
+const PARTY_ROLES = ["owner", "leader", "member"] as const;
 
 /** Dev-only component playground. Not shipped in production builds. */
 export function UiPlayground() {
@@ -204,8 +199,19 @@ export function UiPlayground() {
         <div className="space-y-3">
           <h3 className="text-sm font-medium text-muted-foreground">{t("roleBadges")}</h3>
           <div className="flex flex-wrap gap-2">
-            {CLASS_ROLES.map((role) => (
-              <ClassRoleBadge key={role} role={role} />
+            {WORLD_ROLES.map((role) => (
+              <WorldRoleBadge key={role} role={role} />
+            ))}
+            {PARTY_ROLES.map((role) => (
+              <PartyRoleBadge key={`party-${role}`} role={role} />
+            ))}
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {WORLD_ROLES.map((role) => (
+              <WorldRoleIconBadge key={`${role}-icon`} role={role} />
+            ))}
+            {PARTY_ROLES.map((role) => (
+              <PartyRoleIconBadge key={`party-${role}-icon`} role={role} />
             ))}
           </div>
         </div>

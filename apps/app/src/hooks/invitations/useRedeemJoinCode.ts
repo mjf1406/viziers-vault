@@ -47,6 +47,12 @@ export function useRedeemJoinCode() {
           queryClient.invalidateQueries({
             queryKey: convexQuery(api.parties.get, { partyId: result.partyId }).queryKey,
           }),
+          queryClient.invalidateQueries({
+            queryKey: convexQuery(api.partyMembers.list, { partyId: result.partyId }).queryKey,
+          }),
+          queryClient.invalidateQueries({
+            queryKey: convexQuery(api.partyMembers.count, { partyId: result.partyId }).queryKey,
+          }),
         );
       }
 

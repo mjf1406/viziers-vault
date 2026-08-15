@@ -58,17 +58,19 @@ export const listForWorld = worldQuery({
   },
 });
 
+const partyGrantValidator = v.object({
+  _id: v.id("worldPartyGrants"),
+  worldId: v.id("worlds"),
+  worldName: v.string(),
+  worldIcon: v.optional(v.string()),
+  worldImageFileId: v.optional(v.id("files")),
+  grantedBy: v.id("users"),
+  createdAt: v.number(),
+});
+
 export const listForParty = partyQuery({
   args: {},
-  returns: v.array(
-    v.object({
-      _id: v.id("worldPartyGrants"),
-      worldId: v.id("worlds"),
-      worldName: v.string(),
-      grantedBy: v.id("users"),
-      createdAt: v.number(),
-    }),
-  ),
+  returns: v.array(partyGrantValidator),
   handler: async (ctx) => {
     ctx.requireOwner();
     // eslint-disable-next-line @convex-dev/no-collect-in-query -- grants per party bounded
@@ -81,6 +83,8 @@ export const listForParty = partyQuery({
       _id: Id<"worldPartyGrants">;
       worldId: Id<"worlds">;
       worldName: string;
+      worldIcon?: string;
+      worldImageFileId?: Id<"files">;
       grantedBy: Id<"users">;
       createdAt: number;
     }> = [];
@@ -92,6 +96,8 @@ export const listForParty = partyQuery({
         _id: grant._id,
         worldId: grant.worldId,
         worldName: world.name,
+        worldIcon: world.icon,
+        worldImageFileId: world.imageFileId,
         grantedBy: grant.grantedBy,
         createdAt: grant.createdAt,
       });
@@ -99,6 +105,26 @@ export const listForParty = partyQuery({
 
     results.sort((a, b) => b.createdAt - a.createdAt);
     return results;
+  },
+});
+
+export const countForParty = partyQuery({
+  args: {},
+  returns: v.number(),
+  handler: async (ctx) => {
+    ctx.requireOwner();
+    // eslint-disable-next-line @convex-dev/no-collect-in-query -- grants per party bounded
+    const grants = await ctx.db
+      .query("worldPartyGrants")
+      .withIndex("by_party", (q) => q.eq("partyId", ctx.partyDoc._id))
+      .collect();
+
+    let count = 0;
+    for (const grant of grants) {
+      const world = await ctx.db.get("worlds", grant.worldId);
+      if (world) count += 1;
+    }
+    return count;
   },
 });
 

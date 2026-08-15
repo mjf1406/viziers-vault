@@ -9,7 +9,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import type { PartyDoc } from "@/lib/parties/parties";
-import { PartySwitcher } from "./PartySwitcher";
+import { EntitySwitcher } from "@/components/navigation/EntitySwitcher";
 import { PartyNavMain } from "./PartyMainNavLinks";
 
 type PartyAppSidebarProps = React.ComponentProps<typeof Sidebar> & {
@@ -20,7 +20,7 @@ export function PartyAppSidebar({ partyDoc, ...props }: PartyAppSidebarProps) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <PartySwitcher currentParty={partyDoc} />
+        <EntitySwitcher current={{ kind: "party", party: partyDoc }} />
       </SidebarHeader>
       <SidebarContent>
         <PartyNavMain partyDoc={partyDoc} />

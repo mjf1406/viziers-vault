@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { CreateJoinCodeCredenza } from "@/components/invitations/CreateJoinCodeCredenza";
 import { JoinCodeCard } from "@/components/invitations/JoinCodeCard";
+import { RevokeInviteConfirmDialog } from "@/components/invitations/RevokeInviteConfirmDialog";
 import { Button } from "@/components/ui/button";
 import {
   Empty,
@@ -23,7 +24,7 @@ import {
   createPartyJoinCodeFormSchema,
   type CreateJoinCodeFormValues,
 } from "@/lib/invitations/joinCodeFormSchema";
-import type { JoinCodePublic } from "@/lib/invitations/joinCodes";
+import { formatJoinCodeDisplay, type JoinCodePublic } from "@/lib/invitations/joinCodes";
 import type { PartyJoinCodeRole } from "@/lib/permissions/worldPermissions";
 import type { Id } from "../../../convex/_generated/dataModel";
 
@@ -47,6 +48,7 @@ function InvitationsSkeleton() {
 export function PartyInvitationsPage({ partyId, partyArchived }: PartyInvitationsPageProps) {
   const { t } = useTranslation("parties");
   const [createOpen, setCreateOpen] = useState(false);
+  const [pendingRevoke, setPendingRevoke] = useState<JoinCodePublic | null>(null);
   const [listNow, setListNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -74,15 +76,23 @@ export function PartyInvitationsPage({ partyId, partyArchived }: PartyInvitation
     [createMutation, partyId],
   );
 
-  const handleRevoke = useCallback(
-    (code: JoinCodePublic) => {
-      void revokeMutation.mutateAsync({
+  const handleRevokeRequest = useCallback((code: JoinCodePublic) => {
+    setPendingRevoke(code);
+  }, []);
+
+  const handleRevokeConfirm = useCallback(() => {
+    if (!pendingRevoke) return;
+    const code = pendingRevoke;
+    setPendingRevoke(null);
+    void revokeMutation
+      .mutateAsync({
         joinCodeId: code._id,
         listKey: { kind: "party", partyId, now: listNow },
+      })
+      .catch(() => {
+        setPendingRevoke(code);
       });
-    },
-    [listNow, partyId, revokeMutation],
-  );
+  }, [listNow, partyId, pendingRevoke, revokeMutation]);
 
   return (
     <div className="flex w-full flex-col gap-6 px-4 py-8 sm:px-8">
@@ -129,7 +139,8 @@ export function PartyInvitationsPage({ partyId, partyArchived }: PartyInvitation
               key={code._id}
               code={code}
               classArchived={partyArchived}
-              onRevoke={handleRevoke}
+              namespace="parties"
+              onRevoke={handleRevokeRequest}
             />
           ))}
         </div>
@@ -142,6 +153,15 @@ export function PartyInvitationsPage({ partyId, partyArchived }: PartyInvitation
         namespace="parties"
         schema={createPartyJoinCodeFormSchema}
         onSubmit={handleCreate}
+      />
+      <RevokeInviteConfirmDialog
+        open={pendingRevoke !== null}
+        code={pendingRevoke ? formatJoinCodeDisplay(pendingRevoke.code) : ""}
+        namespace="parties"
+        onOpenChange={(open) => {
+          if (!open) setPendingRevoke(null);
+        }}
+        onConfirm={handleRevokeConfirm}
       />
     </div>
   );

@@ -6,11 +6,14 @@ import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
+  SidebarMenuBadge,
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { useSidebar } from "@/components/ui/sidebar-context";
+import { usePartyMemberCount } from "@/hooks/members/usePartyMemberCount";
 import { useCurrentUser } from "@/hooks/user/useCurrentUser";
+import { usePartyWorldGrantCount } from "@/hooks/worldPartyGrants/usePartyWorldGrantCount";
 import type { PartyDoc } from "@/lib/parties/parties";
 import { partyPathFor, type PartyNavTo } from "@/lib/parties/partyRoutes";
 
@@ -19,6 +22,7 @@ type NavItem = {
   icon: LucideIcon;
   to: PartyNavTo;
   ownerOnly?: boolean;
+  countKind?: "members" | "connectedWorlds";
 };
 
 export function PartyNavMain({ partyDoc }: { partyDoc: PartyDoc }) {
@@ -28,6 +32,8 @@ export function PartyNavMain({ partyDoc }: { partyDoc: PartyDoc }) {
   const { data: currentUser } = useCurrentUser();
   const partyId = partyDoc._id;
   const isOwner = currentUser?._id === partyDoc.ownerId;
+  const { data: memberCount } = usePartyMemberCount(isOwner ? partyId : "skip");
+  const { data: connectedWorldCount } = usePartyWorldGrantCount(isOwner ? partyId : "skip");
 
   const closeMobileSidebar = () => {
     if (isMobile) {
@@ -52,6 +58,7 @@ export function PartyNavMain({ partyDoc }: { partyDoc: PartyDoc }) {
       icon: Users,
       to: "/party/$partyId/members",
       ownerOnly: true,
+      countKind: "members",
     },
     {
       title: t("navInvitations"),
@@ -64,6 +71,7 @@ export function PartyNavMain({ partyDoc }: { partyDoc: PartyDoc }) {
       icon: Globe,
       to: "/party/$partyId/connected-worlds",
       ownerOnly: true,
+      countKind: "connectedWorlds",
     },
   ];
 
@@ -80,16 +88,27 @@ export function PartyNavMain({ partyDoc }: { partyDoc: PartyDoc }) {
               ? pathname === href
               : pathname === href || pathname.startsWith(`${href}/`);
 
+          const count =
+            item.countKind === "members"
+              ? (memberCount ?? null)
+              : item.countKind === "connectedWorlds"
+                ? (connectedWorldCount ?? null)
+                : null;
+
           return (
             <SidebarMenuItem key={item.to}>
               <SidebarMenuButton
                 tooltip={item.title}
                 isActive={isActive}
+                className={count !== null ? "pr-8" : undefined}
                 render={<Link to={item.to} params={{ partyId }} onClick={closeMobileSidebar} />}
               >
                 <item.icon />
                 <span>{item.title}</span>
               </SidebarMenuButton>
+              {count !== null ? (
+                <SidebarMenuBadge className="top-1.5">{count}</SidebarMenuBadge>
+              ) : null}
             </SidebarMenuItem>
           );
         })}

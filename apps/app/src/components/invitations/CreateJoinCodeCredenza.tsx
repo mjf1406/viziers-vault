@@ -3,7 +3,7 @@ import { useForm } from "@tanstack/react-form";
 import { useTranslation } from "react-i18next";
 import type { z } from "zod";
 
-import { PartyRoleBadge } from "@/components/badges/PartyRoleBadges";
+import { PartyRoleSelectLabel } from "@/components/badges/PartyRoleBadges";
 import { WorldRoleSelectLabel } from "@/components/badges/WorldRoleBadges";
 import { Button } from "@/components/ui/button";
 import {
@@ -82,9 +82,9 @@ function ttlLabelKey(option: JoinCodeTtlOption): string {
 function roleLabel(namespace: InviteNamespace, role: string, colored = false): ReactNode {
   switch (namespace) {
     case "worlds":
-      return <WorldRoleSelectLabel role={role} className={colored ? undefined : undefined} />;
+      return <WorldRoleSelectLabel role={role} colored={colored} />;
     case "parties":
-      return <PartyRoleBadge role={role} />;
+      return <PartyRoleSelectLabel role={role} colored={colored} />;
     default:
       return role;
   }

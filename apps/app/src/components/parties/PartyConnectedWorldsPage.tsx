@@ -1,8 +1,8 @@
 import { Link } from "@tanstack/react-router";
 import { useTranslation } from "react-i18next";
 
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { EntityIconDisplay } from "@/components/entities/EntityIconDisplay";
+import { Card, CardHeader, CardTitle } from "@/components/ui/card";
 import { Empty, EmptyDescription, EmptyHeader, EmptyTitle } from "@/components/ui/empty";
 import { ErrorState } from "@/components/ui/error-state";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -15,6 +15,7 @@ type PartyConnectedWorldsPageProps = {
 
 export function PartyConnectedWorldsPage({ partyId }: PartyConnectedWorldsPageProps) {
   const { t } = useTranslation("parties");
+  const { t: tWorlds } = useTranslation("worlds");
   const grantsQuery = usePartyWorldGrants(partyId);
   const grants = grantsQuery.data ?? [];
 
@@ -42,26 +43,36 @@ export function PartyConnectedWorldsPage({ partyId }: PartyConnectedWorldsPagePr
         </Empty>
       ) : null}
 
-      <div className="grid gap-3 sm:grid-cols-2">
-        {grants.map((grant) => (
-          <Card key={grant._id} size="sm">
-            <CardHeader>
-              <CardTitle className="text-base">{grant.worldName}</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <Button
-                type="button"
-                variant="outline"
-                size="sm"
-                nativeButton={false}
-                render={<Link to="/world/$worldId" params={{ worldId: grant.worldId }} />}
-              >
-                {grant.worldName}
-              </Button>
-            </CardContent>
-          </Card>
-        ))}
-      </div>
+      {!grantsQuery.isPending && !grantsQuery.isError && grants.length > 0 ? (
+        <div className="grid gap-3 sm:grid-cols-2">
+          {grants.map((grant) => (
+            <Card
+              key={grant._id}
+              size="sm"
+              className="relative transition-colors hover:bg-accent/40"
+            >
+              <Link
+                to="/world/$worldId"
+                params={{ worldId: grant.worldId }}
+                className="absolute inset-0 z-0 rounded-[inherit] outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+                aria-label={tWorlds("openWorld", { name: grant.worldName })}
+              />
+              <CardHeader className="relative z-10 flex flex-row items-start gap-3 pointer-events-none">
+                <EntityIconDisplay
+                  icon={grant.worldIcon}
+                  imageFileId={grant.worldImageFileId}
+                  alt={grant.worldName}
+                />
+                <div className="min-w-0 flex-1">
+                  <CardTitle className="truncate text-base font-semibold">
+                    {grant.worldName}
+                  </CardTitle>
+                </div>
+              </CardHeader>
+            </Card>
+          ))}
+        </div>
+      ) : null}
     </div>
   );
 }

@@ -9,7 +9,7 @@ import {
   SidebarRail,
 } from "@/components/ui/sidebar";
 import type { WorldDoc } from "@/lib/worlds/worlds";
-import { WorldSwitcher } from "./WorldSwitcher";
+import { EntitySwitcher } from "@/components/navigation/EntitySwitcher";
 import { WorldNavMain } from "./WorldMainNavLinks";
 
 type WorldAppSidebarProps = React.ComponentProps<typeof Sidebar> & {
@@ -20,7 +20,7 @@ export function WorldAppSidebar({ worldDoc, ...props }: WorldAppSidebarProps) {
   return (
     <Sidebar collapsible="icon" {...props}>
       <SidebarHeader>
-        <WorldSwitcher currentWorld={worldDoc} />
+        <EntitySwitcher current={{ kind: "world", world: worldDoc }} />
       </SidebarHeader>
       <SidebarContent>
         <WorldNavMain worldDoc={worldDoc} />

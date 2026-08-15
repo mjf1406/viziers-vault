@@ -3,6 +3,7 @@ import { useCallback, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { PartyRoleBadge } from "@/components/badges/PartyRoleBadges";
+import { RemoveMemberConfirmDialog } from "@/components/members/RemoveMemberConfirmDialog";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
@@ -57,6 +58,7 @@ export function PartyMembersPage({ partyId }: PartyMembersPageProps) {
   const { data, isPending, isError, refetch, isAuthLoading } = usePartyMembers(partyId);
   const removeMutation = useRemovePartyMember();
   const [searchQuery, setSearchQuery] = useState("");
+  const [pendingRemove, setPendingRemove] = useState<PartyMember | null>(null);
   const members = data ?? [];
   const query = searchQuery.trim().toLowerCase();
   const filtered = query
@@ -66,12 +68,21 @@ export function PartyMembersPage({ partyId }: PartyMembersPageProps) {
       })
     : members;
 
-  const handleRemove = useCallback(
-    async (member: PartyMember) => {
-      await removeMutation.mutateAsync({ partyId, userId: member.userId });
-    },
-    [partyId, removeMutation],
-  );
+  const pendingRemoveName = pendingRemove
+    ? getDisplayName(
+        { _id: pendingRemove.userId, name: pendingRemove.name, email: pendingRemove.email },
+        t("unnamedMember"),
+      )
+    : "";
+
+  const handleRemoveConfirm = useCallback(() => {
+    if (!pendingRemove) return;
+    const member = pendingRemove;
+    setPendingRemove(null);
+    void removeMutation.mutateAsync({ partyId, userId: member.userId }).catch(() => {
+      setPendingRemove(member);
+    });
+  }, [partyId, pendingRemove, removeMutation]);
 
   const showSkeleton = (isPending || isAuthLoading) && data == null;
 
@@ -150,7 +161,7 @@ export function PartyMembersPage({ partyId }: PartyMembersPageProps) {
                       type="button"
                       variant="outline"
                       size="sm"
-                      onClick={() => void handleRemove(member)}
+                      onClick={() => setPendingRemove(member)}
                     >
                       <UserMinusIcon data-icon="inline-start" />
                       {t("removeMember")}
@@ -162,6 +173,16 @@ export function PartyMembersPage({ partyId }: PartyMembersPageProps) {
           })}
         </div>
       ) : null}
+
+      <RemoveMemberConfirmDialog
+        open={pendingRemove !== null}
+        memberName={pendingRemoveName}
+        namespace="parties"
+        onOpenChange={(open) => {
+          if (!open) setPendingRemove(null);
+        }}
+        onConfirm={handleRemoveConfirm}
+      />
     </div>
   );
 }

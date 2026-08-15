@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 import { api } from "../../../convex/_generated/api";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { toast } from "@/components/ui/toast-manager";
+import { partyMemberCountQueryKey } from "@/hooks/members/usePartyMemberCount";
 import { partyMembersQueryKey } from "@/hooks/members/usePartyMembers";
 import { partiesListQueryKey } from "@/hooks/parties/useParties";
 import { useOptimisticMutation } from "@/hooks/useOptimisticMutation";
@@ -29,13 +30,21 @@ export function useRemovePartyMember() {
 
   return useOptimisticMutation({
     mutationFn: (args: RemovePartyMemberArgs) => mutationFn(args),
-    queryKeys: (args) => [partyMembersQueryKey(args.partyId)],
+    queryKeys: (args) => [
+      partyMembersQueryKey(args.partyId),
+      partyMemberCountQueryKey(args.partyId),
+    ],
     invalidateQueryKeys: () => [partiesListQueryKey()],
     applyOptimisticUpdate: (queryClient, args) => {
       const queryKey = partyMembersQueryKey(args.partyId);
+      const countKey = partyMemberCountQueryKey(args.partyId);
       queryClient.setQueryData<PartyMember[]>(queryKey, (old) => {
         if (!old) return old;
         return old.filter((member) => member.userId !== args.userId);
+      });
+      queryClient.setQueryData<number>(countKey, (old) => {
+        if (old === undefined) return old;
+        return Math.max(0, old - 1);
       });
     },
     onError: (error) => {

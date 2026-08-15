@@ -53,6 +53,15 @@ export const list = partyQuery({
   },
 });
 
+export const count = partyQuery({
+  args: {},
+  returns: v.number(),
+  handler: async (ctx) => {
+    const memberships = await listPartyMemberships(ctx, ctx.partyDoc._id);
+    return memberships.length;
+  },
+});
+
 export const remove = partyMutation({
   args: { userId: v.id("users") },
   returns: v.null(),

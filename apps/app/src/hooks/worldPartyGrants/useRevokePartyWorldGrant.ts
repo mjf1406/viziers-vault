@@ -5,11 +5,14 @@ import { api } from "../../../convex/_generated/api";
 import type { FunctionReturnType } from "convex/server";
 import type { Id } from "../../../convex/_generated/dataModel";
 import { toast } from "@/components/ui/toast-manager";
+import { partyWorldGrantCountQueryKey } from "@/hooks/worldPartyGrants/usePartyWorldGrantCount";
+import { worldPartyGrantsForPartyQueryKey } from "@/hooks/worldPartyGrants/usePartyWorldGrants";
 import { worldPartyGrantsQueryKey } from "@/hooks/worldPartyGrants/useWorldPartyGrants";
 import { useOptimisticMutation } from "@/hooks/useOptimisticMutation";
 import { messageFromError } from "@/lib/errors/convexError";
 
 type WorldPartyGrantRow = FunctionReturnType<typeof api.worldPartyGrants.listForWorld>[number];
+type PartyWorldGrantRow = FunctionReturnType<typeof api.worldPartyGrants.listForParty>[number];
 
 type RevokePartyGrantArgs = {
   worldId: Id<"worlds">;
@@ -23,12 +26,24 @@ export function useRevokePartyWorldGrant() {
 
   return useOptimisticMutation({
     mutationFn: (args: RevokePartyGrantArgs) => mutationFn(args),
-    queryKeys: (args) => [worldPartyGrantsQueryKey(args.worldId)],
+    queryKeys: (args) => [
+      worldPartyGrantsQueryKey(args.worldId),
+      worldPartyGrantsForPartyQueryKey(args.partyId),
+      partyWorldGrantCountQueryKey(args.partyId),
+    ],
     applyOptimisticUpdate: (queryClient, args) => {
-      const key = worldPartyGrantsQueryKey(args.worldId);
-      queryClient.setQueryData<WorldPartyGrantRow[]>(key, (old) =>
-        old ? old.filter((grant) => grant.partyId !== args.partyId) : old,
+      queryClient.setQueryData<WorldPartyGrantRow[]>(
+        worldPartyGrantsQueryKey(args.worldId),
+        (old) => (old ? old.filter((grant) => grant.partyId !== args.partyId) : old),
       );
+      queryClient.setQueryData<PartyWorldGrantRow[]>(
+        worldPartyGrantsForPartyQueryKey(args.partyId),
+        (old) => (old ? old.filter((grant) => grant.worldId !== args.worldId) : old),
+      );
+      queryClient.setQueryData<number>(partyWorldGrantCountQueryKey(args.partyId), (old) => {
+        if (old === undefined) return old;
+        return Math.max(0, old - 1);
+      });
     },
     onError: (error) => {
       toast.add({

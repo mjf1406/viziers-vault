@@ -3,6 +3,8 @@ import { useEffect, useMemo, useState } from "react";
 import { useTranslation } from "react-i18next";
 
 import { ClassRoleBadge } from "@/components/badges/ClassRoleBadges";
+import { PartyRoleBadge } from "@/components/badges/PartyRoleBadges";
+import { WorldRoleBadge } from "@/components/badges/WorldRoleBadges";
 import { ActionMenu, type ActionMenuItem } from "@/components/ui/action-menu";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -18,13 +20,32 @@ import {
   type JoinCodePublic,
 } from "@/lib/invitations/joinCodes";
 
+type InviteNamespace = "classes" | "worlds" | "parties";
+
 type JoinCodeCardProps = {
   code: JoinCodePublic;
   classArchived: boolean;
   onRevoke: (code: JoinCodePublic) => void;
+  namespace?: InviteNamespace;
 };
 
-export function JoinCodeCard({ code, classArchived, onRevoke }: JoinCodeCardProps) {
+function JoinCodeRoleBadge({ role, namespace }: { role: string; namespace: InviteNamespace }) {
+  switch (namespace) {
+    case "worlds":
+      return <WorldRoleBadge role={role} />;
+    case "parties":
+      return <PartyRoleBadge role={role} />;
+    default:
+      return <ClassRoleBadge role={role} />;
+  }
+}
+
+export function JoinCodeCard({
+  code,
+  classArchived,
+  onRevoke,
+  namespace = "classes",
+}: JoinCodeCardProps) {
   const { t } = useTranslation("classes");
   const [now, setNow] = useState(() => Date.now());
   const pending = isPendingJoinCode(code);
@@ -79,7 +100,7 @@ export function JoinCodeCard({ code, classArchived, onRevoke }: JoinCodeCardProp
               </>
             ) : null}
           </div>
-          <ClassRoleBadge role={code.role} />
+          <JoinCodeRoleBadge role={code.role} namespace={namespace} />
         </div>
         {!pending ? <ActionMenu items={menuItems} label={t("inviteCodeActions")} /> : null}
       </CardHeader>

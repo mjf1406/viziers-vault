@@ -4,6 +4,7 @@ import { useTranslation } from "react-i18next";
 
 import { CreateJoinCodeCredenza } from "@/components/invitations/CreateJoinCodeCredenza";
 import { JoinCodeCard } from "@/components/invitations/JoinCodeCard";
+import { RevokeInviteConfirmDialog } from "@/components/invitations/RevokeInviteConfirmDialog";
 import { CanWorld } from "@/components/permissions/CanWorld";
 import { useWorldPermissionsContext } from "@/components/permissions/worldPermissionsContext";
 import { Button } from "@/components/ui/button";
@@ -25,7 +26,7 @@ import {
   createWorldJoinCodeFormSchema,
   type CreateJoinCodeFormValues,
 } from "@/lib/invitations/joinCodeFormSchema";
-import type { JoinCodePublic } from "@/lib/invitations/joinCodes";
+import { formatJoinCodeDisplay, type JoinCodePublic } from "@/lib/invitations/joinCodes";
 import type { WorldJoinCodeRole } from "@/lib/permissions/worldPermissions";
 import type { Id } from "../../../convex/_generated/dataModel";
 
@@ -50,6 +51,7 @@ export function WorldInvitationsPage({ worldId, worldArchived }: WorldInvitation
   const { t } = useTranslation("worlds");
   const { can } = useWorldPermissionsContext();
   const [createOpen, setCreateOpen] = useState(false);
+  const [pendingRevoke, setPendingRevoke] = useState<JoinCodePublic | null>(null);
   const [listNow, setListNow] = useState(() => Date.now());
 
   useEffect(() => {
@@ -80,15 +82,23 @@ export function WorldInvitationsPage({ worldId, worldArchived }: WorldInvitation
     [createMutation, worldId],
   );
 
-  const handleRevoke = useCallback(
-    (code: JoinCodePublic) => {
-      void revokeMutation.mutateAsync({
+  const handleRevokeRequest = useCallback((code: JoinCodePublic) => {
+    setPendingRevoke(code);
+  }, []);
+
+  const handleRevokeConfirm = useCallback(() => {
+    if (!pendingRevoke) return;
+    const code = pendingRevoke;
+    setPendingRevoke(null);
+    void revokeMutation
+      .mutateAsync({
         joinCodeId: code._id,
         listKey: { kind: "world", worldId, now: listNow },
+      })
+      .catch(() => {
+        setPendingRevoke(code);
       });
-    },
-    [listNow, revokeMutation, worldId],
-  );
+  }, [listNow, pendingRevoke, revokeMutation, worldId]);
 
   return (
     <div className="flex w-full flex-col gap-6 px-4 py-8 sm:px-8">
@@ -147,7 +157,8 @@ export function WorldInvitationsPage({ worldId, worldArchived }: WorldInvitation
               key={code._id}
               code={code}
               classArchived={worldArchived}
-              onRevoke={handleRevoke}
+              namespace="worlds"
+              onRevoke={handleRevokeRequest}
             />
           ))}
         </div>
@@ -160,6 +171,15 @@ export function WorldInvitationsPage({ worldId, worldArchived }: WorldInvitation
         namespace="worlds"
         schema={createWorldJoinCodeFormSchema}
         onSubmit={handleCreate}
+      />
+      <RevokeInviteConfirmDialog
+        open={pendingRevoke !== null}
+        code={pendingRevoke ? formatJoinCodeDisplay(pendingRevoke.code) : ""}
+        namespace="worlds"
+        onOpenChange={(open) => {
+          if (!open) setPendingRevoke(null);
+        }}
+        onConfirm={handleRevokeConfirm}
       />
     </div>
   );
