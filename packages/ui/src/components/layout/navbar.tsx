@@ -89,9 +89,25 @@ export function Navbar({
   return (
     <header className="sticky top-5 z-40 w-full border-b border-secondary bg-card bg-opacity-15 shadow-inner">
       <div className="mx-auto flex max-w-7xl items-center justify-between p-2 px-4">
-        <LinkComponent href={logoHref} className="flex items-center">
-          <Logo className="h-10 w-auto object-contain" />
-        </LinkComponent>
+        <div className="flex items-center gap-6">
+          <LinkComponent href={logoHref} className="flex items-center">
+            <Logo className="h-14 w-auto object-contain" />
+          </LinkComponent>
+          <nav className="hidden md:flex">
+            <div className="flex">
+              {routes.map(({ href, label, icon }) => (
+                <LinkComponent
+                  key={href}
+                  href={href}
+                  className="flex items-center rounded-md px-2 py-1 text-base hover:bg-muted"
+                >
+                  {icon}
+                  <span>{label}</span>
+                </LinkComponent>
+              ))}
+            </div>
+          </nav>
+        </div>
         <div className="flex items-center md:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger render={<Button variant="ghost" size="icon" className="lg:hidden" />}>
@@ -106,7 +122,7 @@ export function Navbar({
                 <SheetHeader className="mb-4 ml-4">
                   <SheetTitle className="flex items-center">
                     <LinkComponent href={logoHref} className="flex items-center">
-                      <Logo className="h-10 w-auto object-contain" />
+                      <Logo className="h-14 w-auto object-contain" />
                     </LinkComponent>
                   </SheetTitle>
                 </SheetHeader>
@@ -153,20 +169,6 @@ export function Navbar({
             </SheetContent>
           </Sheet>
         </div>
-        <nav className="mx-auto hidden md:flex">
-          <div className="flex">
-            {routes.map(({ href, label, icon }) => (
-              <LinkComponent
-                key={href}
-                href={href}
-                className="flex items-center rounded-md px-2 py-1 text-base hover:bg-muted"
-              >
-                {icon}
-                <span>{label}</span>
-              </LinkComponent>
-            ))}
-          </div>
-        </nav>
         <div className="hidden items-center gap-2 md:flex">
           {renderSlot(cta)}
           <Button
