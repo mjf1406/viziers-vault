@@ -5,6 +5,7 @@ import {
   ListIcon,
   PlusIcon,
   SearchIcon,
+  UsersIcon,
   XIcon,
 } from "lucide-react";
 import { useTranslation } from "react-i18next";
@@ -80,10 +81,11 @@ export function PartiesToolbar({
           <h2
             className={
               compact
-                ? "text-xl font-semibold tracking-tight"
-                : "text-2xl font-semibold tracking-tight sm:text-3xl"
+                ? "inline-flex items-center gap-2 text-xl font-semibold tracking-tight"
+                : "inline-flex items-center gap-2 text-2xl font-semibold tracking-tight sm:text-3xl"
             }
           >
+            <UsersIcon aria-hidden="true" className="size-[1em]" />
             {compact ? t("sectionTitle") : t("pageTitle")}
           </h2>
           {!compact ? (
