@@ -40,5 +40,6 @@
     "activityBar.background": "#2d3436",
     "activityBar.foreground": "#ffffff",
     "activityBar.inactiveForeground": "#ffffffB3"
-  }
+  },
+  "cSpell.words": ["tgpu", "typegpu"]
 }

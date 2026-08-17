@@ -76,6 +76,8 @@ export default defineConfig({
       tanstackRouter({
         target: "react",
         autoCodeSplitting: true,
+        // Colocated helpers (e.g. test/lib) are not routes.
+        routeFileIgnorePattern: "/lib/",
       }),
       react(),
       tailwindcss(),
